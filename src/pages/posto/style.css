@@ -1,0 +1,37 @@
+.filtering-select-level-access, .filtering-select-status{
+    width: 200px;
+}
+
+.table-actions thead tr th:last-child{
+    width: 100px;
+}
+
+.table-actions tbody tr td:last-child button{
+    border: none;
+    background-color: transparent;
+    margin: 0 20px 0 0;
+    cursor: pointer;
+}
+
+.table-actions tbody tr td:last-child button img{
+    height: 20px;
+}
+
+.page-title button{
+    margin: 20px 0 0 0;
+    background-color: #58AFCB;
+    width: 170px;
+    color: white;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+}
+
+.page-title-create-option{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,133 @@
+.body {
+    width: 100vw;
+    height: 100vh;
+}
+
+.page-container {
+    padding: 40px 40px 40px 120px;
+    z-index: 1;
+    height: 100%;
+}
+
+.page-title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0 0 40px 0;
+}
+
+.page-title h1 {
+    font-size: 27px;
+    font-weight: 500;
+}
+
+.page-title h2 {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* Filters */
+
+.page-filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px 0 0;
+}
+
+.input-container p {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.input-container .filtering-input{
+    padding: 0 0 0 10px;
+}
+
+.input-container .filtering-input {
+    border: 1px solid #BBBBBB;
+    border-radius: 5px;
+    height: 40px;
+    margin: 8px 0 0 0;
+}
+
+.filters-relatorio-efetivo .input-container:nth-child(1) .filtering-input {
+    width: 250px;
+}
+
+.filters-relatorio-efetivo .input-container:nth-child(4) div div,
+.filters-relatorio-efetivo .input-container:nth-child(5) div div{
+    border: none;
+}
+
+.filters-unidade{
+    width: 900px;
+}
+
+.posto-filters, .unidade-filters{
+    width: 650px;
+}
+
+.searchButton {
+    margin: 20px 0 0 0;
+    background-color: #1B599B;
+    width: 170px;
+    color: white;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+}
+
+
+/* Table */
+
+.page-content {
+    margin: 30px 0 0 0;
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-content table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid #DEE2E6;
+}
+
+.page-content tr {
+    height: 40px;
+    font-size: 15px;
+}
+
+.table {
+    width: 100%;
+    text-align: left;
+}
+
+.row-white {
+    background-color: white;
+}
+
+.row-white {
+    background-color: #F2F2F2;
+}
+
+.page-content table thead tr th:nth-child(1),
+.page-content table tbody tr td:nth-child(1) {
+    padding: 0 0 0 10px;
+}
