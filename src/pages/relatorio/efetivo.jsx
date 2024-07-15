@@ -172,7 +172,7 @@ function RelatorioEfetivo() {
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
-                <div className="page-content">
+                <div className="page-content-table">
                     <RelatoriosEfetivosTable data={registros} />
                 </div>
             </div>

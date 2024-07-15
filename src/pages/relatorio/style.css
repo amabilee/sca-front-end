@@ -16,6 +16,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     margin: 0 0 40px 0;
+    height: 7%;
 }
 
 .page-title h1 {
@@ -24,6 +25,7 @@
 }
 
 .page-title h2 {
+    line-height: 0px;
     font-size: 16px;
     font-weight: 400;
 }
@@ -35,6 +37,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    height: 8%;
 }
 
 .input-container {
@@ -68,14 +71,102 @@
     border: none;
 }
 
+/* Input Unidades */
+
 .filters-unidade{
     width: 900px;
+}
+
+.filters-unidade .input-container:nth-child(1){
+    width: 300px;
 }
 
 .posto-filters, .unidade-filters{
     width: 650px;
 }
 
+.alerta-filters{
+    width: 900px;
+}
+
+/* Style Usuarios */
+
+.table-usuarios tbody tr td:nth-child(3){
+    padding: 10px 0;
+}
+
+.usuarios-filters{
+    width: 1100px;
+}
+
+.usuarios-filters .input-container:nth-child(1){
+    width: 300px;
+}
+
+.usuario-inputs-1{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.usuario-inputs-2{
+    margin: 30px 0 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+    width: max-content;
+}
+
+.usuario-inputs-1 .input-container{
+    width: 20%;
+}
+
+.usuario-inputs-1 .input-container select{
+    width: 300px;
+}
+
+.usuario-inputs-2 .input-container p:nth-child(1) {
+    margin: 0 0 20px 0;
+}
+
+.usuario-inputs-2 .input-container input{
+    width: 20px;
+    height: 20px;
+}
+
+.modulos-container{
+    height: 200px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modulos-container-column{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modulos-checkbox{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.modulos-checkbox input{
+    margin: 0 10px 0 0;
+}
+
+/* Buttons */
 .searchButton {
     margin: 20px 0 0 0;
     background-color: #1B599B;
@@ -86,6 +177,7 @@
     border-radius: 7px;
     cursor: pointer;
     border: none;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 
@@ -94,22 +186,39 @@
 .page-content {
     margin: 30px 0 0 0;
     width: 100%;
-    height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
 }
 
-.page-content table {
-    border-collapse: separate;
-    border-spacing: 0;
-    overflow: hidden;
+.page-content-table {
+    margin: 30px 0 0 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-wrapper {
+    margin: 0px 0 30px 0;
+    max-height: 645px;
+    min-height: 645px;
+    width: 100%;
+    overflow-y: auto;
     border-radius: 10px;
     border: 1px solid #DEE2E6;
 }
 
-.page-content tr {
+.page-content-table table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.page-content-table tr {
     height: 40px;
     font-size: 15px;
 }
@@ -119,15 +228,63 @@
     text-align: left;
 }
 
+.table thead {
+    background-color: #F2F2F2;
+    height: 40px;
+}
+
 .row-white {
     background-color: white;
 }
 
-.row-white {
+.row-gray {
     background-color: #F2F2F2;
 }
 
-.page-content table thead tr th:nth-child(1),
-.page-content table tbody tr td:nth-child(1) {
+.page-content-table table thead tr th:nth-child(1),
+.page-content-table table tbody tr td:nth-child(1) {
     padding: 0 0 0 10px;
+}
+
+/* Password Icon Style */
+
+.iconPasswordContainer{
+    position: relative;
+}
+
+.eyePassword {
+    cursor: pointer;
+    position: absolute;
+    top: 58%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 20px;
+}
+
+.eyePasswordChange {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 80%;
+    transform: translateY(-50%);
+    width: 20px;
+}
+
+.password-input{
+    width: 100%;
+}
+
+/* Date-rage */
+
+.date-range-container{
+    width: 450px;
+}
+
+.date-range-container div div{
+    margin: 8px 0 0 0;
+    border: 1px solid #BBBBBB;
+}
+
+.date-range-container div div input{
+    height: 40px;
 }

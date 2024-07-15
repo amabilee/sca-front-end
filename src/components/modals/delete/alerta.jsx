@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import "./style.css";
 import { server } from '../../../services/server';
 
-export default function EditPostoModal({ currentPosto, closeModal, renderTable }) {
-    const [dataFromPosto, setDataFromPosto] = useState(currentPosto || {});
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+
+export default function DeleteAlertaModal({ currentData, closeModal, renderTable }) {
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return format(date, "dd/MM/yyyy 'às' HH:mm:ss", { locale: ptBR });
+    };
+
+    const [removeOption, setRemoveOption] = useState(0);
+    const [receivedData, setDataReceived] = useState(currentData || {});
+    
     // SnackBar config
     const [message, setMessage] = useState("");
     const [state, setState] = useState({
@@ -19,27 +28,24 @@ export default function EditPostoModal({ currentPosto, closeModal, renderTable }
         setState({ ...state, open: false });
     };
 
-    const cleanInputs = () => {
-        setDataFromPosto({ ...dataFromPosto, nome: "", nivel_acesso: 0 });
-    };
-
-    const confirmEditing = () => {
-        if (dataFromPosto.nome.length === 0) {
+    const confirmDeleting = () => {
+        if (removeOption === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira um nome válido.");
+            setMessage("Para confirmar a remoção a opção 'Sim' deve ser selecionada");
         } else {
             sendRequest();
         }
     };
 
     const sendRequest = async () => {
+        let removeData = { ...receivedData, ativo_alerta: false };
         try {
-            await server.put(`/posto/${dataFromPosto.id}`, dataFromPosto);
-            renderTable('edit');
-            closeModal('edit');
+            await server.put(`/alerta/${receivedData.id}`, removeData);
+            renderTable('delete');
+            closeModal('delete');
         } catch (e) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Erro ao atualizar dados.");
+            setState({ ...state, open: true });
+            setMessage("Erro ao deletar o alerta.");
         }
     };
 
@@ -47,36 +53,27 @@ export default function EditPostoModal({ currentPosto, closeModal, renderTable }
         <>
             <div className="page-container modal">
                 <div className="page-title">
-                    <h1>Editar posto de serviço</h1>
+                    <h1>Deletar alerta: {formatDate(receivedData.data)}</h1>
                     <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">
                     <div className="page-filters filters-relatorio-efetivo">
                         <div className="input-container">
-                            <p>Nome do posto</p>
-                            <input className='filtering-input' value={dataFromPosto.nome} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nome: e.target.value })} />
-                        </div>
-                        <div className="input-container">
-                            <p>Nível de acesso</p>
-                            <select value={dataFromPosto.nivel_acesso} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nivel_acesso: e.target.value })} className='filtering-input filtering-select-level-access'>
-                                <option value={0}>Nenhum</option>
-                                <option value={1}>Portaria</option>
-                                <option value={2}>Aviões</option>
-                                <option value={3}>Administrativa</option>
+                            <p>Tem certeza que deseja deletar este alerta?<br/>Esta ação não pode ser desfeita.</p>
+                            <select value={removeOption} onChange={(e) => setRemoveOption(Number(e.target.value))} className='filtering-input filtering-select-level-access'>
+                                <option value={0}>Não</option>
+                                <option value={1}>Sim</option>
                             </select>
                         </div>
                     </div>
                     <div className="form-buttons-container">
                         <div className="cancel-button">
-                            <button onClick={() => closeModal('edit')}>
+                            <button onClick={() => closeModal('delete')}>
                                 Voltar
                             </button>
                         </div>
                         <div className="form-buttons">
-                            <button onClick={() => cleanInputs()}>
-                                Limpar campos
-                            </button>
-                            <button onClick={confirmEditing}>
+                            <button onClick={confirmDeleting}>
                                 Confirmar
                             </button>
                         </div>
@@ -84,12 +81,12 @@ export default function EditPostoModal({ currentPosto, closeModal, renderTable }
                             ContentProps={{ sx: { borderRadius: '8px' } }}
                             anchorOrigin={{ vertical, horizontal }}
                             open={open}
-                            autoHideDuration={2000}
+                            autoHideDuration={4000}
                             onClose={handleClose}
                             key={vertical + horizontal}
                         >
                             <Alert variant="filled" severity="error" onClose={handleClose}>
-                                {message || "Erro desconhecido"}
+                                {message}
                             </Alert>
                         </Snackbar>
                     </div>

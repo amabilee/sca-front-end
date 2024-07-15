@@ -18,7 +18,7 @@ function Sidebar() {
     const navigate = useNavigate();
 
     //Permitted Modules of the logged user
-    const [permissionModules, setPermissionModules] = useState(['Relatórios', 'Relatórios-Efetivo', 'Relatórios-Veículo', 'Pessoas', 'Pessoas-Efetivo', 'Pessoas-Usuário', 'Postos', 'Unidades', 'Veículos', 'Alertas', 'Crachás', 'Gerencia']);
+    const [permissionModules] = useState(['Relatórios', 'Relatórios-Efetivo', 'Relatórios-Veículo', 'Pessoas', 'Pessoas-Efetivo', 'Pessoas-Usuário', 'Postos', 'Unidades', 'Veículos', 'Alertas', 'Crachás', 'Gerência']);
 
     // Render Nav Icons
     const moduleData = [
@@ -29,7 +29,7 @@ function Sidebar() {
         { name: 'Veículos', imgSrc: Veiculos, tooltip: 'Veículos' },
         { name: 'Alertas', imgSrc: Alertas, tooltip: 'Alertas' },
         { name: 'Crachás', imgSrc: Crachas, tooltip: 'Crachás' },
-        { name: 'Gerencia', imgSrc: Gerencia, tooltip: 'Gerencia' },
+        { name: 'Gerência', imgSrc: Gerencia, tooltip: 'Gerência' },
     ];
 
     const handleModuleClick = (moduleName) => {
@@ -48,6 +48,9 @@ function Sidebar() {
                 setRelatoriosModal(true);
                 setPessoasModal(false);
                 break;
+            case 'Alertas':
+                navigate('/Alertas')
+                break;
             default:
                 setPessoasModal(false);
                 setRelatoriosModal(false);
@@ -55,10 +58,28 @@ function Sidebar() {
         }
     };
 
-    const handleRelatoriosEfetivoClick = () => {
-        setRelatoriosModal(false); 
-        navigate('/Relatórios-Efetivo');
-    };
+    const handleModalClick = (page) => {
+        switch (page) {
+            case 'Relatórios-Efetivo':
+                setRelatoriosModal(false);
+                navigate('/Relatórios-Efetivo');
+                break;
+            case 'Relatório-Veículo':
+                setRelatoriosModal(false);
+                navigate('/Relatórios-Veículo');
+                break;
+            case 'Pessoas-Efetivo':
+                setPessoasModal(false);
+                navigate('/Pessoas-Efetivo');
+                break;
+            case 'Pessoas-Usuário':
+                setPessoasModal(false);
+                navigate('/Pessoas-Usuário');
+                break;
+            default:
+                break;
+        }
+    }
 
     const navigationButtons = () => {
         const modules = moduleData
@@ -98,8 +119,12 @@ function Sidebar() {
             {pessoasModal && (
                 <div className="sideBar-modal" onClick={() => setPessoasModal(false)}>
                     <div className="sideBar-modal-box">
-                        <p>Efetivos</p>
-                        <p>Usuários</p>
+                        {permissionModules.includes('Pessoas-Efetivo') && (
+                            <p onClick={() => handleModalClick('Pessoas-Efetivo')}>Efetivos</p>
+                        )}
+                        {permissionModules.includes('Pessoas-Usuário') && (
+                            <p onClick={() => handleModalClick('Pessoas-Usuário')}>Usuários</p>
+                        )}
                     </div>
                 </div>
             )}
@@ -107,10 +132,10 @@ function Sidebar() {
                 <div className="sideBar-modal" onClick={() => setRelatoriosModal(false)}>
                     <div className="sideBar-modal-box">
                         {permissionModules.includes('Relatórios-Efetivo') && (
-                            <p onClick={handleRelatoriosEfetivoClick}>Efetivos</p>
+                            <p onClick={() => handleModalClick('Relatórios-Efetivo')}>Efetivos</p>
                         )}
                         {permissionModules.includes('Relatórios-Veículo') && (
-                            <p>Veículos</p>
+                            <p onClick={() => handleModalClick('Relatórios-Veículo')}>Veículos</p>
                         )}
                     </div>
                 </div>

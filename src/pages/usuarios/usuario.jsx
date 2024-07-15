@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
-import PostosTable from '../../components/tables/postos';
-import '../relatorio/style.css';
-import '../posto/style.css';
-import EditPostoModal from '../../components/modals/edit/posto';
-import DeletePostoModal from '../../components/modals/delete/posto';
-import CreatePostoModal from '../../components/modals/create/posto';
+import UsuariosTable from '../../components/tables/usuarios';
+import EditUsuarioModal from '../../components/modals/edit/usuario';
+import DeleteUsuarioModal from '../../components/modals/delete/usuario';
+import CreateUsuarioModal from '../../components/modals/create/usuário';
 import { server } from '../../services/server';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { IMaskInput } from "react-imask";
 
-function PostoServico() {
-    const [paginationData, setPaginationData] = useState({currentPage: 1, totalPages: 0, filtering: ''})
+function Usuarios() {
+    const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
     const [editModal, setOpenEditModal] = useState(false);
     const [createModal, setOpenCreateModal] = useState(false);
     const [deleteModal, setOpenDeleteModal] = useState(false);
-    const [sendingPosto, setSendingPosto] = useState({});
+    const [sendingData, setSendingData] = useState({});
 
     //Paginator conifg
     const handleChange = (event, value) => {
         setPaginationData(prevState => {
             return { ...prevState, currentPage: value }
         });
-        getPostos(paginationData.filtering, value)
+        getUsuarios(paginationData.filtering, value)
     };
 
     // SnackBar config
@@ -44,13 +43,12 @@ function PostoServico() {
 
     // Data from the DB
     useEffect(() => {
-        getPostos('', 1);
+        getUsuarios('', 1);
     }, []);
 
-    const getPostos = async (filter, page) => {
-        console.log(page, filter)
+    const getUsuarios = async (filter, page) => {
         try {
-            const response = await server.get(`/posto?page=${page}${filter}`);
+            const response = await server.get(`/usuario?page=${page}${filter}`);
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -67,7 +65,9 @@ function PostoServico() {
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
         nome: '',
-        nivel_acesso: 0,
+        cpf: '',
+        modulos: 0,
+        nivel_acesso: 0
     });
 
     const sendFilteringConditions = () => {
@@ -78,11 +78,16 @@ function PostoServico() {
         if (filteringConditions.nivel_acesso != 0) {
             filter += `&nivel_acesso=${filteringConditions.nivel_acesso}`
         }
-        getPostos(filter, 1)
+        if (filteringConditions.modulos != 0) {
+            filter += `&modulos=${filteringConditions.modulos}`
+        }
+        if (filteringConditions.cpf.length != 0) {
+            filter += `&cpf=${filteringConditions.cpf}`
+        }
+        getUsuarios(filter, 1)
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 }
         });
-        console.log(filteringConditions);
     };
 
     // Open and Close Modals
@@ -90,14 +95,14 @@ function PostoServico() {
         switch (type) {
             case 'edit':
                 setOpenEditModal(true);
-                setSendingPosto(data);
+                setSendingData(data);
                 break;
             case 'create':
                 setOpenCreateModal(true);
                 break;
             case 'delete':
                 setOpenDeleteModal(true)
-                setSendingPosto(data);
+                setSendingData(data);
             default:
                 break;
         }
@@ -122,22 +127,22 @@ function PostoServico() {
         switch (type) {
             case 'create':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Posto de Serviço criado com sucesso.");
+                setMessage("Usuário criado com sucesso.");
                 setStatusAlert("success");
                 break;
             case 'edit':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Posto de Serviço alterado com sucesso.");
+                setMessage("Usuário alterado com sucesso.");
                 setStatusAlert("success");
                 break;
             case 'delete':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Posto de Serviço deletado com sucesso.");
+                setMessage("Usuário deletado com sucesso.");
                 setStatusAlert("success");
             default:
                 break;
         }
-        getPostos(paginationData.filtering, paginationData.currentPage);
+        getUsuarios(paginationData.filtering, paginationData.currentPage);
     };
 
     return (
@@ -146,19 +151,49 @@ function PostoServico() {
             <div className="page-container">
                 <div className="page-title page-title-create-option">
                     <div className="page-title-text">
-                        <h1>Postos de Serviço</h1>
-                        <h2>Para consultar os postos, informe os dados desejados</h2>
+                        <h1>Usuários</h1>
+                        <h2>Para consultar os usuários, informe os dados desejados</h2>
                     </div>
-                    <button onClick={() => openModal("create")}>Cadastrar posto</button>
+                    <button onClick={() => openModal("create")}>Cadastrar usuário</button>
                 </div>
-                <div className="page-filters posto-filters">
+                <div className="page-filters usuarios-filters">
                     <div className="input-container">
-                        <p>Nome do posto</p>
+                        <p>Nome completo</p>
                         <input
                             className='filtering-input'
                             value={filteringConditions.nome}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, nome: e.target.value })}
                         />
+                    </div>
+                    <div className="input-container">
+                        <p>CPF</p>
+                        <IMaskInput
+                            type="text"
+                            mask="000.000.000-00"
+                            className='filtering-input'
+                            value={filteringConditions.cpf}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, cpf: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>Módulos</p>
+                        <select
+                            value={filteringConditions.modulos}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, modulos: e.target.value })}
+                            className='filtering-input filtering-select-level-access'
+                        >
+                            <option value={0}>Nenhum</option>
+                            <option value={"Relatórios-Efetivo"}>Relatórios de efetivos</option>
+                            <option value={"Relatórios-Veículo"}>Relatórios de veículos</option>
+                            <option value={"Pessoas-Efetivo"}>Efetivos</option>
+                            <option value={"Pessoas-Usuário"}>Usuários</option>
+                            <option value={"Postos"}>Postos de serviço</option>
+                            <option value={"Unidades"}>Unidades</option>
+                            <option value={"Veículos"}>Veículos</option>
+                            <option value={"Alertas"}>Alertas</option>
+                            <option value={"Crachás"}>Crachás</option>
+                            <option value={"Gerência"}>Gerência</option>
+                        </select>
                     </div>
                     <div className="input-container">
                         <p>Nível de acesso</p>
@@ -168,28 +203,27 @@ function PostoServico() {
                             className='filtering-input filtering-select-level-access'
                         >
                             <option value={0}>Nenhum</option>
-                            <option value={1}>Portaria</option>
-                            <option value={2}>Aviões</option>
-                            <option value={3}>Administrativa</option>
+                            <option value={1}>Visualizador</option>
+                            <option value={2}>Identificador</option>
                         </select>
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <PostosTable data={registros} openModal={openModal} />
+                    <UsuariosTable data={registros} openModal={openModal} />
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>
                 </div>
             </div>
             {editModal && (
-                <EditPostoModal currentPosto={sendingPosto} closeModal={closeModal} renderTable={operationSuccess} />
+                <EditUsuarioModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
             )}
             {createModal && (
-                <CreatePostoModal closeModal={closeModal} renderTable={operationSuccess} />
+                <CreateUsuarioModal closeModal={closeModal} renderTable={operationSuccess} />
             )}
             {deleteModal && (
-                <DeletePostoModal currentPosto={sendingPosto} closeModal={closeModal} renderTable={operationSuccess} />
+                <DeleteUsuarioModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
             )}
             <Snackbar
                 ContentProps={{ sx: { borderRadius: '8px' } }}
@@ -207,4 +241,4 @@ function PostoServico() {
     );
 }
 
-export default PostoServico;
+export default Usuarios;

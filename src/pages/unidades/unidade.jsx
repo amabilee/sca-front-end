@@ -54,7 +54,9 @@ function Unidades() {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
             });
         } catch (e) {
-            console.log("Erro ao buscar dados:", e);
+            setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
+            setMessage("Erro ao buscar dados:");
+            setStatusAlert("error");
         }
     };
 
@@ -164,14 +166,14 @@ function Unidades() {
                             className='filtering-input filtering-select-level-access'
                         >
                             <option value={0}>Nenhum</option>
-                            <option value={1}>Guarda</option>
-                            <option value={2}>Refeitório</option>
-                            <option value={3}>Operacional</option>
+                            <option value={1}>Portaria</option>
+                            <option value={2}>Aviões</option>
+                            <option value={3}>Administrativa</option>
                         </select>
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
-                <div className="page-content">
+                <div className="page-content-table">
                     <UnidadesTable data={registros} openModal={openModal} />
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
