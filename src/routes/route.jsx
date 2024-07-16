@@ -5,6 +5,7 @@ import PostoServico from '../pages/posto/posto.jsx'
 import Unidades from '../pages/unidades/unidade.jsx'
 import Usuarios from '../pages/usuarios/usuario.jsx'
 import Alertas from '../pages/alertas/alerta.jsx'
+import Efetivos from '../pages/efetivos/efetivo.jsx'
 
 // import { PrivateRouteEmpty, PrivateRouteAlunoHome, PrivateRouteAlunoEntry, PrivateRouteAlunoExit, PrivateRouteAlunoSignature, PrivateRouteColaboradorHome, PrivateRouteColaboradorHistory, PrivateRouteColaboradorExit, PrivateRouteAdminHome, PrivateRouteAdminStaff, PrivateRouteAdminFamily, PrivateRouteAdminEntry, PrivateRouteAdminExit } from '../components/PrivateRoute.jsx';
 
@@ -18,6 +19,7 @@ function Router() {
         <Route path="/Unidades" element={<Unidades />} />
         <Route path="/Pessoas-Usuário" element={<Usuarios />} />
         <Route path="/Alertas" element={<Alertas />} />
+        <Route path="/Pessoas-Efetivo" element={<Efetivos />} />
       </Routes>
     </BrowserRouter>
   )

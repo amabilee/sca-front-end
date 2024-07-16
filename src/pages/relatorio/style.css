@@ -48,7 +48,7 @@
 
 .input-container p {
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 600;
 }
 
 .input-container .filtering-input{
@@ -87,6 +87,14 @@
 
 .alerta-filters{
     width: 900px;
+}
+
+.efetivo-filters{
+    width: 100%;
+}
+
+.efetivo-filters .input-container{
+    width: 250px;
 }
 
 /* Style Usuarios */
