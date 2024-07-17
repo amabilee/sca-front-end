@@ -12,15 +12,16 @@ import Gerencia from '../../assets/sidebar/gerencia-icon.svg';
 import { useNavigate } from 'react-router-dom';
 import './style-sidebar.css';
 
+import { UseAuth } from '../../hooks';
+
 function Sidebar() {
+    const {signOut, auth} = UseAuth()
     const [pessoasModal, setPessoasModal] = useState(false);
     const [relatoriosModal, setRelatoriosModal] = useState(false);
     const navigate = useNavigate();
 
-    //Permitted Modules of the logged user
     const [permissionModules] = useState(['Relatórios', 'Relatórios-Efetivo', 'Relatórios-Veículo', 'Pessoas', 'Pessoas-Efetivo', 'Pessoas-Usuário', 'Postos', 'Unidades', 'Veículos', 'Alertas', 'Crachás', 'Gerência']);
 
-    // Render Nav Icons
     const moduleData = [
         { name: 'Relatórios', imgSrc: Relatorio, tooltip: 'Relatório', modalState: relatoriosModal, setModalState: setRelatoriosModal },
         { name: 'Pessoas', imgSrc: Pessoas, tooltip: 'Pessoas', modalState: pessoasModal, setModalState: setPessoasModal },
@@ -103,6 +104,17 @@ function Sidebar() {
         }
     };
 
+    const logOut = () => {
+        signOut()
+    }
+
+    if (!auth) {
+        setTimeout(() => {
+          navigate('/')
+        }, 100)
+      }
+
+
     return (
         <>
             <div className="side-bar-container">
@@ -112,7 +124,7 @@ function Sidebar() {
                 {navigationButtons()}
                 <div className="exit-container">
                     <div className="tooltip">
-                        <img src={Sair} alt='Sair' /><span className='tooltiptext'>Sair</span>
+                        <img src={Sair} alt='Sair' onClick={logOut}/><span className='tooltiptext'>Sair</span>
                     </div>
                 </div>
             </div>

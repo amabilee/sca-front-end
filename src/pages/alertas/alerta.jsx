@@ -64,17 +64,17 @@ function Alertas() {
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
-        categoria: 'Nenhum',
-        data: []
+        descricao: '',
+        cor: ''
     });
 
     const sendFilteringConditions = () => {
         let filter = '';
-        if (filteringConditions.categoria !== 'Nenhum') {
-            filter += `&categoria=${filteringConditions.categoria}`;
+        if (filteringConditions.descricao !== '') {
+            filter += `&descricao=${filteringConditions.descricao}`;
         }
-        if (Array.isArray(filteringConditions.data) && filteringConditions.data.length > 0) {
-            filter += `&data=${filteringConditions.data}`;
+        if (filteringConditions.cor !== '') {
+            filter += `&cor=${filteringConditions.cor}`;
         }
         getAlertas(filter, 1);
         setPaginationData(prevState => {
@@ -128,8 +128,8 @@ function Alertas() {
                         <p>Categoria</p>
                         <select
                             className='filtering-input filtering-select-level-access'
-                            value={filteringConditions.categoria}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, categoria: e.target.value })}
+                            value={filteringConditions.descricao}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, descricao: e.target.value })}
                         >
                             <option value={'Nenhum'}>Nenhum</option>
                             <option value={'Erro'}>Erro</option>
@@ -139,8 +139,8 @@ function Alertas() {
                     <div className="input-container date-range-container">
                         <p>Intervalo de tempo</p>
                         <DateRangePicker
-                            value={filteringConditions.data}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, data: e })}
+                            value={filteringConditions.cor}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, cor: e })}
                             format="dd/MM/yyyy (HH:mm:ss)"
                             showMeridian
                             caretAs={FaCalendar} />
