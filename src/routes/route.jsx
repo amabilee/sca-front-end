@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from '../pages/login/login';
+import ConsultarEfetivo from '../pages/login/consultar.jsx';
 import RelatorioEfetivo from '../pages/relatorio/efetivo.jsx'
 import PostoServico from '../pages/posto/posto.jsx'
 import Unidades from '../pages/unidades/unidade.jsx'
@@ -14,10 +15,11 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/consultarEfetivo" element={<ConsultarEfetivo />} />
         <Route path="/Relatórios-Efetivo" element={<RelatorioEfetivo />} />
         <Route path="/Postos" element={<PostoServico />} />
         <Route path="/Unidades" element={<Unidades />} />
-        <Route path="/Pessoas-Usuário" element={<Usuarios />} />
+        <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/Alertas" element={<Alertas />} />
         <Route path="/Pessoas-Efetivo" element={<Efetivos />} />
       </Routes>

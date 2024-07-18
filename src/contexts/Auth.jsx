@@ -35,16 +35,23 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem('user_token', tokenResponse);
             setTimeout(() => {
                 setLoading(false);
-              }, 500)
+            }, 1000);
+            console.log(response.data)
+            return true
 
         } catch (error) {
             setAuth(false);
             setLoading(false);
             if (error.response) {
                 setError(error.response.data.message);
+            } else if (error.code === 'ERR_NETWORK') {
+                setError('Não foi possível conectar ao servidor.');
+            } else {
+                setError('Ocorreu um erro ao tentar fazer login.');
             }
         }
     }
+
 
     function signOut() {
         setUser({})

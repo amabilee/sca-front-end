@@ -32,7 +32,7 @@
 
 .card-login {
     margin: 0 0 0 100px;
-    padding: 30px 50px ;
+    padding: 30px 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -94,20 +94,10 @@
 }
 
 .card-login p:last-child {
-    font-size: 18px;
-    font-weight: 400;
-    color: #1B599B;
-    text-align: center;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.card-login p:last-child {
     font-size: 15px;
     color: #1B599B;
     cursor: pointer;
-    text-decoration: underline;
-    font-weight: 600;
+    font-weight: 800;
     text-align: center;
 }
 
@@ -118,7 +108,7 @@
     font-weight: 600;
 }
 
-.card-login .input-container input:focus-within{
+.card-login .input-container input:focus-within {
     box-shadow: 0px 0.2em 2.5em #c4c4c4;
     border: none;
 }
@@ -126,4 +116,179 @@
 .card-login .input-container input:focus {
     border-color: none;
     outline: none;
-  }
+}
+
+.iconPasswordContainer{
+    width: 100%;
+}
+
+
+/* Consultar Efetivo */
+
+.consultar-header {
+    height: 60px;
+    width: 100%;
+    background-color: #174858;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px 0 50px;
+}
+
+.consultar-header-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    width: 60%;
+    min-width: 700px;
+}
+
+.consultar-header-left img {
+    width: 50px;
+    height: 50px;
+    margin: 0 20px 0 0;
+}
+
+.consultar-header-left h1 {
+    font-size: 35px;
+    font-weight: 800;
+    color: white;
+}
+
+.consultar-header img:last-child {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.consultar-body {
+    padding: 50px 50px 0 50px;
+}
+
+.consultar-body h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: black;
+}
+
+.consultar-body .input-container p,
+.consultar-body .input-pesquisa p {
+    font-size: 14px;
+    font-weight: 600;
+    color: black;
+
+}
+
+.consultar-body .input-container input,
+.consultar-body .input-pesquisa input {
+    border: 1px solid #BBBBBB;
+    border-radius: 5px;
+    height: 40px;
+    margin: 8px 0 0 0;
+    padding: 0 10px;
+}
+
+.consultar-dados {
+    width: 80%;
+    height: 100%;
+}
+
+
+.consultar-dados h3 {
+    font-size: 20px;
+    font-weight: 500;
+    color: black;
+    margin: 20px 0 10px 0;
+}
+
+.box-dados-militar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.dados-militar-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.dados-militar-first-row,
+.dados-militar-second-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 20px 0;
+}
+
+.dados-militar-first-row input {
+    width: 300px;
+}
+
+.dados-militar-second-row input {
+    width: 200px;
+}
+
+.input-pesquisa {
+    margin: 20px 0;
+}
+
+.input-pesquisa input {
+    width: 300px;
+}
+
+.table-wrapper-consulta {
+    margin: 0px 0 30px 0;
+    max-height: 350px;
+    min-height: 350px;
+    width: 1000px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 1px solid #DEE2E6;
+}
+
+.table-consulta {
+    width: 100%;
+}
+
+.table-consulta thead tr th:first-child,
+.table-consulta tbody tr td:first-child {
+    padding: 0 0 0 20px;
+}
+
+.table-consulta thead tr {
+    height: 50px;
+    font-weight: 900;
+}
+
+.table-consulta tbody tr {
+    height: 50px;
+    font-weight: 500;
+}
+
+.input-foto,
+.input-qrcode {
+    width: 200px;
+    height: 200px;
+    min-width: 200px;
+}
+
+.input-foto {
+    background-color: #58AFCB;
+}
+
+.findQrcode-button {
+    margin: 20px 0 0 0;
+    background-color: #58AFCB;
+    width: 170px;
+    color: white;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+}

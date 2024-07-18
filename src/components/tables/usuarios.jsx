@@ -8,8 +8,7 @@ const UsuariosTable = ({ data, openModal }) => (
         <table className='table table-actions table-usuarios'>
             <thead>
                 <tr>
-                    <th scope="col">Nome completo</th>
-                    <th scope="col">CPF</th>
+                    <th scope="col">Militar</th>
                     <th scope="col">Módulos</th>
                     <th scope="col">Nível de acesso</th>
                     <th scope="col"><p>Ações</p></th>
@@ -18,16 +17,17 @@ const UsuariosTable = ({ data, openModal }) => (
             <tbody>
                 {data && Array.isArray(data) && data.map((registro, index) => (
                     <tr key={index} scope="row" className={index % 2 === 0 ? 'row-white' : 'row-gray'}>
-                        <td>{registro.nome}</td>
-                        <td>{registro.cpf}</td>
+                        <td>{registro.graduacao} {registro.nome_guerra}</td>
                         <td>
-                            {registro.modulos.split(', ').filter(modulo => modulo !== 'Pessoas' && modulo !== 'Relatórios').map((modulo, i) => (
-                                <div key={i}>{modulo}</div>
+                            {registro.Modulos.map((modulo, i) => (
+                                <div key={i}>{modulo.descricao}</div>
                             ))}
                         </td>
-                        <td>{registro.nivel_acesso === 1 ? "Visualizador" :
-                            registro.nivel_acesso === 2 ? "Identificador" : null
-                        }</td>
+                        <td>
+                            {registro.nivel_acesso === 1 ? "Visualizador" :
+                                registro.nivel_acesso === 2 ? "Identificador" : null
+                            }
+                        </td>
                         <td>
                             <button onClick={() => openModal("edit", registro)}><img src={Edit} alt="Edit" /></button>
                             <button onClick={() => openModal("delete", registro)}><img src={Delete} alt="Delete" /></button>

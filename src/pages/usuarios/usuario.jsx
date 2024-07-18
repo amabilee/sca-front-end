@@ -48,7 +48,7 @@ function Usuarios() {
 
     const getUsuarios = async (filter, page) => {
         try {
-            const response = await server.get(`/usuario?page=${page}${filter}`);
+            const response = await server.get(`/usuario`);
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -149,7 +149,7 @@ function Usuarios() {
         <div className="body">
             <Header />
             <div className="page-container">
-                <div className="page-title page-title-create-option">
+                <div className="page-title-create-option ">
                     <div className="page-title-text">
                         <h1>Usuários</h1>
                         <h2>Para consultar os usuários, informe os dados desejados</h2>
