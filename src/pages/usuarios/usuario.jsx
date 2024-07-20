@@ -10,7 +10,10 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { IMaskInput } from "react-imask";
+
+import './style.css'
+
+import '../style.css'
 
 function Usuarios() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
@@ -48,7 +51,7 @@ function Usuarios() {
 
     const getUsuarios = async (filter, page) => {
         try {
-            const response = await server.get(`/usuario`);
+            const response = await server.get(`/usuario?page=${page}${filter}`);
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -65,24 +68,16 @@ function Usuarios() {
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
         nome: '',
-        cpf: '',
-        modulos: 0,
         nivel_acesso: 0
     });
 
     const sendFilteringConditions = () => {
         let filter = ''
         if (filteringConditions.nome != '') {
-            filter += `&nome=${filteringConditions.nome}`
+            filter += `&nome_guerra=${filteringConditions.nome}`
         }
         if (filteringConditions.nivel_acesso != 0) {
             filter += `&nivel_acesso=${filteringConditions.nivel_acesso}`
-        }
-        if (filteringConditions.modulos != 0) {
-            filter += `&modulos=${filteringConditions.modulos}`
-        }
-        if (filteringConditions.cpf.length != 0) {
-            filter += `&cpf=${filteringConditions.cpf}`
         }
         getUsuarios(filter, 1)
         setPaginationData(prevState => {
@@ -149,51 +144,18 @@ function Usuarios() {
         <div className="body">
             <Header />
             <div className="page-container">
-                <div className="page-title-create-option ">
-                    <div className="page-title-text">
-                        <h1>Usuários</h1>
-                        <h2>Para consultar os usuários, informe os dados desejados</h2>
-                    </div>
-                    <button onClick={() => openModal("create")}>Cadastrar usuário</button>
+                <div className="page-title">
+                    <h1>Usuários</h1>
+                    <h2>Para consultar os usuários, informe os dados desejados</h2>
                 </div>
                 <div className="page-filters usuarios-filters">
                     <div className="input-container">
-                        <p>Nome completo</p>
+                        <p>Militar</p>
                         <input
                             className='filtering-input'
                             value={filteringConditions.nome}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, nome: e.target.value })}
                         />
-                    </div>
-                    <div className="input-container">
-                        <p>CPF</p>
-                        <IMaskInput
-                            type="text"
-                            mask="000.000.000-00"
-                            className='filtering-input'
-                            value={filteringConditions.cpf}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, cpf: e.target.value })}
-                        />
-                    </div>
-                    <div className="input-container">
-                        <p>Módulos</p>
-                        <select
-                            value={filteringConditions.modulos}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, modulos: e.target.value })}
-                            className='filtering-input filtering-select-level-access'
-                        >
-                            <option value={0}>Nenhum</option>
-                            <option value={"Relatórios-Efetivo"}>Relatórios de efetivos</option>
-                            <option value={"Relatórios-Veículo"}>Relatórios de veículos</option>
-                            <option value={"Pessoas-Efetivo"}>Efetivos</option>
-                            <option value={"Pessoas-Usuário"}>Usuários</option>
-                            <option value={"Postos"}>Postos de serviço</option>
-                            <option value={"Unidades"}>Unidades</option>
-                            <option value={"Veículos"}>Veículos</option>
-                            <option value={"Alertas"}>Alertas</option>
-                            <option value={"Crachás"}>Crachás</option>
-                            <option value={"Gerência"}>Gerência</option>
-                        </select>
                     </div>
                     <div className="input-container">
                         <p>Nível de acesso</p>

@@ -5,13 +5,12 @@ import '../../pages/posto/style.css';
 
 const UsuariosTable = ({ data, openModal }) => (
     <div className='table-wrapper'>
-        <table className='table table-actions table-usuarios'>
+        <table className='table table-usuarios'>
             <thead>
                 <tr>
                     <th scope="col">Militar</th>
                     <th scope="col">Módulos</th>
                     <th scope="col">Nível de acesso</th>
-                    <th scope="col"><p>Ações</p></th>
                 </tr>
             </thead>
             <tbody>
@@ -27,10 +26,6 @@ const UsuariosTable = ({ data, openModal }) => (
                             {registro.nivel_acesso === 1 ? "Visualizador" :
                                 registro.nivel_acesso === 2 ? "Identificador" : null
                             }
-                        </td>
-                        <td>
-                            <button onClick={() => openModal("edit", registro)}><img src={Edit} alt="Edit" /></button>
-                            <button onClick={() => openModal("delete", registro)}><img src={Delete} alt="Delete" /></button>
                         </td>
                     </tr>
                 ))}

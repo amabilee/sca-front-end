@@ -1,0 +1,20 @@
+.color-box{
+    width: 100px;
+    height: 20px;
+    border-radius: 10px;
+}
+
+.table-actions thead tr th:last-child {
+    width: 100px;
+}
+
+.table-actions tbody tr td:last-child button {
+    border: none;
+    background-color: transparent;
+    margin: 0 20px 0 0;
+    cursor: pointer;
+}
+
+.table-actions tbody tr td:last-child button img {
+    height: 20px;
+}

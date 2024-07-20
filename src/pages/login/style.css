@@ -278,7 +278,9 @@
 }
 
 .input-foto {
-    background-color: #58AFCB;
+    background-color: #c5c5c5;
+    border-radius: 10px;
+    padding: 5px;
 }
 
 .findQrcode-button {

@@ -142,6 +142,7 @@ function ConsultarEfetivo() {
                 <div className="input-pesquisa">
                     <p>Número de ordem</p>
                     <input
+                        type="number"
                         placeholder='Digite aqui para pesquisar'
                         onChange={(e) => handleNumeroOrdemChange(e.target.value)}
                     />
@@ -176,7 +177,6 @@ function ConsultarEfetivo() {
                             </div>
                         </div>
                         <div className="input-container input-foto">
-                            <p>Foto</p>
                             {efetivoData.foto ? (
                                 <img src={efetivoData.foto} alt="Foto do Militar" />
                             ) : (

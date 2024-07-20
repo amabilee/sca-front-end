@@ -24,7 +24,7 @@ function Efetivos() {
         setPaginationData(prevState => {
             return { ...prevState, currentPage: value }
         });
-        getAlertas(paginationData.filtering, value)
+        getEfetivos(paginationData.filtering, value)
     };
 
     // SnackBar config
@@ -43,13 +43,12 @@ function Efetivos() {
 
     // Data from the DB
     useEffect(() => {
-        getAlertas('', 1);
+        getEfetivos('', 1);
     }, []);
 
-    const getAlertas = async (filter, page) => {
-        console.log(page, filter)
+    const getEfetivos = async (filter, page) => {
         try {
-            const response = await server.get(`/alerta?page=${page}${filter}`);
+            const response = await server.get(`/efetivo?page=${page}${filter}`);
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -65,26 +64,34 @@ function Efetivos() {
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
-        numero_ordem: '',
+        qrcode_efetivo: '',
         nome_guerra: '',
         nome_completo: '',
         unidade: '',
-        posto_graduacao: ''
+        graduacao: ''
     });
 
     const sendFilteringConditions = () => {
         let filter = '';
-        if (filteringConditions.categoria !== 'Nenhum') {
-            filter += `&categoria=${filteringConditions.categoria}`;
+        if (filteringConditions.qrcode_efetivo !== '') {
+            filter += `&qrcode_efetivo=${filteringConditions.qrcode_efetivo}`;
         }
-        if (Array.isArray(filteringConditions.data) && filteringConditions.data.length > 0) {
-            filter += `&data=${filteringConditions.data}`;
+        if (filteringConditions.nome_guerra !== '') {
+            filter += `&nome_guerra=${filteringConditions.nome_guerra}`;
         }
-        getAlertas(filter, 1);
+        if (filteringConditions.nome_completo !== '') {
+            filter += `&nome_completo=${filteringConditions.nome_completo}`;
+        }
+        if (filteringConditions.graduacao !== '') {
+            filter += `&graduacao=${filteringConditions.graduacao}`;
+        }
+        if (filteringConditions.unidade !== '') {
+            filter += `&unidade=${filteringConditions.unidade}`;
+        }
+        getEfetivos(filter, 1);
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 };
         });
-        console.log(filteringConditions)
     };
 
     // Open and Close Modals
@@ -139,7 +146,7 @@ function Efetivos() {
             default:
                 break;
         }
-        getAlertas(paginationData.filtering, paginationData.currentPage);
+        getEfetivos(paginationData.filtering, paginationData.currentPage);
     };
 
     return (
@@ -157,9 +164,18 @@ function Efetivos() {
                     <div className="input-container">
                         <p>Número de ordem</p>
                         <input
+                            type="number"
                             className='filtering-input'
-                            value={filteringConditions.numero_ordem}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, numero_ordem: e.target.value })}
+                            value={filteringConditions.qrcode_efetivo}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode_efetivo: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>Posto\Graduação</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.graduacao}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, graduacao: e.target.value })}
                         />
                     </div>
                     <div className="input-container">
@@ -184,14 +200,6 @@ function Efetivos() {
                             className='filtering-input'
                             value={filteringConditions.unidade}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, unidade: e.target.value })}
-                        />
-                    </div>
-                    <div className="input-container">
-                        <p>Posto\Graduação</p>
-                        <input
-                            className='filtering-input'
-                            value={filteringConditions.posto_graduacao}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, posto_graduacao: e.target.value })}
                         />
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>

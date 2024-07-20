@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { server } from '../../../services/server'
+import "./style.css";
+import "../style.css";
+import { server } from '../../../services/server';
+import { MuiColorInput } from 'mui-color-input'
 
-export default function CreateUnidadeModal({ closeModal, renderTable }) {
-    const [receivedData, setReceivedData] = useState({ nome: "", ativo_unidade: true })
+export default function EditUnidadeModal({ currentData, closeModal, renderTable }) {
+    const [receivedData, setReceivedData] = useState(currentData || {});
     // SnackBar config
     const [message, setMessage] = useState("");
     const [state, setState] = useState({
@@ -19,13 +22,18 @@ export default function CreateUnidadeModal({ closeModal, renderTable }) {
     };
 
     const cleanInputs = () => {
-        setReceivedData({ ...receivedData, nome: "", nivel_acesso: 0 });
+        setReceivedData({ ...receivedData, nome_alerta: "", cor: "" });
     };
 
-    const confirmCreating = () => {
-        if (receivedData.nome.length == 0) {
+    const confirmEditing = () => {
+        const hexColorPattern = /^#([0-9A-F]{6})$/i;
+
+        if (receivedData.nome_alerta.length === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
+        } else if (!hexColorPattern.test(receivedData.cor)) {
+            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+            setMessage("Insira uma cor válida.");
         } else {
             sendRequest();
         }
@@ -33,12 +41,12 @@ export default function CreateUnidadeModal({ closeModal, renderTable }) {
 
     const sendRequest = async () => {
         try {
-            await server.post(`/unidade`, receivedData);
-            renderTable('create');
-            closeModal('create');
+            await server.put(`/alerta/${receivedData.id}`, receivedData);
+            renderTable('edit');
+            closeModal('edit');
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Erro ao enviar dados.");
+            setMessage("Erro ao atualizar dados.");
         }
     };
 
@@ -46,19 +54,23 @@ export default function CreateUnidadeModal({ closeModal, renderTable }) {
         <>
             <div className="page-container modal">
                 <div className="page-title">
-                    <h1>Criar unidade</h1>
+                    <h1>Editar alerta</h1>
                     <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">
-                    <div className="page-filters filters-unidade">
+                    <div className="page-filters filters-relatorio-efetivo">
                         <div className="input-container">
-                            <p>Nome da unidade</p>
-                            <input className='filtering-input' value={receivedData.nome} onChange={(e) => setReceivedData({ ...receivedData, nome: e.target.value })} />
+                            <p>Descrição do alerta</p>
+                            <input className='filtering-input' value={receivedData.nome_alerta} onChange={(e) => setReceivedData({ ...receivedData, nome_alerta: e.target.value })} />
+                        </div>
+                        <div className="input-container">
+                            <p>Cor</p>
+                            <MuiColorInput className='filtering-input color-input' format="hex" value={receivedData.cor} onChange={(e) => setReceivedData({ ...receivedData, cor: e })} />
                         </div>
                     </div>
                     <div className="form-buttons-container">
                         <div className="cancel-button">
-                            <button onClick={() => closeModal('create')}>
+                            <button onClick={() => closeModal('edit')}>
                                 Voltar
                             </button>
                         </div>
@@ -66,7 +78,7 @@ export default function CreateUnidadeModal({ closeModal, renderTable }) {
                             <button onClick={() => cleanInputs()}>
                                 Limpar campos
                             </button>
-                            <button onClick={confirmCreating}>
+                            <button onClick={confirmEditing}>
                                 Confirmar
                             </button>
                         </div>
@@ -78,8 +90,8 @@ export default function CreateUnidadeModal({ closeModal, renderTable }) {
                             onClose={handleClose}
                             key={vertical + horizontal}
                         >
-                            <Alert variant="filled" severity="error">
-                                {message}
+                            <Alert variant="filled" severity="error" onClose={handleClose}>
+                                {message || "Erro desconhecido"}
                             </Alert>
                         </Snackbar>
                     </div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import AlertasTable from '../../components/tables/alertas';
 import DeleteAlertaModal from '../../components/modals/delete/alerta';
+import CreateAlertaModal from '../../components/modals/create/alerta';
+import EditAlertaModal from '../../components/modals/edit/alerta';
 import { server } from '../../services/server';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -9,13 +11,17 @@ import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-import { DateRangePicker } from 'rsuite';
-import { FaCalendar } from 'react-icons/fa';
-import 'rsuite/dist/rsuite.min.css';
+
+// Style for general
+import "../style.css";
+// Style for this specific
+import "./style.css"
 
 function Alertas() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
     const [deleteModal, setOpenDeleteModal] = useState(false);
+    const [editModal, setOpenEditModal] = useState(false);
+    const [createModal, setOpenCreateModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
 
     //Paginator conifg
@@ -64,14 +70,13 @@ function Alertas() {
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
-        descricao: '',
-        cor: ''
+        nome_alerta: '',
     });
 
     const sendFilteringConditions = () => {
         let filter = '';
-        if (filteringConditions.descricao !== '') {
-            filter += `&descricao=${filteringConditions.descricao}`;
+        if (filteringConditions.nome_alerta !== '') {
+            filter += `&nome_alerta=${filteringConditions.nome_alerta}`;
         }
         if (filteringConditions.cor !== '') {
             filter += `&cor=${filteringConditions.cor}`;
@@ -86,6 +91,13 @@ function Alertas() {
     // Open and Close Modals
     const openModal = (type, data) => {
         switch (type) {
+            case 'edit':
+                setOpenEditModal(true);
+                setSendingData(data);
+                break;
+            case 'create':
+                setOpenCreateModal(true);
+                break;
             case 'delete':
                 setOpenDeleteModal(true)
                 setSendingData(data);
@@ -96,6 +108,12 @@ function Alertas() {
 
     const closeModal = (type) => {
         switch (type) {
+            case 'edit':
+                setOpenEditModal(false);
+                break;
+            case 'create':
+                setOpenCreateModal(false);
+                break;
             case 'delete':
                 setOpenDeleteModal(false)
             default:
@@ -105,6 +123,15 @@ function Alertas() {
 
     const operationSuccess = (type) => {
         switch (type) {
+            case 'delete':
+                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
+                setMessage("Alerta deletado com sucesso.");
+                setStatusAlert("success");
+            case 'edit':
+                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
+                setMessage("Alerta alterado com sucesso.");
+                setStatusAlert("success");
+                break;
             case 'delete':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Alerta deletado com sucesso.");
@@ -119,31 +146,21 @@ function Alertas() {
         <div className="body">
             <Header />
             <div className="page-container">
-                <div className="page-title">
-                    <h1>Alertas do sistema</h1>
-                    <h2>Para consultar os alertas, informe os dados desejados</h2>
+                <div className="page-title page-title-create-option">
+                    <div className="page-title-text">
+                        <h1>Alertas</h1>
+                        <h2>Para consultar os alertas, informe os dados desejados</h2>
+                    </div>
+                    <button onClick={() => openModal("create")}>Cadastrar alerta</button>
                 </div>
                 <div className="page-filters alerta-filters">
                     <div className="input-container">
-                        <p>Categoria</p>
-                        <select
-                            className='filtering-input filtering-select-level-access'
-                            value={filteringConditions.descricao}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, descricao: e.target.value })}
-                        >
-                            <option value={'Nenhum'}>Nenhum</option>
-                            <option value={'Erro'}>Erro</option>
-                            <option value={'Sucesso'}>Sucesso</option>
-                        </select>
-                    </div>
-                    <div className="input-container date-range-container">
-                        <p>Intervalo de tempo</p>
-                        <DateRangePicker
-                            value={filteringConditions.cor}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, cor: e })}
-                            format="dd/MM/yyyy (HH:mm:ss)"
-                            showMeridian
-                            caretAs={FaCalendar} />
+                        <p>Descrição do alerta</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.nome_alerta}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, nome_alerta: e.target.value })}
+                        ></input>
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
@@ -156,6 +173,12 @@ function Alertas() {
             </div>
             {deleteModal && (
                 <DeleteAlertaModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
+            )}
+            {createModal && (
+                <CreateAlertaModal closeModal={closeModal} renderTable={operationSuccess} />
+            )}
+            {editModal && (
+                <EditAlertaModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
             )}
             <Snackbar
                 ContentProps={{ sx: { borderRadius: '8px' } }}

@@ -56,23 +56,6 @@ export default function EditUnidadeModal({ currentData, closeModal, renderTable 
                             <p>Nome da unidade</p>
                             <input className='filtering-input' value={receivedData.nome} onChange={(e) => setReceivedData({ ...receivedData, nome: e.target.value })} />
                         </div>
-                        <div className="input-container">
-                            <p>Nível de acesso</p>
-                            <select value={receivedData.nivel_acesso} onChange={(e) => setReceivedData({ ...receivedData, nivel_acesso: e.target.value })} className='filtering-input filtering-select-level-access'>
-                                <option value={0}>Nenhum</option>
-                                <option value={1}>Portaria</option>
-                                <option value={2}>Aviões</option>
-                                <option value={3}>Administrativa</option>
-                            </select>
-                        </div>
-                        <div className="input-container">
-                            <p>Número máximo de efetivos</p>
-                            <input type="number" value={receivedData.maximo_efetivo} onChange={(e) => setReceivedData({ ...receivedData, maximo_efetivo: e.target.value })} className="filtering-input" />
-                        </div>
-                        <div className="input-container">
-                            <p>Número máximo de veículos</p>
-                            <input type="number" value={receivedData.maximo_veiculo} onChange={(e) => setReceivedData({ ...receivedData, maximo_veiculo: e.target.value })} className="filtering-input" />
-                        </div>
                     </div>
                     <div className="form-buttons-container">
                         <div className="cancel-button">

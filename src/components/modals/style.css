@@ -1,0 +1,83 @@
+.color-input div{
+    padding: 0;
+}
+
+.color-input div input{
+    height: 40px;
+    padding: 0;
+    border: none;
+}
+
+.color-input div fieldset{
+    border: none;
+}
+
+.efetivo-inputs-1{
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.efetivo-inputs-1 .input-container:nth-child(1),
+.efetivo-inputs-1 .input-container:nth-child(3){
+    width: 200px;
+}
+
+.efetivo-inputs-1 .input-container:nth-child(2),
+.efetivo-inputs-1 .input-container:nth-child(6){
+    width: 300px;
+}
+
+.efetivo-inputs-1 .input-container select {
+    width: 150px;
+}
+
+.efetivo-inputs-2 {
+    margin: 30px 0 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+    width: max-content;
+}
+
+.efetivo-inputs-2 .input-container:nth-child(1) select {
+    width: 180px;
+    height: 40px;
+}
+
+.efetivo-inputs-2 .input-container:last-child input{
+    padding: 10px;
+    width: 300px;
+    background-color: #e3e3e3;
+}
+
+.militar-foto{
+    margin: 10px auto;
+    width: 200px;
+    height: 200px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.foto-preview{
+    padding: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.foto-preview button{
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+}
+
+.foto-preview button img{
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}

@@ -4,72 +4,40 @@ import Sair from '../../assets/sidebar/sair-icon.svg';
 import './style-sidebar.css';
 import { useNavigate } from 'react-router-dom';
 import { UseAuth } from '../../hooks';
+import { server } from '../../services/server'
 
 function Sidebar() {
     const { signOut } = UseAuth();
     const [userModules, setUserModules] = useState([]);
     const navigate = useNavigate();
 
+    const getUserModulos = async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData) 
+        try {
+            const response = await server.get(`/usuario/${userDataParsed.id}`);
+            console.log(response.data.entity[0].Modulos)
+            setUserModules(response.data.entity[0].Modulos)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
-        
-        const mockData = {
-            entity: {
-                id: 137,
-                usuario: 1000001,
-                nivel_acesso: 2,
-                flag: false,
-                auth: null
-            },
-            modulos: [
-                {
-                    id_usuario: 137,
-                    id_modulo: 14,
-                    Modulo: {
-                        id: 14,
-                        descricao: "Usuários",
-                        link: "/usuarios",
-                        icone: "usuario_icon.svg",
-                        ordem: 1
-                    }
-                },
-                {
-                    id_usuario: 137,
-                    id_modulo: 15,
-                    Modulo: {
-                        id: 15,
-                        descricao: "Efetivos",
-                        link: "/efetivos",
-                        icone: "efetivo_icon.svg",
-                        ordem: 2
-                    }
-                },
-                {
-                    id_usuario: 137,
-                    id_modulo: 16,
-                    Modulo: {
-                        id: 16,
-                        descricao: "Relatórios Efetivos",
-                        link: "/relatorio-efetivos",
-                        icone: "reports_efetivo_icon.svg",
-                        ordem: 3
-                    }
-                }
-            ]
-        };
-        setUserModules(mockData.modulos);
+        getUserModulos()
     }, []);
 
     const navigationButtons = () => {
         return (
             <div className="nav-container">
                 {userModules.map((module) => (
-                    <div className="tooltip" key={module.Modulo.id}>
+                    <div className="tooltip" key={module.ordem}>
                         <img
-                            src={`../../../public/${module.Modulo.icone}`}
-                            alt={module.Modulo.descricao}
-                            onClick={() => handleModuleClick(module.Modulo.link)}
+                            src={`../../../public/${module.icone}`}
+                            alt={module.descricao}
+                            onClick={() => handleModuleClick(module.link)}
                         />
-                        <span className="tooltiptext">{module.Modulo.descricao}</span>
+                        <span className="tooltiptext">{module.descricao}</span>
                     </div>
                 ))}
             </div>

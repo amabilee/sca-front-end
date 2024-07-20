@@ -3,14 +3,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server';
 
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 export default function DeleteAlertaModal({ currentData, closeModal, renderTable }) {
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return format(date, "dd/MM/yyyy 'às' HH:mm:ss", { locale: ptBR });
-    };
 
     const [removeOption, setRemoveOption] = useState(0);
     const [receivedData, setDataReceived] = useState(currentData || {});
@@ -53,7 +47,7 @@ export default function DeleteAlertaModal({ currentData, closeModal, renderTable
         <>
             <div className="page-container modal">
                 <div className="page-title">
-                    <h1>Deletar alerta: {formatDate(receivedData.data)}</h1>
+                    <h1>Deletar alerta: {receivedData.nome_alerta}</h1>
                     <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">

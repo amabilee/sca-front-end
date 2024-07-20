@@ -1,0 +1,59 @@
+/* Page titles */
+
+.page-title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0 0 40px 0;
+    height: 7%;
+}
+
+.page-title h1 {
+    font-size: 27px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+}
+
+.page-title h2 {
+    line-height: 0px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.page-title-create-option {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0 0 40px 0;
+    height: 7%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-title-create-option h1 {
+    font-size: 27px;
+    font-weight: 500;
+}
+
+.page-title-create-option h2 {
+    line-height: 0px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.page-title-create-option button {
+    margin: 20px 0 0 0;
+    background-color: #58AFCB;
+    width: 170px;
+    color: white;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+}

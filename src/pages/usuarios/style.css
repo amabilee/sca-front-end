@@ -1,0 +1,7 @@
+.usuarios-filters {
+    width: 800px;
+}
+
+.usuarios-filters .input-container:nth-child(1) {
+    width: 300px;
+}

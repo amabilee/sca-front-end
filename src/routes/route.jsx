@@ -17,11 +17,11 @@ function Router() {
         <Route path="/" element={<Login />} />
         <Route path="/consultarEfetivo" element={<ConsultarEfetivo />} />
         <Route path="/Relatórios-Efetivo" element={<RelatorioEfetivo />} />
-        <Route path="/Postos" element={<PostoServico />} />
-        <Route path="/Unidades" element={<Unidades />} />
+        <Route path="/graduacao" element={<PostoServico />} />
+        <Route path="/unidade" element={<Unidades />} />
         <Route path="/usuarios" element={<Usuarios />} />
-        <Route path="/Alertas" element={<Alertas />} />
-        <Route path="/Pessoas-Efetivo" element={<Efetivos />} />
+        <Route path="/alertas" element={<Alertas />} />
+        <Route path="/efetivos" element={<Efetivos />} />
       </Routes>
     </BrowserRouter>
   )

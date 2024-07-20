@@ -9,27 +9,6 @@
     height: 100%;
 }
 
-.page-title {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin: 0 0 40px 0;
-    height: 7%;
-}
-
-.page-title h1 {
-    font-size: 27px;
-    font-weight: 500;
-}
-
-.page-title h2 {
-    line-height: 0px;
-    font-size: 16px;
-    font-weight: 400;
-}
-
 /* Filters */
 
 .page-filters {
@@ -81,13 +60,8 @@
     width: 300px;
 }
 
-.posto-filters,
-.unidade-filters {
+.posto-filters {
     width: 650px;
-}
-
-.alerta-filters {
-    width: 900px;
 }
 
 .efetivo-filters {
@@ -102,14 +76,6 @@
 
 .table-usuarios tbody tr td:nth-child(3) {
     padding: 10px 0;
-}
-
-.usuarios-filters {
-    width: 1100px;
-}
-
-.usuarios-filters .input-container:nth-child(1) {
-    width: 300px;
 }
 
 .usuario-inputs-1 {
