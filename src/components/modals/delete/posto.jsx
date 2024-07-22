@@ -31,8 +31,16 @@ export default function DeletePostoModal({ currentPosto, closeModal, renderTable
 
     const sendRequest = async () => {
         let removeData = { ...dataFromPosto, ativo_posto: false };
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.put(`/posto/${dataFromPosto.id}`, removeData);
+            await server.put(`/posto/${dataFromPosto.id}`, removeData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('delete');
             closeModal('delete');
         } catch (e) {

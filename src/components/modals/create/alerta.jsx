@@ -42,8 +42,16 @@ export default function CreateAlertaModal({ closeModal, renderTable }) {
     
 
     const sendRequest = async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.post(`/alerta`, receivedData);
+            await server.post(`/alerta`, receivedData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('create');
             closeModal('create');
         } catch (e) {

@@ -4,7 +4,7 @@ import Edit from '../../assets/table/edit-icon.svg'
 import '../../pages/posto/style.css';
 import '../../components/tables/style.css'
 
-const AlertasTable = ({ data, openModal }) => {
+const AlertasTable = ({ data, openModal, levelAcesso }) => {
     return (
         <div className='table-wrapper'>
             <table className='table table-actions alerta-table'>
@@ -12,7 +12,10 @@ const AlertasTable = ({ data, openModal }) => {
                     <tr>
                         <th scope="col">Descrição do alerta</th>
                         <th scope="col">Cor</th>
-                        <th scope="col"><p>Ações</p></th>
+                        {levelAcesso && levelAcesso == 2(
+                            <th scope="col"><p>Ações</p></th>
+                        )}
+
                     </tr>
                 </thead>
                 <tbody>
@@ -22,10 +25,12 @@ const AlertasTable = ({ data, openModal }) => {
                             <td>
                                 <div className="color-box" style={{ backgroundColor: registro.cor }}></div>
                             </td>
-                            <td>
-                            <button onClick={() => openModal("edit", registro)}><img src={Edit} alt="Edit" /></button>
-                            <button onClick={() => openModal("delete", registro)}><img src={Delete} alt="Delete" /></button>
-                            </td>
+                            {levelAcesso && levelAcesso == 2 && (
+                                <td>
+                                    <button onClick={() => openModal("edit", registro)}><img src={Edit} alt="Edit" /></button>
+                                    <button onClick={() => openModal("delete", registro)}><img src={Delete} alt="Delete" /></button>
+                                </td>
+                            )}
                         </tr>
                     ))}
                 </tbody>

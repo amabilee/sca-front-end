@@ -23,6 +23,7 @@ function Alertas() {
     const [editModal, setOpenEditModal] = useState(false);
     const [createModal, setOpenCreateModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
+    const [nivelAcesso, setNivelAcesso] = useState(1)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -52,9 +53,17 @@ function Alertas() {
     }, []);
 
     const getAlertas = async (filter, page) => {
-        console.log(page, filter)
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData)
+        let token = localStorage.getItem("user_token")
+        setNivelAcesso(userDataParsed.nivel_acesso)
         try {
-            const response = await server.get(`/alerta?page=${page}${filter}`);
+            const response = await server.get(`/alerta?page=${page}${filter}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -85,7 +94,6 @@ function Alertas() {
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 };
         });
-        console.log(filteringConditions)
     };
 
     // Open and Close Modals
@@ -146,13 +154,21 @@ function Alertas() {
         <div className="body">
             <Header />
             <div className="page-container">
-                <div className="page-title page-title-create-option">
-                    <div className="page-title-text">
+                {nivelAcesso && nivelAcesso == 2 && (
+                    <div className="page-title page-title-create-option">
+                        <div className="page-title-text">
+                            <h1>Alertas</h1>
+                            <h2>Para consultar os alertas, informe os dados desejados</h2>
+                        </div>
+                        <button onClick={() => openModal("create")}>Cadastrar alerta</button>
+                    </div>
+                )}
+                {nivelAcesso && nivelAcesso == 1 && (
+                    <div className="page-title">
                         <h1>Alertas</h1>
                         <h2>Para consultar os alertas, informe os dados desejados</h2>
                     </div>
-                    <button onClick={() => openModal("create")}>Cadastrar alerta</button>
-                </div>
+                )}
                 <div className="page-filters alerta-filters">
                     <div className="input-container">
                         <p>Descrição do alerta</p>
@@ -165,7 +181,7 @@ function Alertas() {
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <AlertasTable data={registros} openModal={openModal} />
+                    <AlertasTable data={registros} openModal={openModal} levelAcesso={nivelAcesso}/>
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>

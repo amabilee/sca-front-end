@@ -19,6 +19,7 @@ function Unidades() {
     const [createModal, setOpenCreateModal] = useState(false);
     const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
+    const [nivelAcesso, setNivelAcesso] = useState(1)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -48,9 +49,17 @@ function Unidades() {
     }, []);
 
     const getUnidades = async (filter, page) => {
-        console.log(page, filter)
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
+        setNivelAcesso(userDataParsed.nivel_acesso)
         try {
-            const response = await server.get(`/unidade?page=${page}${filter}`);
+            const response = await server.get(`/unidade?page=${page}${filter}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -144,13 +153,21 @@ function Unidades() {
         <div className="body">
             <Header />
             <div className="page-container">
-                <div className="page-title page-title-create-option">
-                    <div className="page-title-text">
+                {nivelAcesso && nivelAcesso == 2 && (
+                    <div className="page-title page-title-create-option">
+                        <div className="page-title-text">
+                            <h1>Unidades</h1>
+                            <h2>Para consultar as unidades, informe os dados desejados</h2>
+                        </div>
+                        <button onClick={() => openModal("create")}>Cadastrar unidade</button>
+                    </div>
+                )}
+                {nivelAcesso && nivelAcesso == 1 && (
+                    <div className="page-title">
                         <h1>Unidades</h1>
                         <h2>Para consultar as unidades, informe os dados desejados</h2>
                     </div>
-                    <button onClick={() => openModal("create")}>Cadastrar unidade</button>
-                </div>
+                )}
                 <div className="page-filters unidade-filters">
                     <div className="input-container">
                         <p>Nome da unidade</p>
@@ -163,7 +180,7 @@ function Unidades() {
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <UnidadesTable data={registros} openModal={openModal} />
+                    <UnidadesTable data={registros} openModal={openModal} levelAcesso={nivelAcesso}/>
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>

@@ -16,9 +16,9 @@ function Router() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/consultarEfetivo" element={<ConsultarEfetivo />} />
-        <Route path="/Relatórios-Efetivo" element={<RelatorioEfetivo />} />
-        <Route path="/graduacao" element={<PostoServico />} />
-        <Route path="/unidade" element={<Unidades />} />
+        <Route path="/relatorio-efetivos" element={<RelatorioEfetivo />} />
+        <Route path="/postos" element={<PostoServico />} />
+        <Route path="/unidades" element={<Unidades />} />
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/alertas" element={<Alertas />} />
         <Route path="/efetivos" element={<Efetivos />} />

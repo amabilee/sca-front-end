@@ -33,8 +33,16 @@ export default function EditPostoModal({ currentPosto, closeModal, renderTable }
     };
 
     const sendRequest = async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.put(`/posto/${dataFromPosto.id}`, dataFromPosto);
+            await server.put(`/posto/${dataFromPosto.id}`, dataFromPosto, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('edit');
             closeModal('edit');
         } catch (e) {
@@ -60,9 +68,9 @@ export default function EditPostoModal({ currentPosto, closeModal, renderTable }
                             <p>Nível de acesso</p>
                             <select value={dataFromPosto.nivel_acesso} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nivel_acesso: e.target.value })} className='filtering-input filtering-select-level-access'>
                                 <option value={0}>Nenhum</option>
-                                <option value={1}>Portaria</option>
-                                <option value={2}>Aviões</option>
-                                <option value={3}>Administrativa</option>
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
+                                <option value={3}>3</option>
                             </select>
                         </div>
                     </div>

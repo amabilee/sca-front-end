@@ -1,32 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { server } from '../../../services/server'
+import "./style.css";
+import { server } from '../../../services/server';
 import { IMaskInput } from "react-imask";
 import Remove from '../../../assets/remove_icon.svg'
 
-export default function CreateEfetivoModal({ closeModal, renderTable }) {
-    const [graduacaoOptions, setGraduacaoOptions] = useState([])
-    const [unidadeOptions, setUnidadeOptions] = useState([])
-    const [situacaoOptions, setSituacaoOptions] = useState([])
-    const [efetivoFoto, setEfetivoFoto] = useState("")
-    const [receivedData, setReceivedData] = useState(
-        {
-            qrcode_efetivo: '',
-            nome_guerra: '',
-            nome_completo: '',
-            id_unidade: 0,
-            id_graduacao: 0,
-            email: '',
-            id_alerta: 0,
-            email: '',
-            cnh: '',
-            val_cnh: '',
-            foto: '',
-            ativo_efetivo: true
-        })
+export default function EditEfetivoModal({ currentData, closeModal, renderTable }) {
+    const [graduacaoOptions, setGraduacaoOptions] = useState([]);
+    const [unidadeOptions, setUnidadeOptions] = useState([]);
+    const [situacaoOptions, setSituacaoOptions] = useState([]);
+    const [efetivoFoto, setEfetivoFoto] = useState("");
 
-    // SnackBar config
+    const [receivedData, setReceivedData] = useState(currentData || {});
     const [message, setMessage] = useState("");
     const [state, setState] = useState({
         open: false,
@@ -39,55 +25,37 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         setState({ ...state, open: false });
     };
 
-    const cleanInputs = () => {
-        setReceivedData({
-            ...receivedData,
-            qrcode_efetivo: '',
-            nome_guerra: '',
-            nome_completo: '',
-            id_unidade: 0,
-            id_graduacao: 0,
-            email: '',
-            id_alerta: 0,
-            email: '',
-            cnh: '',
-            val_cnh: '',
-            foto: '',
-        });
-        removeFoto()
-    };
-
-    const confirmCreating = () => {
+    const confirmEditing = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (receivedData.qrcode_efetivo.length != 7) {
+        if (String(receivedData.qrcode_efetivo).length !== 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
-        } else if (receivedData.nome_completo == 0) {
+        } else if (!receivedData.nome_completo) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
-        } else if (receivedData.nome_guerra == 0) {
+        } else if (!receivedData.nome_guerra) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome de guerra válido.");
-        } else if (receivedData.id_graduacao == 0) {
+        } else if (receivedData.id_graduacao === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um posto/gradução válidos.");
-        } else if (receivedData.id_unidade == 0) {
+        } else if (receivedData.id_unidade === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma unidade válida.");
         } else if (!emailPattern.test(receivedData.email)) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um email válido.");
-        } else if (receivedData.id_alerta == 0) {
+        } else if (receivedData.id_alerta === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
-        } else if (receivedData.cnh.length != 9) {
+        } else if (String(receivedData.cnh).length !== 9) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de cnh válido.");
-        } else if (receivedData.val_cnh.length != 10) {
+        } else if (receivedData.val_cnh.length !== 10) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma data de CNH válida no formato DD/MM/AAAA.");
-        } else if (receivedData.foto == 0) {
+        } else if (!receivedData.foto) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma foto válida.");
         } else {
@@ -97,7 +65,6 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             sendRequest();
         }
     };
-
 
     const sendRequest = async () => {
         const formData = new FormData();
@@ -117,21 +84,20 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
         try {
-            await server.post(`/efetivo`, formData, {
+            await server.put(`/efetivo/${receivedData.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authentication': token,
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            renderTable('create');
-            closeModal('create');
+            renderTable('edit');
+            closeModal('edit');
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Erro ao enviar dados.");
+            setMessage(e.response.data.message);
         }
     };
-
 
     const getSelectOptions = async () => {
         let userData = localStorage.getItem('user');
@@ -144,7 +110,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            setGraduacaoOptions(response.data.entities)
+            setGraduacaoOptions(response.data.entities);
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Erro ao buscar graduações.");
@@ -157,7 +123,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            setUnidadeOptions(response.data.entities)
+            setUnidadeOptions(response.data.entities);
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Erro ao buscar unidades.");
@@ -170,16 +136,14 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            setSituacaoOptions(response.data.entities)
+            setSituacaoOptions(response.data.entities);
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Erro ao buscar situações.");
         }
-    }
+    };
 
-    useEffect(() => {
-        getSelectOptions()
-    }, [])
+    // Image Functions
 
     const fileInputRef = useRef(null);
 
@@ -190,7 +154,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             setReceivedData({ ...receivedData, foto: file });
             setEfetivoFoto(fileURL);
         }
-    }
+    };
 
     const removeFoto = () => {
         setReceivedData({ ...receivedData, foto: '' });
@@ -198,14 +162,48 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
-    }
+    };
+
+    const convertImage = () => {
+        if (receivedData.foto && receivedData.foto.type !== 'File') {
+            const buffer = receivedData.foto.data;
+            const blob = new Blob([new Uint8Array(buffer)], { type: 'image/png' });
+            const file = new File([blob], 'received_image.png', { type: 'image/png', lastModified: Date.now() });
+            setReceivedData({ ...receivedData, foto: file });
+            const fileURL = URL.createObjectURL(file);
+            setEfetivoFoto(fileURL);
+        } else if (receivedData.foto) {
+            const fileURL = URL.createObjectURL(receivedData.foto);
+            setEfetivoFoto(fileURL);
+        }
+    };
+
+    // Convert Received Data
+
+    const convertDateToDDMMYYYY = (dateString) => {
+        const [year, month, day] = dateString.split('-');
+        return `${day}-${month}-${year}`;
+    };
+
+    useEffect(() => {
+        getSelectOptions();
+        convertImage();
+
+        if (receivedData && receivedData.val_cnh) {
+            const formattedDate = convertDateToDDMMYYYY(receivedData.val_cnh);
+            setReceivedData((prevFormData) => ({
+                ...prevFormData,
+                val_cnh: formattedDate,
+            }));
+        }
+    }, []);
 
     return (
         <>
             <div className="page-container modal">
                 <div className="page-title">
-                    <h1>Criar efetivo</h1>
-                    <h2>Todos os campos obrigatórios devem ser preenchidos</h2>
+                    <h1>Editar efetivo</h1>
+                    <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">
                     <div className="efetivo-inputs-1">
@@ -282,22 +280,20 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Número da CNH</p>
-                            <IMaskInput
-                                type="text"
-                                mask="000000000"
+                            <input
+                                type="number"
                                 className='filtering-input'
                                 value={receivedData.cnh}
                                 onChange={(e) => setReceivedData({ ...receivedData, cnh: e.target.value })}
                             />
                         </div>
                         <div className="input-container">
-                            <p>Validade da CNH</p>
+                            <p>Validade da CNH*</p>
                             <IMaskInput
-                                type="text"
                                 mask="00-00-0000"
+                                className='filtering-input'
                                 value={receivedData.val_cnh}
                                 onChange={(e) => setReceivedData({ ...receivedData, val_cnh: e.target.value })}
-                                className="filtering-input"
                             />
                         </div>
                         <div className="input-container">
@@ -320,15 +316,12 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                     </div>
                     <div className="form-buttons-container">
                         <div className="cancel-button">
-                            <button onClick={() => closeModal('create')}>
+                            <button onClick={() => closeModal('edit')}>
                                 Voltar
                             </button>
                         </div>
                         <div className="form-buttons">
-                            <button onClick={() => cleanInputs()}>
-                                Limpar campos
-                            </button>
-                            <button onClick={confirmCreating}>
+                            <button onClick={confirmEditing}>
                                 Confirmar
                             </button>
                         </div>
@@ -340,8 +333,8 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             onClose={handleClose}
                             key={vertical + horizontal}
                         >
-                            <Alert variant="filled" severity="error">
-                                {message}
+                            <Alert variant="filled" severity="error" onClose={handleClose}>
+                                {message || "Erro desconhecido"}
                             </Alert>
                         </Snackbar>
                     </div>

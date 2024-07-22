@@ -50,8 +50,16 @@ function Usuarios() {
     }, []);
 
     const getUsuarios = async (filter, page) => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            const response = await server.get(`/usuario?page=${page}${filter}`);
+            const response = await server.get(`/usuario?page=${page}${filter}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }

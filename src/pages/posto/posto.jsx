@@ -14,11 +14,12 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 function PostoServico() {
-    const [paginationData, setPaginationData] = useState({currentPage: 1, totalPages: 0, filtering: ''})
+    const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
     const [editModal, setOpenEditModal] = useState(false);
     const [createModal, setOpenCreateModal] = useState(false);
     const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingPosto, setSendingPosto] = useState({});
+    const [nivelAcesso, setNivelAcesso] = useState(1)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -48,9 +49,17 @@ function PostoServico() {
     }, []);
 
     const getPostos = async (filter, page) => {
-        console.log(page, filter)
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
+        setNivelAcesso(userDataParsed.nivel_acesso)
         try {
-            const response = await server.get(`/posto?page=${page}${filter}`);
+            const response = await server.get(`/posto?page=${page}${filter}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -144,13 +153,21 @@ function PostoServico() {
         <div className="body">
             <Header />
             <div className="page-container">
-                <div className="page-title page-title-create-option">
-                    <div className="page-title-text">
+                {nivelAcesso && nivelAcesso == 2 && (
+                    <div className="page-title page-title-create-option">
+                        <div className="page-title-text">
+                            <h1>Postos de Serviço</h1>
+                            <h2>Para consultar os postos, informe os dados desejados</h2>
+                        </div>
+                        <button onClick={() => openModal("create")}>Cadastrar posto</button>
+                    </div>
+                )}
+                {nivelAcesso && nivelAcesso == 1 && (
+                    <div className="page-title">
                         <h1>Postos de Serviço</h1>
                         <h2>Para consultar os postos, informe os dados desejados</h2>
                     </div>
-                    <button onClick={() => openModal("create")}>Cadastrar posto</button>
-                </div>
+                )}
                 <div className="page-filters posto-filters">
                     <div className="input-container">
                         <p>Nome do posto</p>
@@ -168,15 +185,15 @@ function PostoServico() {
                             className='filtering-input filtering-select-level-access'
                         >
                             <option value={0}>Nenhum</option>
-                            <option value={1}>Portaria</option>
-                            <option value={2}>Aviões</option>
-                            <option value={3}>Administrativa</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
                         </select>
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <PostosTable data={registros} openModal={openModal} />
+                    <PostosTable data={registros} openModal={openModal} levelAcesso={nivelAcesso}/>
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>

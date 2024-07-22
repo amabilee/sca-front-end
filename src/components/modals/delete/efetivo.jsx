@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { server } from '../../../services/server'
+import { server } from '../../../services/server';
 
-export default function CreatePostoModal({ closeModal, renderTable }) {
-    const [dataFromPosto, setDataFromPosto] = useState({ nome: "", nivel_acesso: 0, ativo_posto: true })
+export default function DeleteEfetivoModal({ currentData, closeModal, renderTable }) {
+    const [removeOption, setRemoveOption] = useState(0);
+    const [receivedData, setDataReceived] = useState(currentData || {});
+    
     // SnackBar config
     const [message, setMessage] = useState("");
     const [state, setState] = useState({
@@ -18,75 +20,62 @@ export default function CreatePostoModal({ closeModal, renderTable }) {
         setState({ ...state, open: false });
     };
 
-    const cleanInputs = () => {
-        setDataFromPosto({ ...dataFromPosto, nome: "", nivel_acesso: 0 });
-    };
-
-    const confirmCreating = () => {
-        if (dataFromPosto.nome.length === 0) {
+    const confirmDeleting = () => {
+        if (removeOption === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira um nome válido.");
-        } else if (dataFromPosto.nivel_acesso === 0) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira um nível de acesso válido.");
+            setMessage("Para confirmar a remoção a opção 'Sim' deve ser selecionada");
         } else {
             sendRequest();
         }
     };
 
     const sendRequest = async () => {
+        let removeData = { ...receivedData, ativo_efetivo: false };
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
         try {
-            await server.post(`/posto`, dataFromPosto, {
+            await server.put(`/efetivo/${receivedData.id}`, removeData, {
                 headers: {
                     'Authentication': token,
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            renderTable('create');
-            closeModal('create');
+            renderTable('delete');
+            closeModal('delete');
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Erro ao enviar dados.");
+            setMessage("Erro ao deletar o efetivo.");
         }
     };
+
+    console.log(receivedData)
 
     return (
         <>
             <div className="page-container modal">
                 <div className="page-title">
-                    <h1>Criar posto de serviço</h1>
+                    <h1>Deletar efetivo : {`${receivedData.graduacao} ${receivedData.nome_guerra}`}</h1>
                     <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">
                     <div className="page-filters filters-relatorio-efetivo">
                         <div className="input-container">
-                            <p>Nome do posto</p>
-                            <input className='filtering-input' value={dataFromPosto.nome} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nome: e.target.value })} />
-                        </div>
-                        <div className="input-container">
-                            <p>Nível de acesso</p>
-                            <select value={dataFromPosto.nivel_acesso} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nivel_acesso: e.target.value })} className='filtering-input filtering-select-level-access'>
-                                <option value={0}>Nenhum</option>
-                                <option value={1}>1</option>
-                                <option value={2}>2</option>
-                                <option value={3}>3</option>
+                            <p>Tem certeza que deseja deletar esta unidade?<br/>Esta ação não pode ser desfeita.</p>
+                            <select value={removeOption} onChange={(e) => setRemoveOption(Number(e.target.value))} className='filtering-input filtering-select-level-access'>
+                                <option value={0}>Não</option>
+                                <option value={1}>Sim</option>
                             </select>
                         </div>
                     </div>
                     <div className="form-buttons-container">
                         <div className="cancel-button">
-                            <button onClick={() => closeModal('create')}>
+                            <button onClick={() => closeModal('delete')}>
                                 Voltar
                             </button>
                         </div>
                         <div className="form-buttons">
-                            <button onClick={() => cleanInputs()}>
-                                Limpar campos
-                            </button>
-                            <button onClick={confirmCreating}>
+                            <button onClick={confirmDeleting}>
                                 Confirmar
                             </button>
                         </div>
@@ -94,11 +83,11 @@ export default function CreatePostoModal({ closeModal, renderTable }) {
                             ContentProps={{ sx: { borderRadius: '8px' } }}
                             anchorOrigin={{ vertical, horizontal }}
                             open={open}
-                            autoHideDuration={2000}
+                            autoHideDuration={4000}
                             onClose={handleClose}
                             key={vertical + horizontal}
                         >
-                            <Alert variant="filled" severity="error">
+                            <Alert variant="filled" severity="error" onClose={handleClose}>
                                 {message}
                             </Alert>
                         </Snackbar>

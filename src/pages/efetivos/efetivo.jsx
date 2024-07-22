@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import EfetivosTable from '../../components/tables/efetivos';
-import EditUsuarioModal from '../../components/modals/edit/usuario';
-import DeleteUsuarioModal from '../../components/modals/delete/usuario';
+import EditEfetivoModal from '../../components/modals/edit/efetivo';
+import DeleteEfetivoModal from '../../components/modals/delete/efetivo';
 import CreateEfetivoModal from '../../components/modals/create/efetivo';
 import { server } from '../../services/server';
 
@@ -18,6 +18,10 @@ function Efetivos() {
     const [editModal, setOpenEditModal] = useState(false);
     const [createModal, setOpenCreateModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
+    const [nivelAcesso, setNivelAcesso] = useState(1)
+
+    const [graduacaoOptions, setGraduacaoOptions] = useState([]);
+    const [unidadeOptions, setUnidadeOptions] = useState([]);
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -44,11 +48,21 @@ function Efetivos() {
     // Data from the DB
     useEffect(() => {
         getEfetivos('', 1);
+        getSelectOptions();
     }, []);
 
     const getEfetivos = async (filter, page) => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData)
+        let token = localStorage.getItem("user_token")
+        setNivelAcesso(userDataParsed.nivel_acesso)
         try {
-            const response = await server.get(`/efetivo?page=${page}${filter}`);
+            const response = await server.get(`/efetivo?page=${page}${filter}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
@@ -149,17 +163,58 @@ function Efetivos() {
         getEfetivos(paginationData.filtering, paginationData.currentPage);
     };
 
+    //Filtering Options
+
+    const getSelectOptions = async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData)
+        let token = localStorage.getItem("user_token")
+        try {
+            const response = await server.get(`/graduacao`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
+            setGraduacaoOptions(response.data.entities);
+        } catch (e) {
+            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+            setMessage("Erro ao buscar graduações.");
+        }
+
+        try {
+            const response = await server.get(`/unidade`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
+            setUnidadeOptions(response.data.entities);
+        } catch (e) {
+            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+            setMessage("Erro ao buscar unidades.");
+        }
+    };
+
     return (
         <div className="body">
             <Header />
             <div className="page-container">
-                <div className="page-title page-title-create-option">
-                    <div className="page-title-text">
+                {nivelAcesso && nivelAcesso == 2 && (
+                    <div className="page-title page-title-create-option">
+                        <div className="page-title-text">
+                            <h1>Efetivos</h1>
+                            <h2>Para consultar os efetivos, informe os dados desejados</h2>
+                        </div>
+                        <button onClick={() => openModal("create")}>Cadastrar efetivo</button>
+                    </div>
+                )}
+                {nivelAcesso && nivelAcesso == 1 && (
+                    <div className="page-title">
                         <h1>Efetivos</h1>
                         <h2>Para consultar os efetivos, informe os dados desejados</h2>
                     </div>
-                    <button onClick={() => openModal("create")}>Cadastrar efetivo</button>
-                </div>
+                )}
                 <div className="page-filters efetivo-filters">
                     <div className="input-container">
                         <p>Número de ordem</p>
@@ -172,11 +227,15 @@ function Efetivos() {
                     </div>
                     <div className="input-container">
                         <p>Posto\Graduação</p>
-                        <input
-                            className='filtering-input'
+                        <select
                             value={filteringConditions.graduacao}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, graduacao: e.target.value })}
-                        />
+                            className='filtering-input'
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, graduacao: e.target.value })}>
+                            <option value={''}>Nenhuma</option>
+                            {graduacaoOptions.map((modulo, i) => (
+                                <option key={i} value={modulo.sigla}>{modulo.sigla}</option>
+                            ))}
+                        </select>
                     </div>
                     <div className="input-container">
                         <p>Nome de guerra</p>
@@ -196,29 +255,33 @@ function Efetivos() {
                     </div>
                     <div className="input-container">
                         <p>Unidade</p>
-                        <input
+                        <select
                             className='filtering-input'
                             value={filteringConditions.unidade}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, unidade: e.target.value })}
-                        />
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, unidade: e.target.value })}>
+                            <option value={''}>Nenhuma</option>
+                            {unidadeOptions.map((modulo, i) => (
+                                <option key={i} value={modulo.nome}>{modulo.nome}</option>
+                            ))}
+                        </select>
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <EfetivosTable data={registros} openModal={openModal} />
+                    <EfetivosTable data={registros} openModal={openModal} nivelAcesso={nivelAcesso}/>
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>
                 </div>
             </div>
             {editModal && (
-                <EditUsuarioModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
+                <EditEfetivoModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
             )}
             {createModal && (
                 <CreateEfetivoModal closeModal={closeModal} renderTable={operationSuccess} />
             )}
             {deleteModal && (
-                <DeleteUsuarioModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
+                <DeleteEfetivoModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
             )}
             <Snackbar
                 ContentProps={{ sx: { borderRadius: '8px' } }}

@@ -14,7 +14,7 @@
 
 .efetivo-inputs-1{
     display: flex;
-    width: fit-content;
+    width: max-content;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
@@ -31,7 +31,7 @@
 }
 
 .efetivo-inputs-1 .input-container select {
-    width: 150px;
+    width: 200px;
 }
 
 .efetivo-inputs-2 {
@@ -44,7 +44,11 @@
     width: max-content;
 }
 
-.efetivo-inputs-2 .input-container:nth-child(1) select {
+.efetivo-inputs-2 .input-container:nth-child(1) input {
+    width: 200px;
+}
+
+.efetivo-inputs-2 .input-container:nth-child(2) select {
     width: 180px;
     height: 40px;
 }

@@ -6,6 +6,7 @@ import Loader from '../../components/loader/index';
 import { useNavigate } from 'react-router-dom';
 import EyeOn from '../../assets/password/eyeOn.svg'
 import EyeOff from '../../assets/password/eyeOff.svg'
+import { server } from '../../services/server'
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -14,13 +15,22 @@ function Login() {
     const { signIn, error, loading, auth } = UseAuth();
 
     const handleAuth = async () => {
-        const response = await signIn(username, pwd);
-        if (auth || response === true) {
-            setTimeout(() => {
-                navigate('/Relatórios-Efetivo');
-            }, 1000);
+        try {
+            const response = await signIn(username, pwd);
+            if (auth || response === true) {
+                const modules = await getUserModulos();
+                setTimeout(() => {
+                    if (modules.length > 0) {
+                        navigate(`${modules[0].link}`);
+                    } else {
+                        console.error('Nenhum módulo encontrado para navegação.');
+                    }
+                }, 1000)
+            }
+        } catch (error) {
+            console.error('Erro ao autenticar ou obter módulos:', error);
         }
-    }
+    };
 
     const consultarEfetivo = () => {
         navigate('/consultarEfetivo');
@@ -30,10 +40,14 @@ function Login() {
         const handleKeyPress = async (event) => {
             if (event.key === 'Enter') {
                 const response = await signIn(username, pwd);
-                console.log(response)
                 if (auth || response === true) {
+                    const modules = await getUserModulos();
                     setTimeout(() => {
-                        navigate('/Relatórios-Efetivo');
+                        if (modules.length > 0) {
+                            navigate(`${modules[0].link}`);
+                        } else {
+                            console.error('Nenhum módulo encontrado para navegação.');
+                        }
                     }, 1000);
                 }
             }
@@ -48,13 +62,27 @@ function Login() {
 
     // Password
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [isPasswordVisible2, setIsPasswordVisible2] = useState(false);
     const togglePasswordVisibility = () => {
         setIsPasswordVisible((prev) => !prev);
     };
 
-    const togglePasswordVisibility2 = () => {
-        setIsPasswordVisible2((prev) => !prev);
+    const getUserModulos = async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
+        try {
+            const response = await server.get(`/usuario/${userDataParsed.id}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
+            console.log(response.data.entity[0].Modulos);
+            return response.data.entity[0].Modulos;
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
     };
 
     return (

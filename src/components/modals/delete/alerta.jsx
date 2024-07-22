@@ -33,8 +33,16 @@ export default function DeleteAlertaModal({ currentData, closeModal, renderTable
 
     const sendRequest = async () => {
         let removeData = { ...receivedData, ativo_alerta: false };
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.put(`/alerta/${receivedData.id}`, removeData);
+            await server.put(`/alerta/${receivedData.id}`, removeData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('delete');
             closeModal('delete');
         } catch (e) {

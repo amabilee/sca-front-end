@@ -46,9 +46,16 @@ function Alertas() {
     }, []);
 
     const getAlertas = async (filter, page) => {
-        console.log(page, filter)
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData) 
+        let token = localStorage.getItem("user_token")
         try {
-            const response = await server.get(`/alerta?page=${page}${filter}`);
+            const response = await server.get(`/alerta?page=${page}${filter}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }

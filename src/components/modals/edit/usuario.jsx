@@ -107,8 +107,17 @@ export default function EditUnidadeModal({ currentData, closeModal, renderTable 
             ...receivedData,
             usuario: Number(receivedData.usuario)
         };
+
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.put(`/usuario/${receivedData.id}`, updatedData);
+            await server.put(`/usuario/${receivedData.id}`, updatedData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('edit');
             closeModal('edit');
         } catch (e) {

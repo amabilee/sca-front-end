@@ -9,15 +9,9 @@ import EyeOff from '../../../assets/password/eyeOff.svg'
 export default function CreateUsuarioModal({ closeModal, renderTable }) {
     // Password
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [isPasswordVisible2, setIsPasswordVisible2] = useState(false);
     const togglePasswordVisibility = () => {
         setIsPasswordVisible((prev) => !prev);
     };
-
-    const togglePasswordVisibility2 = () => {
-        setIsPasswordVisible2((prev) => !prev);
-    };
-
 
     const [receivedData, setReceivedData] = useState({
         nome: "",
@@ -109,9 +103,16 @@ export default function CreateUsuarioModal({ closeModal, renderTable }) {
     };
 
     const sendRequest = async () => {
-        console.log(receivedData);
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.post(`/usuario`, receivedData);
+            await server.post(`/usuario`, receivedData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('create');
             closeModal('create');
         } catch (e) {

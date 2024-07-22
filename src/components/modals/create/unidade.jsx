@@ -32,8 +32,16 @@ export default function CreateUnidadeModal({ closeModal, renderTable }) {
     };
 
     const sendRequest = async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.post(`/unidade`, receivedData);
+            await server.post(`/unidade`, receivedData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('create');
             closeModal('create');
         } catch (e) {

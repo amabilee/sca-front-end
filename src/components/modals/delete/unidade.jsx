@@ -31,8 +31,16 @@ export default function DeleteUnidadeModal({ currentData, closeModal, renderTabl
 
     const sendRequest = async () => {
         let removeData = { ...receivedData, ativo_unidade: false };
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
         try {
-            await server.put(`/unidade/${receivedData.id}`, removeData);
+            await server.put(`/unidade/${receivedData.id}`, removeData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('delete');
             closeModal('delete');
         } catch (e) {

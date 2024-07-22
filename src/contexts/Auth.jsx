@@ -42,10 +42,12 @@ const AuthProvider = ({ children }) => {
         } catch (error) {
             setAuth(false);
             setLoading(false);
-            if (error.response) {
+            if (error.response && error.response.data.message) {
                 setError(error.response.data.message);
             } else if (error.code === 'ERR_NETWORK') {
                 setError('Não foi possível conectar ao servidor.');
+            } else if (error.code ===  "ERR_BAD_REQUEST") {
+                setError('Credenciais inválidas');
             } else {
                 setError('Ocorreu um erro ao tentar fazer login.');
             }

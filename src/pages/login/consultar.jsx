@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Buffer } from 'react';
 import Logo from '../../assets/sidebar/air-force-logo.svg'
 import LeaveIcon from '../../assets/sidebar/sair-icon.svg'
 import ConsultarTable from '../../components/tables/consultar.jsx'
@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 
 function ConsultarEfetivo() {
     const navigate = useNavigate()
-    const [numeroOrdem, setNumeroOrdem] = useState('')
     const arrayData = [
         {
             "tipo": "Carro",
@@ -76,7 +75,6 @@ function ConsultarEfetivo() {
     });
 
     const handleNumeroOrdemChange = (data) => {
-        setNumeroOrdem(data);
         if (data.length === 7) {
             getEfetivo(data);
         } else {
@@ -91,28 +89,49 @@ function ConsultarEfetivo() {
         }
     };
 
-    const bufferToBase64 = (buffer) => {
-        const binary = buffer.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
-        return window.btoa(binary);
+    const bufferToBase64 = (data) => {
+        let binaryString = "";
+        const bytes = new Uint8Array(data);
+        for (let i = 0; i < bytes.length; i++) {
+            binaryString += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binaryString);
     };
-
+    
     const getEfetivo = async (numero) => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData) 
+        let token = localStorage.getItem("user_token")
         try {
-            const response = await server.get(`/efetivo/consulta/${numero}`);
-            const { nome_completo, nome_guerra, foto, id_unidade, email, id_graduacao } = response.data[0];
-
-            const fotoBase64 = foto ? `data:image/jpeg;base64,${bufferToBase64(foto.data)}` : '';
-
+            const response = await server.get(`/efetivo/consulta/${numero}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
+            const { nome_completo, nome_guerra, foto, Unidade, email, Graduacao, Fotos } = response.data[0];
+            let fotoBase64 = '';
+            if (Fotos && Fotos.length > 0) {
+                try {
+                    const fotoBuffer = Fotos[0].foto.data;
+                    fotoBase64 = `data:image/png;base64,${bufferToBase64(fotoBuffer)}`;
+                } catch (error) {
+                    console.error('Error converting buffer to Base64:', error);
+                }
+            }
+    
             setEfetivoData({
                 nome_completo: nome_completo || '',
                 nome_guerra: nome_guerra || '',
                 foto: fotoBase64,
-                id_unidade: id_unidade || '',
+                id_unidade: Unidade.nome || '',
                 email: email || '',
-                id_graduacao: id_graduacao || ''
+                id_graduacao: Graduacao.sigla || ''
             });
+    
+            console.log(fotoBase64);
         } catch (e) {
-            console.log(e);
+            console.error('Error fetching efetivo data:', e);
             setEfetivoData({
                 nome_completo: '',
                 nome_guerra: '',
@@ -123,10 +142,10 @@ function ConsultarEfetivo() {
             });
         }
     };
-
+    
     const returnLogin = () => {
-        navigate('/')
-    }
+        navigate('/');
+    };
 
     return (
         <div className="body">

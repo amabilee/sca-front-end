@@ -14,8 +14,14 @@ function Sidebar() {
     const getUserModulos = async () => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData) 
+        let token = localStorage.getItem("user_token")
         try {
-            const response = await server.get(`/usuario/${userDataParsed.id}`);
+            const response = await server.get(`/usuario/${userDataParsed.id}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             console.log(response.data.entity[0].Modulos)
             setUserModules(response.data.entity[0].Modulos)
         } catch (e) {

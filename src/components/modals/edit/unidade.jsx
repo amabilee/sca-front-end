@@ -33,8 +33,17 @@ export default function EditUnidadeModal({ currentData, closeModal, renderTable 
     };
 
     const sendRequest = async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
+
         try {
-            await server.put(`/unidade/${receivedData.id}`, receivedData);
+            await server.put(`/unidade/${receivedData.id}`, receivedData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
             renderTable('edit');
             closeModal('edit');
         } catch (e) {
