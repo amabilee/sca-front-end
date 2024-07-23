@@ -4,67 +4,15 @@ import LeaveIcon from '../../assets/sidebar/sair-icon.svg'
 import ConsultarTable from '../../components/tables/consultar.jsx'
 import { server } from "../../services/server.js";
 import { useNavigate } from 'react-router-dom'
+import UserPhoto from '../../assets/login/user-photo.svg'
+import QRCode from "react-qr-code";
 
 function ConsultarEfetivo() {
     const navigate = useNavigate()
-    const arrayData = [
-        {
-            "tipo": "Carro",
-            "placa": "ABC-1234",
-            "cor_veiculo": "Preto",
-            "marca": "Toyota",
-            "modelo": "Corolla",
-            "qrcode": "123456"
-        },
-        {
-            "tipo": "Moto",
-            "placa": "XYZ-5678",
-            "cor_veiculo": "Vermelho",
-            "marca": "Honda",
-            "modelo": "CB 500",
-            "qrcode": "789012"
-        },
-        {
-            "tipo": "Moto",
-            "placa": "XYZ-5678",
-            "cor_veiculo": "Vermelho",
-            "marca": "Honda",
-            "modelo": "CB 500",
-            "qrcode": "789012"
-        },
-        {
-            "tipo": "Moto",
-            "placa": "XYZ-5678",
-            "cor_veiculo": "Vermelho",
-            "marca": "Honda",
-            "modelo": "CB 500",
-            "qrcode": "789012"
-        },
-        {
-            "tipo": "Moto",
-            "placa": "XYZ-5678",
-            "cor_veiculo": "Vermelho",
-            "marca": "Honda",
-            "modelo": "CB 500",
-            "qrcode": "789012"
-        },
-        {
-            "tipo": "Moto",
-            "placa": "XYZ-5678",
-            "cor_veiculo": "Vermelho",
-            "marca": "Honda",
-            "modelo": "CB 500",
-            "qrcode": "789012"
-        },
-        {
-            "tipo": "Moto",
-            "placa": "XYZ-5678",
-            "cor_veiculo": "Vermelho",
-            "marca": "Honda",
-            "modelo": "CB 500",
-            "qrcode": "789012"
-        }
-    ];
+    const [viewQr, setViewQr] = useState(false)
+
+    const [veiculosData, setVeiculosData] = useState([])
+
     const [efetivoData, setEfetivoData] = useState({
         nome_completo: '',
         nome_guerra: '',
@@ -79,6 +27,7 @@ function ConsultarEfetivo() {
             getEfetivo(data);
         } else {
             setEfetivoData({
+                qrcode_efetivo: '',
                 nome_completo: '',
                 nome_guerra: '',
                 foto: '',
@@ -86,6 +35,7 @@ function ConsultarEfetivo() {
                 email: '',
                 id_graduacao: ''
             });
+            setVeiculosData([])
         }
     };
 
@@ -97,19 +47,11 @@ function ConsultarEfetivo() {
         }
         return btoa(binaryString);
     };
-    
+
     const getEfetivo = async (numero) => {
-        let userData = localStorage.getItem('user');
-        let userDataParsed = JSON.parse(userData) 
-        let token = localStorage.getItem("user_token")
         try {
-            const response = await server.get(`/efetivo/consulta/${numero}`, {
-                headers: {
-                    'Authentication': token,
-                    'access-level': userDataParsed.nivel_acesso
-                }
-            });
-            const { nome_completo, nome_guerra, foto, Unidade, email, Graduacao, Fotos } = response.data[0];
+            const response = await server.get(`/efetivo/consulta/${numero}`);
+            const { nome_completo, nome_guerra, foto, Unidade, email, Graduacao, Fotos, qrcode_efetivo } = response.data[0];
             let fotoBase64 = '';
             if (Fotos && Fotos.length > 0) {
                 try {
@@ -119,8 +61,9 @@ function ConsultarEfetivo() {
                     console.error('Error converting buffer to Base64:', error);
                 }
             }
-    
+            console.log(response.data)
             setEfetivoData({
+                qrcode_efetivo: String(qrcode_efetivo) || 0,
                 nome_completo: nome_completo || '',
                 nome_guerra: nome_guerra || '',
                 foto: fotoBase64,
@@ -128,8 +71,15 @@ function ConsultarEfetivo() {
                 email: email || '',
                 id_graduacao: Graduacao.sigla || ''
             });
-    
-            console.log(fotoBase64);
+
+            try {
+                const response2 = await server.get(`/veiculo?page=1&efetivo=${response.data[0].id}&ativo_veiculo=true`);
+                setVeiculosData(response2.data.formattedEntities)
+                console.log(response2.data.formattedEntities)
+            } catch (e) {
+                console.log(e)
+            }
+
         } catch (e) {
             console.error('Error fetching efetivo data:', e);
             setEfetivoData({
@@ -142,10 +92,20 @@ function ConsultarEfetivo() {
             });
         }
     };
-    
+
     const returnLogin = () => {
         navigate('/');
     };
+
+    const viewQrCodes = (state) => {
+        if (state) {
+            console.log(efetivoData)
+            setViewQr(true)
+        } else {
+            console.log(efetivoData)
+            setViewQr(false)
+        }
+    }
 
     return (
         <div className="body">
@@ -156,61 +116,100 @@ function ConsultarEfetivo() {
                 </div>
                 <img src={LeaveIcon} alt="Leave Icon" onClick={returnLogin} />
             </div>
-            <div className="consultar-body">
-                <h2>Consultar dados</h2>
-                <div className="input-pesquisa">
-                    <p>Número de ordem</p>
-                    <input
-                        type="number"
-                        placeholder='Digite aqui para pesquisar'
-                        onChange={(e) => handleNumeroOrdemChange(e.target.value)}
-                    />
-                </div>
-                <div className="consultar-dados">
-                    <h3>Dados do militar</h3>
-                    <div className="box-dados-militar">
-                        <div className="dados-militar-form">
-                            <div className="dados-militar-first-row">
-                                <div className="input-container">
-                                    <p>Nome completo</p>
-                                    <input disabled={true} value={efetivoData.nome_completo} />
-                                </div>
-                                <div className="input-container">
-                                    <p>Nome de guerra</p>
-                                    <input disabled={true} value={efetivoData.nome_guerra} />
-                                </div>
-                            </div>
-                            <div className="dados-militar-second-row">
-                                <div className="input-container">
-                                    <p>Posto/Graduação</p>
-                                    <input disabled={true} value={efetivoData.id_graduacao} />
-                                </div>
-                                <div className="input-container">
-                                    <p>Unidade</p>
-                                    <input disabled={true} value={efetivoData.id_unidade} />
-                                </div>
-                                <div className="input-container">
-                                    <p>Email</p>
-                                    <input disabled={true} value={efetivoData.email} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="input-container input-foto">
-                            {efetivoData.foto ? (
-                                <img src={efetivoData.foto} alt="Foto do Militar" />
-                            ) : (
-                                <p>Sem foto</p>
-                            )}
-                        </div>
-                        <div className="input-container input-qrcode">
-                            <p>Qr Codes</p>
-                            <button className='findQrcode-button'>Visualizar Qr Codes</button>
-                        </div>
+            {!viewQr ? (
+                <div className="consultar-body">
+                    <h2>Consultar dados</h2>
+                    <div className="input-pesquisa">
+                        <p>Número de ordem</p>
+                        <input
+                            type="number"
+                            placeholder='Digite aqui para pesquisar'
+                            onChange={(e) => handleNumeroOrdemChange(e.target.value)}
+                        />
                     </div>
-                    <h3>Veículos cadastrados</h3>
-                    <ConsultarTable data={arrayData} />
+                    <div className="consultar-dados">
+                        <h3>Dados do militar</h3>
+                        <div className="box-dados-militar">
+                            <div className="dados-militar-form">
+                                <div className="dados-militar-first-row">
+                                    <div className="input-container">
+                                        <p>Nome completo</p>
+                                        <input disabled={true} value={efetivoData.nome_completo} />
+                                    </div>
+                                    <div className="input-container">
+                                        <p>Nome de guerra</p>
+                                        <input disabled={true} value={efetivoData.nome_guerra} />
+                                    </div>
+                                </div>
+                                <div className="dados-militar-second-row">
+                                    <div className="input-container">
+                                        <p>Posto/Graduação</p>
+                                        <input disabled={true} value={efetivoData.id_graduacao} />
+                                    </div>
+                                    <div className="input-container">
+                                        <p>Unidade</p>
+                                        <input disabled={true} value={efetivoData.id_unidade} />
+                                    </div>
+                                    <div className="input-container">
+                                        <p>Email</p>
+                                        <input disabled={true} value={efetivoData.email} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="input-container input-foto">
+                                {efetivoData.foto ? (
+                                    <img src={efetivoData.foto} alt="Foto do Militar" className='photo-consulta' />
+                                ) : (
+                                    <img src={UserPhoto} alt="Sem foto" className='no-photo-consulta' />
+                                )}
+                            </div>
+                            <div className="input-container input-qrcode">
+                                <p>Qr Codes</p>
+                                <button className='findQrcode-button' onClick={() => viewQrCodes(true)}>Visualizar Qr Codes</button>
+                            </div>
+                        </div>
+                        <h3>Veículos cadastrados</h3>
+                        <ConsultarTable data={veiculosData} />
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="consultar-body">
+                    <div className="consulta-button">
+                        <button className='return-consulta' onClick={() => setViewQr(false)}>Voltar</button>
+                    </div>
+                    <p className='qrcode-title'>Efetivo</p>
+                    <div className="qrcode-container">
+                        {efetivoData && efetivoData.qrcode_efetivo != 0 && (
+                            <div className="qrcode-box">
+                                <QRCode
+                                    size={256}
+                                    style={{ height: "auto", maxWidth: "150px", width: "150px" }}
+                                    value={`1,${efetivoData.qrcode_efetivo}`}
+                                    viewBox={`0 0 256 256`}
+                                />
+                                <p>{efetivoData.id_graduacao} {efetivoData.nome_guerra} <br />{efetivoData.id_unidade}</p>
+                            </div>
+                        )}
+                    </div>
+                    <p className='qrcode-title'>Veículos</p>
+                    <div className="qrcode-container-veiculos">
+                        {veiculosData && (
+                            veiculosData.map((veiculo, i) => (
+                                <div className="qrcode-box" key={i}>
+                                    <QRCode
+                                        size={256}
+                                        style={{ height: "auto", maxWidth: "150px", width: "150px" }}
+                                        value={`2,${veiculo.qrcode}`}
+                                        viewBox={`0 0 256 256`}
+                                    />
+                                    <p>{veiculo.tipo} {veiculo.modelo} <br />Placa: {veiculosData[i].placa}</p>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

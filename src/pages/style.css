@@ -56,4 +56,51 @@
     border-radius: 7px;
     cursor: pointer;
     border: none;
+    transition: all 0.5s;
+}
+
+.page-title-create-option button:hover {
+    margin: 20px 0 0 0;
+    background-color: #36a4c9;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 170px;
+    color: white;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.5s;
+}
+
+/* Loading */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 645px;
+    margin: 0px 0 30px 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+/* Buttons */
+.searchButton {
+    margin: 20px 0 0 0;
+    background-color: #1B599B;
+    width: 170px;
+    color: white;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.searchButton {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: all 0.5s;
 }

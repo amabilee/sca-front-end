@@ -77,7 +77,6 @@ function Login() {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            console.log(response.data.entity[0].Modulos);
             return response.data.entity[0].Modulos;
         } catch (e) {
             console.log(e);
@@ -93,6 +92,10 @@ function Login() {
                     <h1>SISTEMA DE CONTROLE DE ACESSO</h1>
                 </div>
                 <div className="card-login">
+                    <div className="card-login-title">
+                        <h2>Entrar</h2>
+                        <h3>Preencha os campos abaixo para acessar sua conta.</h3>
+                    </div>
                     <div className="input-container">
                         <p>Usuário</p>
                         <input value={username} onChange={(e) => setUsername(e.target.value)} />
@@ -100,7 +103,7 @@ function Login() {
                     <div className="input-container">
                         <p>Senha</p>
                         <div className='iconPasswordContainer'>
-                            <input value={pwd} onChange={(e) => setPwd(e.target.value)} className="filtering-input password-input" type={isPasswordVisible ? 'text' : 'password'} />
+                            <input value={pwd} onChange={(e) => setPwd(e.target.value)} className="password-input" type={isPasswordVisible ? 'text' : 'password'} />
                             <img src={isPasswordVisible ? EyeOff : EyeOn} className="eyePassword" onClick={togglePasswordVisibility} />
                         </div>
                     </div>
@@ -110,7 +113,7 @@ function Login() {
                     ) : (
                         <button onClick={handleAuth}>Entrar</button>
                     )}
-                    <p onClick={consultarEfetivo}>Consultar dados</p>
+                    <p onClick={consultarEfetivo}>Consulte aqui seus dados</p>
                 </div>
             </div>
         </>

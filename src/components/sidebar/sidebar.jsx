@@ -13,7 +13,7 @@ function Sidebar() {
 
     const getUserModulos = async () => {
         let userData = localStorage.getItem('user');
-        let userDataParsed = JSON.parse(userData) 
+        let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
         try {
             const response = await server.get(`/usuario/${userDataParsed.id}`, {
@@ -22,10 +22,15 @@ function Sidebar() {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            console.log(response.data.entity[0].Modulos)
             setUserModules(response.data.entity[0].Modulos)
         } catch (e) {
             console.log(e)
+            if (e.response.status == 401) {
+                navigate('/');
+                signOut()
+            } else {
+                console.log(e)
+            }
         }
     }
 

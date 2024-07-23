@@ -7,6 +7,7 @@ const AuthProvider = ({ children }) => {
     const [error, setError] = useState('')
     const [auth, setAuth] = useState(false)
     const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         const verifyData = async () => {
             const userData = localStorage.getItem("user")
@@ -16,7 +17,7 @@ const AuthProvider = ({ children }) => {
                 setUser(JSON.parse(userData))
                 setAuth(true)
                 server.defaults.headers['Authentication'] = `${tokenData}`
-                server.defaults.headers['access-level'] = 2
+                server.defaults.headers['access-level'] = 1
             }
         }
         verifyData()
@@ -36,7 +37,6 @@ const AuthProvider = ({ children }) => {
             setTimeout(() => {
                 setLoading(false);
             }, 1000);
-            console.log(response.data)
             return true
 
         } catch (error) {

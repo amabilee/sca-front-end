@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
+import { UseAuth } from '../../../hooks';
 
 export default function CreateUnidadeModal({ closeModal, renderTable }) {
     const [receivedData, setReceivedData] = useState({ nome: "", ativo_unidade: true })
+    const { signOut } = UseAuth();
     // SnackBar config
     const [message, setMessage] = useState("");
     const [state, setState] = useState({

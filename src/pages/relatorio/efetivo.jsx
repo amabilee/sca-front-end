@@ -136,7 +136,6 @@ function RelatorioEfetivo() {
             horarioInicial: valueTimeInicial,
             horarioFinal: valueTimeFinal
         }
-        console.log(filteringConditions)
     }
 
     // Open and Close Modals

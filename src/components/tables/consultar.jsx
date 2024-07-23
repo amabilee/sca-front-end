@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../pages/posto/style.css';
+import './style.css';
 
 const ConsultarTable = ({ data }) => {
     return (
@@ -12,7 +12,7 @@ const ConsultarTable = ({ data }) => {
                         <th scope="col">Cor</th>
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
-                        <th scope="col">Selo 'AN'</th>
+                        <th scope="col">Selo/AN</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +29,7 @@ const ConsultarTable = ({ data }) => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="6">Nenhum registro encontrado</td>
+                            <td colSpan="6">Nenhum veículo encontrado</td>
                         </tr>
                     )}
                 </tbody>

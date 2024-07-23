@@ -137,21 +137,6 @@
     margin: 0 10px 0 0;
 }
 
-/* Buttons */
-.searchButton {
-    margin: 20px 0 0 0;
-    background-color: #1B599B;
-    width: 170px;
-    color: white;
-    font-size: 15px;
-    height: 35px;
-    border-radius: 7px;
-    cursor: pointer;
-    border: none;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-}
-
-
 /* Table */
 
 .page-content {

@@ -11,6 +11,8 @@ import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import Loader from '../../components/loader/index';
+
 import './style.css'
 
 import '../style.css'
@@ -21,6 +23,8 @@ function Usuarios() {
     const [createModal, setOpenCreateModal] = useState(false);
     const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
+
+    const [loading, setLoading] = useState(true)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -64,6 +68,7 @@ function Usuarios() {
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
             });
+            setLoading(false)
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados:");
@@ -180,7 +185,13 @@ function Usuarios() {
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <UsuariosTable data={registros} openModal={openModal} />
+                    {loading ? (
+                        <div className="loading-container">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <UsuariosTable data={registros} openModal={openModal} />
+                    )}
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>

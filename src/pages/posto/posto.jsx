@@ -13,6 +13,8 @@ import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import Loader from '../../components/loader/index';
+
 function PostoServico() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
     const [editModal, setOpenEditModal] = useState(false);
@@ -20,6 +22,8 @@ function PostoServico() {
     const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingPosto, setSendingPosto] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
+
+    const [loading, setLoading] = useState(true)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -64,6 +68,7 @@ function PostoServico() {
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
             });
+            setLoading(false)
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados:");
@@ -91,7 +96,6 @@ function PostoServico() {
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 }
         });
-        console.log(filteringConditions);
     };
 
     // Open and Close Modals
@@ -153,7 +157,7 @@ function PostoServico() {
         <div className="body">
             <Header />
             <div className="page-container">
-                {nivelAcesso && nivelAcesso == 2 && (
+                {nivelAcesso == 2 ? (
                     <div className="page-title page-title-create-option">
                         <div className="page-title-text">
                             <h1>Postos de Serviço</h1>
@@ -161,8 +165,7 @@ function PostoServico() {
                         </div>
                         <button onClick={() => openModal("create")}>Cadastrar posto</button>
                     </div>
-                )}
-                {nivelAcesso && nivelAcesso == 1 && (
+                ) : (
                     <div className="page-title">
                         <h1>Postos de Serviço</h1>
                         <h2>Para consultar os postos, informe os dados desejados</h2>
@@ -193,21 +196,33 @@ function PostoServico() {
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <PostosTable data={registros} openModal={openModal} levelAcesso={nivelAcesso}/>
-                    <Stack spacing={2}>
+                    {loading ? (
+                        <div className="loading-container">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <PostosTable data={registros} openModal={openModal} levelAcesso={nivelAcesso} />
+                    )}
+                    < Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>
                 </div>
             </div>
-            {editModal && (
-                <EditPostoModal currentPosto={sendingPosto} closeModal={closeModal} renderTable={operationSuccess} />
-            )}
-            {createModal && (
-                <CreatePostoModal closeModal={closeModal} renderTable={operationSuccess} />
-            )}
-            {deleteModal && (
-                <DeletePostoModal currentPosto={sendingPosto} closeModal={closeModal} renderTable={operationSuccess} />
-            )}
+            {
+                editModal && (
+                    <EditPostoModal currentPosto={sendingPosto} closeModal={closeModal} renderTable={operationSuccess} />
+                )
+            }
+            {
+                createModal && (
+                    <CreatePostoModal closeModal={closeModal} renderTable={operationSuccess} />
+                )
+            }
+            {
+                deleteModal && (
+                    <DeletePostoModal currentPosto={sendingPosto} closeModal={closeModal} renderTable={operationSuccess} />
+                )
+            }
             <Snackbar
                 ContentProps={{ sx: { borderRadius: '8px' } }}
                 anchorOrigin={{ vertical, horizontal }}
@@ -220,7 +235,7 @@ function PostoServico() {
                     {message}
                 </Alert>
             </Snackbar>
-        </div>
+        </div >
     );
 }
 

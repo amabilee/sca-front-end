@@ -87,7 +87,6 @@ function Alertas() {
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 };
         });
-        console.log(filteringConditions)
     };
 
     // Open and Close Modals

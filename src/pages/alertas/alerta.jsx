@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import Loader from '../../components/loader/index';
 
 // Style for general
 import "../style.css";
@@ -24,6 +25,8 @@ function Alertas() {
     const [createModal, setOpenCreateModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
+
+    const [loading, setLoading] = useState(true)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -68,6 +71,7 @@ function Alertas() {
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
             });
+            setLoading(false)
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados");
@@ -154,7 +158,7 @@ function Alertas() {
         <div className="body">
             <Header />
             <div className="page-container">
-                {nivelAcesso && nivelAcesso == 2 && (
+                {nivelAcesso == 2 ? (
                     <div className="page-title page-title-create-option">
                         <div className="page-title-text">
                             <h1>Alertas</h1>
@@ -162,8 +166,7 @@ function Alertas() {
                         </div>
                         <button onClick={() => openModal("create")}>Cadastrar alerta</button>
                     </div>
-                )}
-                {nivelAcesso && nivelAcesso == 1 && (
+                ) : (
                     <div className="page-title">
                         <h1>Alertas</h1>
                         <h2>Para consultar os alertas, informe os dados desejados</h2>
@@ -181,7 +184,13 @@ function Alertas() {
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <AlertasTable data={registros} openModal={openModal} levelAcesso={nivelAcesso}/>
+                    {loading ? (
+                        <div className="loading-container">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <AlertasTable data={registros} openModal={openModal} levelAcesso={nivelAcesso} />
+                    )}
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>

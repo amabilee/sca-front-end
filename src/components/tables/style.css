@@ -18,3 +18,28 @@
 .table-actions tbody tr td:last-child button img {
     height: 20px;
 }
+
+
+
+.table-consulta {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-weight: 600;
+    color: black;
+}
+
+.table-consulta thead tr th:first-child,
+.table-consulta tbody tr td:first-child {
+    padding: 0 0 0 20px;
+}
+
+.table-consulta thead tr {
+    height: 50px;
+    font-weight: 900;
+}
+
+.table-consulta tbody tr {
+    height: 50px;
+    font-weight: 500;
+}

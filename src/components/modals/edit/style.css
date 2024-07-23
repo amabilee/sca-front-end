@@ -62,6 +62,21 @@
     cursor: pointer;
     border: 1px solid #1B599B;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    transition: all 0.5s;
+}
+
+.form-buttons button:nth-child(1):hover{
+    background-color: #1b599b27;
+    color: #1B599B;
+    width: 170px;
+    font-size: 15px;
+    margin: 0 30px 0 0;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 1px solid #1B599B;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: all 0.5s;
 }
 
 .form-buttons button:last-child{
@@ -74,4 +89,22 @@
     cursor: pointer;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border: none;
+    transition: all 0.5s;
+}
+
+.form-buttons button:last-child:hover{
+    background-color: #083f7a;
+    color: white;
+    width: 170px;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border: none;
+    transition: all 0.5s;
+}
+
+.input-container input{
+    text-transform: capitalize;
 }

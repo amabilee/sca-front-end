@@ -11,6 +11,8 @@ import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import Loader from '../../components/loader/index';
+
 import './style.css'
 
 function Unidades() {
@@ -20,6 +22,8 @@ function Unidades() {
     const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
+
+    const [loading, setLoading] = useState(true)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -64,6 +68,7 @@ function Unidades() {
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
             });
+            setLoading(false)
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados:");
@@ -91,7 +96,6 @@ function Unidades() {
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 }
         });
-        console.log(filteringConditions);
     };
 
     // Open and Close Modals
@@ -153,7 +157,7 @@ function Unidades() {
         <div className="body">
             <Header />
             <div className="page-container">
-                {nivelAcesso && nivelAcesso == 2 && (
+                {nivelAcesso == 2 ? (
                     <div className="page-title page-title-create-option">
                         <div className="page-title-text">
                             <h1>Unidades</h1>
@@ -161,8 +165,7 @@ function Unidades() {
                         </div>
                         <button onClick={() => openModal("create")}>Cadastrar unidade</button>
                     </div>
-                )}
-                {nivelAcesso && nivelAcesso == 1 && (
+                ) : (
                     <div className="page-title">
                         <h1>Unidades</h1>
                         <h2>Para consultar as unidades, informe os dados desejados</h2>
@@ -180,7 +183,13 @@ function Unidades() {
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <UnidadesTable data={registros} openModal={openModal} levelAcesso={nivelAcesso}/>
+                    {loading ? (
+                        <div className="loading-container">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <UnidadesTable data={registros} openModal={openModal} levelAcesso={nivelAcesso} />
+                    )}
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>

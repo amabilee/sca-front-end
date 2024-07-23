@@ -1,0 +1,37 @@
+.veiculo-inputs-1 .input-container:nth-child(1), .veiculo-inputs-1 .input-container:nth-child(2) {
+    width: 200px;
+}
+
+.veiculo-inputs-1 {
+    display: flex;
+    width: 400px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.veiculo-inputs-2 {
+    margin: 30px 0 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+}
+
+.veiculo-inputs-2 .input-container:nth-child(1),
+.veiculo-inputs-2 .input-container:nth-child(2),
+.veiculo-inputs-2 .input-container:nth-child(3),
+.veiculo-inputs-2 .input-container:nth-child(4),
+.veiculo-inputs-2 .input-container:nth-child(5){
+    width: 200px;
+}
+
+.input-container input{
+    text-transform: capitalize;
+}
+
+.veiculo-inputs-2 .input-container:nth-child(3) input{
+    text-transform: uppercase;
+}

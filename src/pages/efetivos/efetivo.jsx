@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import Loader from '../../components/loader/index';
 
 function Efetivos() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
@@ -22,6 +23,8 @@ function Efetivos() {
 
     const [graduacaoOptions, setGraduacaoOptions] = useState([]);
     const [unidadeOptions, setUnidadeOptions] = useState([]);
+
+    const [loading, setLoading] = useState(true)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -67,6 +70,7 @@ function Efetivos() {
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
             });
+            setLoading(false)
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados");
@@ -200,7 +204,7 @@ function Efetivos() {
         <div className="body">
             <Header />
             <div className="page-container">
-                {nivelAcesso && nivelAcesso == 2 && (
+                {nivelAcesso == 2 ? (
                     <div className="page-title page-title-create-option">
                         <div className="page-title-text">
                             <h1>Efetivos</h1>
@@ -208,8 +212,7 @@ function Efetivos() {
                         </div>
                         <button onClick={() => openModal("create")}>Cadastrar efetivo</button>
                     </div>
-                )}
-                {nivelAcesso && nivelAcesso == 1 && (
+                ) : (
                     <div className="page-title">
                         <h1>Efetivos</h1>
                         <h2>Para consultar os efetivos, informe os dados desejados</h2>
@@ -268,7 +271,13 @@ function Efetivos() {
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
                 </div>
                 <div className="page-content-table">
-                    <EfetivosTable data={registros} openModal={openModal} nivelAcesso={nivelAcesso}/>
+                    {loading ? (
+                        <div className="loading-container">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <EfetivosTable data={registros} openModal={openModal} levelAcesso={nivelAcesso} />
+                    )}
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>

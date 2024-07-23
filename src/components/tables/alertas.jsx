@@ -12,7 +12,7 @@ const AlertasTable = ({ data, openModal, levelAcesso }) => {
                     <tr>
                         <th scope="col">Descrição do alerta</th>
                         <th scope="col">Cor</th>
-                        {levelAcesso && levelAcesso == 2(
+                        {levelAcesso && levelAcesso == 2 && (
                             <th scope="col"><p>Ações</p></th>
                         )}
 
@@ -25,7 +25,7 @@ const AlertasTable = ({ data, openModal, levelAcesso }) => {
                             <td>
                                 <div className="color-box" style={{ backgroundColor: registro.cor }}></div>
                             </td>
-                            {levelAcesso && levelAcesso == 2 && (
+                            {levelAcesso == 2 && (
                                 <td>
                                     <button onClick={() => openModal("edit", registro)}><img src={Edit} alt="Edit" /></button>
                                     <button onClick={() => openModal("delete", registro)}><img src={Delete} alt="Delete" /></button>

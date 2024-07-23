@@ -5,8 +5,10 @@ import { server } from '../../../services/server';
 import { IMaskInput } from "react-imask";
 import EyeOn from '../../../assets/password/eyeOn.svg'
 import EyeOff from '../../../assets/password/eyeOff.svg'
+import { UseAuth } from '../../../hooks';
 
 export default function CreateUsuarioModal({ closeModal, renderTable }) {
+    const { signOut } = UseAuth();
     // Password
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const togglePasswordVisibility = () => {
@@ -159,7 +161,7 @@ export default function CreateUsuarioModal({ closeModal, renderTable }) {
                         <div className="input-container">
                             <p>Senha</p>
                             <div className='iconPasswordContainer'>
-                                <input value={receivedData.senha} onChange={(e) => setReceivedData({ ...receivedData, senha: e.target.value })} className="filtering-input password-input" type={isPasswordVisible ? 'text' : 'password'}  />
+                                <input value={receivedData.senha} onChange={(e) => setReceivedData({ ...receivedData, senha: e.target.value })} className="filtering-input password-input" type={isPasswordVisible ? 'text' : 'password'} />
                                 <img src={isPasswordVisible ? EyeOff : EyeOn} className="eyePassword" onClick={togglePasswordVisibility} />
                             </div>
                         </div>

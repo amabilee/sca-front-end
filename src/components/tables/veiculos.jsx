@@ -8,12 +8,15 @@ const UnidadesTable = ({ data, openModal, levelAcesso }) => (
         <table className='table table-actions'>
             <thead>
                 <tr>
-                    <th scope="col">Número de ordem</th>
-                    <th scope="col">Posto/Graduação</th>
-                    <th scope="col">Nome de guerra</th>
-                    <th scope="col">Nome completo</th>
-                    <th scope="col">Unidade</th>
-                    {levelAcesso && levelAcesso == 2 && (
+                    <th scope="col">Responsável</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Cor</th>
+                    <th scope="col">Placa</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">RENAVAM</th>
+                    <th scope="col">Selo/AN</th>
+                    {levelAcesso == 2 && (
                         <th scope="col"><p>Ações</p></th>
                     )}
 
@@ -22,12 +25,15 @@ const UnidadesTable = ({ data, openModal, levelAcesso }) => (
             <tbody>
                 {data && Array.isArray(data) && data.map((registro, index) => (
                     <tr key={index} scope="row" className={index % 2 === 0 ? 'row-white' : 'row-gray'}>
-                        <td>{registro.qrcode_efetivo}</td>
-                        <td>{registro.graduacao}</td>
-                        <td>{registro.nome_guerra}</td>
-                        <td>{registro.nome_completo}</td>
-                        <td>{registro.unidade}</td>
-                        {levelAcesso && levelAcesso == 2 && (
+                        <td>{registro.graduacao} {registro.nome_guerra}</td>
+                        <td>{registro.tipo}</td>
+                        <td>{registro.cor_veiculo}</td>
+                        <td>{registro.placa}</td>
+                        <td>{registro.marca}</td>
+                        <td>{registro.modelo}</td>
+                        <td>{registro.renavam}</td>
+                        <td>{registro.qrcode}</td>
+                        {levelAcesso == 2 && (
                             <td>
                                 <button onClick={() => openModal("edit", registro)}><img src={Edit} /></button>
                                 <button onClick={() => openModal("delete", registro)}><img src={Delete} /></button>

@@ -37,10 +37,17 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 400px;
+    height: 500px;
     width: 500px;
     border-radius: 20px;
     background-color: white;
+}
+
+.card-login-title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-login h2 {
@@ -50,12 +57,21 @@
     text-align: center;
 }
 
+.card-login h3 {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(80, 80, 80);
+    text-align: center;
+    margin: 15px 0 30px 0;
+}
+
 .card-login .input-container {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    margin: 0;
 }
 
 .card-login .input-container input {
@@ -92,10 +108,10 @@
 }
 
 .card-login p:last-child {
-    font-size: 17px;
-    color: #1B599B;
+    font-size: 16px;
+    color: #216dbd;
     cursor: pointer;
-    font-weight: 800;
+    font-weight: 700;
     text-align: center;
 }
 
@@ -116,7 +132,7 @@
     outline: none;
 }
 
-.iconPasswordContainer{
+.iconPasswordContainer {
     width: 100%;
 }
 
@@ -249,26 +265,6 @@
     border: 1px solid #DEE2E6;
 }
 
-.table-consulta {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table-consulta thead tr th:first-child,
-.table-consulta tbody tr td:first-child {
-    padding: 0 0 0 20px;
-}
-
-.table-consulta thead tr {
-    height: 50px;
-    font-weight: 900;
-}
-
-.table-consulta tbody tr {
-    height: 50px;
-    font-weight: 500;
-}
-
 .input-foto,
 .input-qrcode {
     width: 200px;
@@ -277,13 +273,91 @@
 }
 
 .input-foto {
-    background-color: #c5c5c5;
+    background-color: #eaeaea;
     border-radius: 10px;
     padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .findQrcode-button {
     margin: 20px 0 0 0;
+    background-color: #58AFCB;
+    width: 170px;
+    color: white;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+}
+
+.no-photo-consulta {
+    width: 120px;
+}
+
+.photo-consulta {
+    border-radius: 10px;
+    width: 190px;
+    height: 190px;
+}
+
+.qrcode-box {
+    width: 200px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    padding: 20px 0;
+}
+
+.qrcode-box p {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: black;
+}
+
+.qrcode-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: black;
+}
+
+.consultar-body .qrcode-title{
+    margin: 20px 0;
+}
+
+
+.qrcode-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.qrcode-container-veiculos{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.qrcode-container-veiculos .qrcode-box{
+    margin: 0 20px 0 0;
+}
+
+.consulta-button{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+.return-consulta {
     background-color: #58AFCB;
     width: 170px;
     color: white;

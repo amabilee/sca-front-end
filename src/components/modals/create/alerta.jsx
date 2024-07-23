@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
-
 import { MuiColorInput } from 'mui-color-input'
 
 import '../style.css'
 
 export default function CreateAlertaModal({ closeModal, renderTable }) {
-    const [receivedData, setReceivedData] = useState({ nome_alerta: "", cor: "", ativo_alerta: true})
+    const [receivedData, setReceivedData] = useState({ nome_alerta: "", cor: "", ativo_alerta: true })
     // SnackBar config
     const [message, setMessage] = useState("");
     const [state, setState] = useState({
@@ -28,7 +27,7 @@ export default function CreateAlertaModal({ closeModal, renderTable }) {
 
     const confirmCreating = () => {
         const hexColorPattern = /^#([0-9A-F]{6})$/i;
-    
+
         if (receivedData.nome_alerta.length === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
@@ -39,7 +38,7 @@ export default function CreateAlertaModal({ closeModal, renderTable }) {
             sendRequest();
         }
     };
-    
+
 
     const sendRequest = async () => {
         let userData = localStorage.getItem('user');

@@ -1,0 +1,39 @@
+.veiculo-filters{
+    width: 100%;
+}
+
+.page-title-buttons {
+    display: flex;
+    flex-direction: row;
+    width: 450px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-title-buttons button:nth-child(1){
+    background-color: white;
+    color: #1B599B;
+    width: 230px;
+    font-size: 15px;
+    font-weight: 600;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 1px solid #1B599B;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 15px;
+    transition: all 0.5s;
+}
+
+.page-title-buttons button:nth-child(1) img{
+    width: 25px;
+}
+
+.page-title-buttons button:nth-child(1):hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: all 0.5s;
+}
