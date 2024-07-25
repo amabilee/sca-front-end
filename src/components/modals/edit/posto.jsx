@@ -59,7 +59,7 @@ export default function EditPostoModal({ currentPosto, closeModal, renderTable }
                     <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">
-                    <div className="page-filters filters-relatorio-efetivo">
+                    <div className="page-filters">
                         <div className="input-container">
                             <p>Nome do posto</p>
                             <input className='filtering-input' value={dataFromPosto.nome} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nome: e.target.value })} />

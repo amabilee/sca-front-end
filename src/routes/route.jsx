@@ -2,12 +2,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from '../pages/login/login';
 import ConsultarEfetivo from '../pages/login/consultar.jsx';
 import RelatorioEfetivo from '../pages/relatorio/efetivo.jsx'
+import RelatorioVeiculo from '../pages/relatorio/veiculo.jsx'
 import PostoServico from '../pages/posto/posto.jsx'
 import Unidades from '../pages/unidades/unidade.jsx'
 import Usuarios from '../pages/usuarios/usuario.jsx'
 import Alertas from '../pages/alertas/alerta.jsx'
 import Efetivos from '../pages/efetivos/efetivo.jsx'
 import Veiculos from '../pages/veiculos/veiculo.jsx'
+import Crachas from '../pages/crachas/cracha.jsx'
+import Pessoas from '../pages/pessoas/pessoa.jsx'
 
 // import { PrivateRouteEmpty, PrivateRouteAlunoHome, PrivateRouteAlunoEntry, PrivateRouteAlunoExit, PrivateRouteAlunoSignature, PrivateRouteColaboradorHome, PrivateRouteColaboradorHistory, PrivateRouteColaboradorExit, PrivateRouteAdminHome, PrivateRouteAdminStaff, PrivateRouteAdminFamily, PrivateRouteAdminEntry, PrivateRouteAdminExit } from '../components/PrivateRoute.jsx';
 
@@ -18,12 +21,16 @@ function Router() {
         <Route path="/" element={<Login />} />
         <Route path="/consultarEfetivo" element={<ConsultarEfetivo />} />
         <Route path="/relatorio-efetivos" element={<RelatorioEfetivo />} />
+        <Route path="/relatorio-veiculos" element={<RelatorioVeiculo />} />
         <Route path="/postos" element={<PostoServico />} />
         <Route path="/unidades" element={<Unidades />} />
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/alertas" element={<Alertas />} />
         <Route path="/efetivos" element={<Efetivos />} />
         <Route path="/veiculos" element={<Veiculos />} />
+        <Route path="/crachas" element={<Crachas />} />
+        <Route path="/visitantes" element={<Pessoas />} />
+        {/* <Route path="/gerencia" element={<Gerencia />} /> */}
       </Routes>
     </BrowserRouter>
   )

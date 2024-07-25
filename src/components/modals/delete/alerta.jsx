@@ -59,7 +59,7 @@ export default function DeleteAlertaModal({ currentData, closeModal, renderTable
                     <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">
-                    <div className="page-filters filters-relatorio-efetivo">
+                    <div className="page-filters">
                         <div className="input-container">
                             <p>Tem certeza que deseja deletar este alerta?<br/>Esta ação não pode ser desfeita.</p>
                             <select value={removeOption} onChange={(e) => setRemoveOption(Number(e.target.value))} className='filtering-input filtering-select-level-access'>

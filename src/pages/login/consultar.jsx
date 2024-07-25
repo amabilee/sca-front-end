@@ -1,4 +1,4 @@
-import React, { useState, Buffer } from 'react';
+import React, { useState } from 'react';
 import Logo from '../../assets/sidebar/air-force-logo.svg'
 import LeaveIcon from '../../assets/sidebar/sair-icon.svg'
 import ConsultarTable from '../../components/tables/consultar.jsx'
@@ -107,100 +107,111 @@ function ConsultarEfetivo() {
         }
     }
 
+    const [isPrinting, setIsPrinting] = useState(false)
+
+    const print = () => {
+        setIsPrinting(true)
+        setTimeout(() => {
+            window.print();
+            setIsPrinting(false)
+        }, 300)
+    }
+
     return (
-        <div className="body">
-            <div className="consultar-header">
-                <div className="consultar-header-left">
-                    <img src={Logo} alt="Logo" />
-                    <h1>SISTEMA DE CONTROLE DE ACESSO</h1>
-                </div>
-                <img src={LeaveIcon} alt="Leave Icon" onClick={returnLogin} />
-            </div>
+        <>
             {!viewQr ? (
-                <div className="consultar-body">
-                    <h2>Consultar dados</h2>
-                    <div className="input-pesquisa">
-                        <p>Número de ordem</p>
-                        <input
-                            type="number"
-                            placeholder='Digite aqui para pesquisar'
-                            onChange={(e) => handleNumeroOrdemChange(e.target.value)}
-                        />
-                    </div>
-                    <div className="consultar-dados">
-                        <h3>Dados do militar</h3>
-                        <div className="box-dados-militar">
-                            <div className="dados-militar-form">
-                                <div className="dados-militar-first-row">
-                                    <div className="input-container">
-                                        <p>Nome completo</p>
-                                        <input disabled={true} value={efetivoData.nome_completo} />
-                                    </div>
-                                    <div className="input-container">
-                                        <p>Nome de guerra</p>
-                                        <input disabled={true} value={efetivoData.nome_guerra} />
-                                    </div>
-                                </div>
-                                <div className="dados-militar-second-row">
-                                    <div className="input-container">
-                                        <p>Posto/Graduação</p>
-                                        <input disabled={true} value={efetivoData.id_graduacao} />
-                                    </div>
-                                    <div className="input-container">
-                                        <p>Unidade</p>
-                                        <input disabled={true} value={efetivoData.id_unidade} />
-                                    </div>
-                                    <div className="input-container">
-                                        <p>Email</p>
-                                        <input disabled={true} value={efetivoData.email} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="input-container input-foto">
-                                {efetivoData.foto ? (
-                                    <img src={efetivoData.foto} alt="Foto do Militar" className='photo-consulta' />
-                                ) : (
-                                    <img src={UserPhoto} alt="Sem foto" className='no-photo-consulta' />
-                                )}
-                            </div>
-                            <div className="input-container input-qrcode">
-                                <p>Qr Codes</p>
-                                <button className='findQrcode-button' onClick={() => viewQrCodes(true)}>Visualizar Qr Codes</button>
-                            </div>
+                <div className="body">
+                    <div className="consultar-header">
+                        <div className="consultar-header-left">
+                            <img src={Logo} alt="Logo" />
+                            <h1>SISTEMA DE CONTROLE DE ACESSO</h1>
                         </div>
-                        <h3>Veículos cadastrados</h3>
-                        <ConsultarTable data={veiculosData} />
+                        <img src={LeaveIcon} alt="Leave Icon" onClick={returnLogin} />
+                    </div>
+                    <div className="consultar-body">
+                        <h2>Consultar dados</h2>
+                        <div className="input-pesquisa">
+                            <p>Número de ordem</p>
+                            <input
+                                type="number"
+                                placeholder='Digite aqui para pesquisar'
+                                onChange={(e) => handleNumeroOrdemChange(e.target.value)}
+                            />
+                        </div>
+                        <div className="consultar-dados">
+                            <h3>Dados do militar</h3>
+                            <div className="box-dados-militar">
+                                <div className="dados-militar-form">
+                                    <div className="dados-militar-first-row">
+                                        <div className="input-container">
+                                            <p>Nome completo</p>
+                                            <input disabled={true} value={efetivoData.nome_completo} />
+                                        </div>
+                                        <div className="input-container">
+                                            <p>Nome de guerra</p>
+                                            <input disabled={true} value={efetivoData.nome_guerra} />
+                                        </div>
+                                    </div>
+                                    <div className="dados-militar-second-row">
+                                        <div className="input-container">
+                                            <p>Posto/Graduação</p>
+                                            <input disabled={true} value={efetivoData.id_graduacao} />
+                                        </div>
+                                        <div className="input-container">
+                                            <p>Unidade</p>
+                                            <input disabled={true} value={efetivoData.id_unidade} />
+                                        </div>
+                                        <div className="input-container">
+                                            <p>Email</p>
+                                            <input disabled={true} value={efetivoData.email} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="input-container input-foto">
+                                    {efetivoData.foto ? (
+                                        <img src={efetivoData.foto} alt="Foto do Militar" className='photo-consulta' />
+                                    ) : (
+                                        <img src={UserPhoto} alt="Sem foto" className='no-photo-consulta' />
+                                    )}
+                                </div>
+                                <div className="input-container input-qrcode">
+                                    <p>Qr Codes</p>
+                                    <button className='findQrcode-button' onClick={() => viewQrCodes(true)}>Visualizar Qr Codes</button>
+                                </div>
+                            </div>
+                            <h3>Veículos cadastrados</h3>
+                            <ConsultarTable data={veiculosData} />
+                        </div>
                     </div>
                 </div>
             ) : (
                 <div className="consultar-body">
-                    <div className="consulta-button">
-                        <button className='return-consulta' onClick={() => setViewQr(false)}>Voltar</button>
-                    </div>
-                    <p className='qrcode-title'>Efetivo</p>
+                    {!isPrinting && (
+                        <div className="consulta-button">
+                            <button onClick={() => print()}>Imprimir</button>
+                            <button onClick={() => setViewQr(false)}>Voltar</button>
+                        </div>
+                    )}
                     <div className="qrcode-container">
                         {efetivoData && efetivoData.qrcode_efetivo != 0 && (
                             <div className="qrcode-box">
                                 <QRCode
-                                    size={256}
-                                    style={{ height: "auto", maxWidth: "150px", width: "150px" }}
+                                    size={50}
+                                    style={{ height: "100px", maxWidth: "100px", width: "100px" }}
                                     value={`1,${efetivoData.qrcode_efetivo}`}
-                                    viewBox={`0 0 256 256`}
+                                    viewBox={`0 0 50 50`}
                                 />
                                 <p>{efetivoData.id_graduacao} {efetivoData.nome_guerra} <br />{efetivoData.id_unidade}</p>
                             </div>
                         )}
-                    </div>
-                    <p className='qrcode-title'>Veículos</p>
-                    <div className="qrcode-container-veiculos">
                         {veiculosData && (
                             veiculosData.map((veiculo, i) => (
                                 <div className="qrcode-box" key={i}>
                                     <QRCode
-                                        size={256}
-                                        style={{ height: "auto", maxWidth: "150px", width: "150px" }}
+                                        size={50}
+                                        style={{ height: "100px", maxWidth: "100px", width: "100px" }}
                                         value={`2,${veiculo.qrcode}`}
-                                        viewBox={`0 0 256 256`}
+                                        viewBox={`0 0 50 50`}
                                     />
                                     <p>{veiculo.tipo} {veiculo.modelo} <br />Placa: {veiculosData[i].placa}</p>
                                 </div>
@@ -209,8 +220,7 @@ function ConsultarEfetivo() {
                     </div>
                 </div>
             )}
-
-        </div>
+        </>
     );
 }
 

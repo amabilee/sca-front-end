@@ -1,9 +1,10 @@
 import React from 'react';
 import Edit from '../../assets/table/edit-icon.svg'
 import Delete from '../../assets/table/delete-icon.svg'
+import Activate from '../../assets/table/active-icon.svg'
 import '../../pages/posto/style.css'
 
-const UnidadesTable = ({ data, openModal, levelAcesso }) => (
+const UnidadesTable = ({ data, openModal, levelAcesso, archived }) => (
     <div className='table-wrapper'>
         <table className='table table-actions'>
             <thead>
@@ -33,13 +34,17 @@ const UnidadesTable = ({ data, openModal, levelAcesso }) => (
                         <td>{registro.modelo}</td>
                         <td>{registro.renavam}</td>
                         <td>{registro.qrcode}</td>
-                        {levelAcesso == 2 && (
+                        {levelAcesso == 2 && !archived && (
                             <td>
                                 <button onClick={() => openModal("edit", registro)}><img src={Edit} /></button>
                                 <button onClick={() => openModal("delete", registro)}><img src={Delete} /></button>
                             </td>
                         )}
-
+                        {levelAcesso == 2 && archived && (
+                            <td>
+                                <button onClick={() => openModal("activate", registro)}><img src={Activate} /></button>
+                            </td>
+                        )}
                     </tr>
                 ))}
             </tbody>

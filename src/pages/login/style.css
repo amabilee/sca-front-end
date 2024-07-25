@@ -304,14 +304,15 @@
 }
 
 .qrcode-box {
-    width: 200px;
-    height: 250px;
+    width: 130px;
+    height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     border: 1px solid black;
-    padding: 20px 0;
+    padding: 10px 0 10px 0;
+    margin: 0 20px 0 0;
 }
 
 .qrcode-box p {
@@ -319,6 +320,7 @@
     font-size: 14px;
     font-weight: 500;
     color: black;
+    margin: 10px 0 0 0;
 }
 
 .qrcode-title {
@@ -357,7 +359,7 @@
     width: 100%;
 }
 
-.return-consulta {
+.consulta-button button:nth-child(2) {
     background-color: #58AFCB;
     width: 170px;
     color: white;
@@ -366,4 +368,32 @@
     border-radius: 7px;
     cursor: pointer;
     border: none;
+}
+
+.consulta-button button:nth-child(1){
+    background-color: white;
+    color: #1B599B;
+    width: 170px;
+    font-size: 15px;
+    margin: 0 30px 0 0;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 1px solid #1B599B;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    transition: all 0.5s;
+}
+
+.consulta-button button:nth-child(1):hover{
+    background-color: #1b599b27;
+    color: #1B599B;
+    width: 170px;
+    font-size: 15px;
+    margin: 0 30px 0 0;
+    height: 35px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 1px solid #1B599B;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: all 0.5s;
 }

@@ -7,7 +7,7 @@ import '../../components/tables/style.css'
 const AlertasTable = ({ data, openModal, levelAcesso }) => {
     return (
         <div className='table-wrapper'>
-            <table className='table table-actions alerta-table'>
+            <table className='table table-actions'>
                 <thead>
                     <tr>
                         <th scope="col">Descrição do alerta</th>

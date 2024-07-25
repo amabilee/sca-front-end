@@ -4,6 +4,7 @@ import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
 import { IMaskInput } from "react-imask";
 import Remove from '../../../assets/remove_icon.svg'
+import uploadIcon from '../../../assets/upload.svg'
 
 export default function CreateEfetivoModal({ closeModal, renderTable }) {
     const [graduacaoOptions, setGraduacaoOptions] = useState([])
@@ -190,6 +191,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             setReceivedData({ ...receivedData, foto: file });
             setEfetivoFoto(fileURL);
         }
+        console.log(file)
     }
 
     const removeFoto = () => {
@@ -302,8 +304,10 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Foto</p>
+                            <label htmlFor="arquivo" className="label-foto-input">Enviar arquivo<img src={uploadIcon}/></label>
                             <input
                                 type="file"
+                                id="arquivo"
                                 ref={fileInputRef}
                                 className='filtering-input'
                                 onChange={detectEntryFoto}

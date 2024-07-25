@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import EfetivosTable from '../../components/tables/efetivos';
-import EditEfetivoModal from '../../components/modals/edit/efetivo';
-import DeleteEfetivoModal from '../../components/modals/delete/efetivo';
-import CreateEfetivoModal from '../../components/modals/create/efetivo';
+import EditUnidadeModal from '../../components/modals/edit/unidade';
+import DeleteUnidadeModal from '../../components/modals/delete/unidade';
+import CreateUnidadeModal from '../../components/modals/create/unidade';
 import { server } from '../../services/server';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -13,20 +13,19 @@ import Stack from '@mui/material/Stack';
 
 import Loader from '../../components/loader/index';
 
-import './style.css'
 
-function Efetivos() {
+function Crachas() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
-    const [deleteModal, setOpenDeleteModal] = useState(false);
     const [editModal, setOpenEditModal] = useState(false);
     const [createModal, setOpenCreateModal] = useState(false);
+    const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
 
+    const [loading, setLoading] = useState(true)
+
     const [graduacaoOptions, setGraduacaoOptions] = useState([]);
     const [unidadeOptions, setUnidadeOptions] = useState([]);
-
-    const [loading, setLoading] = useState(true)
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -50,15 +49,9 @@ function Efetivos() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getEfetivos('', 1);
-        getSelectOptions();
-    }, []);
-
     const getEfetivos = async (filter, page) => {
         let userData = localStorage.getItem('user');
-        let userDataParsed = JSON.parse(userData)
+        let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
         setNivelAcesso(userDataParsed.nivel_acesso)
         try {
@@ -75,7 +68,7 @@ function Efetivos() {
             setLoading(false)
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-            setMessage("Erro ao buscar dados");
+            setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
         }
     };
@@ -151,17 +144,17 @@ function Efetivos() {
         switch (type) {
             case 'create':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Efetivo criado com sucesso.");
+                setMessage("Unidade criada com sucesso.");
                 setStatusAlert("success");
                 break;
             case 'edit':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Efetivo alterado com sucesso.");
+                setMessage("Unidade alterada com sucesso.");
                 setStatusAlert("success");
                 break;
             case 'delete':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Efetivo deletado com sucesso.");
+                setMessage("Unidade deletada com sucesso.");
                 setStatusAlert("success");
             default:
                 break;
@@ -204,6 +197,12 @@ function Efetivos() {
         }
     };
 
+    // Data from the DB
+    useEffect(() => {
+        getEfetivos('', 1);
+        getSelectOptions();
+    }, []);
+
     return (
         <div className="body">
             <Header />
@@ -211,14 +210,14 @@ function Efetivos() {
                 {nivelAcesso == 2 ? (
                     <div className="page-title page-title-create-option">
                         <div className="page-title-text">
-                            <h1>Efetivos</h1>
+                            <h1>Gerador de crachás</h1>
                             <h2>Para consultar os efetivos, informe os dados desejados</h2>
                         </div>
-                        <button onClick={() => openModal("create")}>Cadastrar efetivo</button>
+                        <button onClick={() => openModal("create")}>Cadastrar unidade</button>
                     </div>
                 ) : (
                     <div className="page-title">
-                        <h1>Efetivos</h1>
+                        <h1>Gerador de crachás</h1>
                         <h2>Para consultar os efetivos, informe os dados desejados</h2>
                     </div>
                 )}
@@ -280,7 +279,7 @@ function Efetivos() {
                             <Loader />
                         </div>
                     ) : (
-                        <EfetivosTable data={registros} openModal={openModal} levelAcesso={nivelAcesso} />
+                        <EfetivosTable data={registros} openModal={openModal} levelAcesso={nivelAcesso} type={'cracha'}/>
                     )}
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
@@ -288,13 +287,13 @@ function Efetivos() {
                 </div>
             </div>
             {editModal && (
-                <EditEfetivoModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
+                <EditUnidadeModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
             )}
             {createModal && (
-                <CreateEfetivoModal closeModal={closeModal} renderTable={operationSuccess} />
+                <CreateUnidadeModal closeModal={closeModal} renderTable={operationSuccess} />
             )}
             {deleteModal && (
-                <DeleteEfetivoModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
+                <DeleteUnidadeModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
             )}
             <Snackbar
                 ContentProps={{ sx: { borderRadius: '8px' } }}
@@ -312,4 +311,4 @@ function Efetivos() {
     );
 }
 
-export default Efetivos;
+export default Crachas;

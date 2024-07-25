@@ -1,0 +1,35 @@
+.nav-pessoas{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+.nav-pessoas button{
+    width: 250px;
+    border-radius: 20px 20px 0 0;
+    height: 40px;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    margin: 0 2px 0 0;
+    transition: all 0.5s;
+}
+
+.nav-pessoas .inactive-button{
+    background-color: #808F9F;
+}
+
+.nav-pessoas .inactive-button:hover{
+    background-color: #5F80A2;
+    transition: all 0.5s;
+}
+
+.nav-pessoas .active-button{
+    background-color: #58AFCB;
+}
+
+.page-content-pessoas{
+    height: 85%;
+}

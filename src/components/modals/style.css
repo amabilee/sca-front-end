@@ -1,18 +1,35 @@
-.color-input div{
+/* Style Geral */
+
+.body {
+    width: 100vw;
+    height: 100vh;
+}
+
+.page-container {
+    padding: 40px 40px 40px 120px;
+    z-index: 1;
+    height: 100%;
+}
+
+/* Style Alertas */
+
+.color-input div {
     padding: 0;
 }
 
-.color-input div input{
+.color-input div input {
     height: 40px;
     padding: 0;
     border: none;
 }
 
-.color-input div fieldset{
+.color-input div fieldset {
     border: none;
 }
 
-.efetivo-inputs-1{
+/* Style Efetivos */
+
+.efetivo-inputs-1 {
     display: flex;
     width: max-content;
     flex-direction: row;
@@ -21,12 +38,12 @@
 }
 
 .efetivo-inputs-1 .input-container:nth-child(1),
-.efetivo-inputs-1 .input-container:nth-child(3){
+.efetivo-inputs-1 .input-container:nth-child(3) {
     width: 200px;
 }
 
 .efetivo-inputs-1 .input-container:nth-child(2),
-.efetivo-inputs-1 .input-container:nth-child(6){
+.efetivo-inputs-1 .input-container:nth-child(6) {
     width: 300px;
 }
 
@@ -53,35 +70,134 @@
     height: 40px;
 }
 
-.efetivo-inputs-2 .input-container:last-child input{
+.efetivo-inputs-2 .input-container:last-child input {
     padding: 10px;
     width: 300px;
     background-color: #e3e3e3;
 }
 
-.militar-foto{
+.militar-foto {
     margin: 10px auto;
     width: 200px;
     height: 200px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.foto-preview{
+.foto-preview {
     padding: 10px 0 0 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-.foto-preview button{
+.foto-preview button {
     width: 30px;
     height: 30px;
     background-color: transparent;
     border: none;
 }
 
-.foto-preview button img{
+.foto-preview button img {
     width: 25px;
     height: 25px;
     cursor: pointer;
+}
+
+
+
+
+
+/* Style Usuarios */
+
+.modulos-container {
+    height: 200px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modulos-container-column {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modulos-checkbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.modulos-checkbox input {
+    margin: 0 10px 0 0;
+}
+
+.table-usuarios tbody tr td:nth-child(3) {
+    padding: 10px 0;
+}
+
+.usuario-inputs-1 {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.usuario-inputs-2 {
+    margin: 30px 0 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+    width: max-content;
+}
+
+.usuario-inputs-1 .input-container {
+    width: 20%;
+}
+
+.usuario-inputs-1 .input-container select {
+    width: 300px;
+}
+
+.usuario-inputs-2 .input-container p:nth-child(1) {
+    margin: 0 0 20px 0;
+}
+
+.usuario-inputs-2 .input-container input {
+    width: 20px;
+    height: 20px;
+}
+
+/* Photo inputs */
+
+input[type="file"] {
+    display: none;
+}
+.label-foto-input {
+    padding: 10px 20px;
+    width: 200px;
+    background-color: #1B599B;
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.label-foto-input img{
+    width: 23px;
+    height: 23px;
 }

@@ -64,171 +64,221 @@ export default function Veiculos({ closeModal }) {
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
 
-    }
-};
+        }
+    };
 
-const [registros, setRegistros] = useState([]);
+    const [registros, setRegistros] = useState([]);
 
-// Filtering arguments
-const [filteringConditions, setFilteringConditions] = useState({
-    nome_guerra: '',
-    tipo: 0,
-    cor_veiculo: '',
-    placa: '',
-    marca: '',
-    modelo: '',
-    renavam: '',
-    qrcode: ''
-});
-
-const sendFilteringConditions = () => {
-    let filter = ''
-    if (filteringConditions.nome_guerra != '') {
-        filter += `&nome_guerra=${filteringConditions.nome_guerra}`
-    }
-    if (filteringConditions.tipo != 0) {
-        filter += `&tipo=${filteringConditions.tipo}`
-    }
-    if (filteringConditions.cor_veiculo != '') {
-        filter += `&cor_veiculo=${filteringConditions.cor_veiculo}`
-    }
-    if (filteringConditions.placa != '') {
-        filter += `&placa=${filteringConditions.placa}`
-    }
-    if (filteringConditions.marca != '') {
-        filter += `&marca=${filteringConditions.marca}`
-    }
-    if (filteringConditions.modelo != '') {
-        filter += `&modelo=${filteringConditions.modelo}`
-    }
-    if (filteringConditions.renavam != '') {
-        filter += `&renavam=${filteringConditions.renavam}`
-    }
-    if (filteringConditions.qrcode != '') {
-        filter += `&qrcode=${filteringConditions.qrcode}`
-    }
-    getVeiculos(filter, 1)
-    setPaginationData(prevState => {
-        return { ...prevState, filtering: filter, currentPage: 1 }
+    // Filtering arguments
+    const [filteringConditions, setFilteringConditions] = useState({
+        nome_guerra: '',
+        tipo: 0,
+        cor_veiculo: '',
+        placa: '',
+        marca: '',
+        modelo: '',
+        renavam: '',
+        qrcode: ''
     });
 
-};
+    const sendFilteringConditions = () => {
+        let filter = ''
+        if (filteringConditions.nome_guerra != '') {
+            filter += `&nome_guerra=${filteringConditions.nome_guerra}`
+        }
+        if (filteringConditions.tipo != 0) {
+            filter += `&tipo=${filteringConditions.tipo}`
+        }
+        if (filteringConditions.cor_veiculo != '') {
+            filter += `&cor_veiculo=${filteringConditions.cor_veiculo}`
+        }
+        if (filteringConditions.placa != '') {
+            filter += `&placa=${filteringConditions.placa}`
+        }
+        if (filteringConditions.marca != '') {
+            filter += `&marca=${filteringConditions.marca}`
+        }
+        if (filteringConditions.modelo != '') {
+            filter += `&modelo=${filteringConditions.modelo}`
+        }
+        if (filteringConditions.renavam != '') {
+            filter += `&renavam=${filteringConditions.renavam}`
+        }
+        if (filteringConditions.qrcode != '') {
+            filter += `&qrcode=${filteringConditions.qrcode}`
+        }
+        getVeiculos(filter, 1)
+        setPaginationData(prevState => {
+            return { ...prevState, filtering: filter, currentPage: 1 }
+        });
 
-return (
-    <>
-        <div className="page-container modal">
-            {nivelAcesso == 2 ? (
-                <div className="page-title page-title-create-option">
-                    <div className="page-title-text">
-                        <h1>Veículos desativados</h1>
-                        <h2>Para consultar os veículos desativados, informe os dados desejados</h2>
-                    </div>
-                    <button onClick={() => closeModal('inactive')}>Voltar</button>
-                </div>
-            ) : (
-                <div className="page-title">
-                    <h1>Veículos</h1>
-                    <h2>Para consultar os veículos, informe os dados desejados</h2>
-                </div>
-            )}
-            <div className="page-filters veiculo-filters">
-                <div className="input-container">
-                    <p>Responsável</p>
-                    <input
-                        className='filtering-input'
-                        value={filteringConditions.nome_guerra}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, nome_guerra: e.target.value })}
-                    />
-                </div>
-                <div className="input-container">
-                    <p>Tipo</p>
-                    <select
-                        value={filteringConditions.tipo}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, tipo: e.target.value })}
-                        className='filtering-input filtering-select-level-access'
-                    >
-                        <option value={0}>Nenhum</option>
-                        <option value={'Motocicleta'}>Motocicleta</option>
-                        <option value={'Carro'}>Carro</option>
-                        <option value={'Caminhoneta'}>Caminhoneta</option>
-                        <option value={'Ônibus'}>Ônibus</option>
-                    </select>
-                </div>
-                <div className="input-container">
-                    <p>Cor</p>
-                    <input
-                        className='filtering-input'
-                        value={filteringConditions.cor_veiculo}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, cor_veiculo: e.target.value })}
-                    />
-                </div>
-                <div className="input-container">
-                    <p>Placa</p>
-                    <input
-                        className='filtering-input'
-                        value={filteringConditions.placa}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value })}
-                    />
-                </div>
-                <div className="input-container">
-                    <p>Marca</p>
-                    <input
-                        className='filtering-input'
-                        value={filteringConditions.marca}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, marca: e.target.value })}
-                    />
-                </div>
-                <div className="input-container">
-                    <p>Modelo</p>
-                    <input
-                        className='filtering-input'
-                        value={filteringConditions.modelo}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, modelo: e.target.value })}
-                    />
-                </div>
-                <div className="input-container">
-                    <p>RENAVAM</p>
-                    <input
-                        className='filtering-input'
-                        value={filteringConditions.renavam}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, renavam: e.target.value })}
-                    />
-                </div>
-                <div className="input-container">
-                    <p>Selo / AN</p>
-                    <input
-                        className='filtering-input'
-                        value={filteringConditions.qrcode}
-                        onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode: e.target.value })}
-                    />
-                </div>
-                <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
-            </div>
-            <div className="page-content-table">
-                {loading ? (
-                    <div className="loading-container">
-                        <Loader />
+    };
+
+
+    // Modal operations
+    const openModal = (type, data) => {
+        switch (type) {
+            case 'activate':
+                activateVeiculo(data)
+                break;
+            default:
+                break;
+        }
+    };
+
+    const operationSuccess = (type) => {
+        switch (type) {
+            case 'activate':
+                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
+                setMessage("Veículo ativado com sucesso.");
+                setStatusAlert("success");
+                break;
+            default:
+                break;
+        }
+        getVeiculos(paginationData.filtering, paginationData.currentPage);
+    };
+
+    // Activate Veiculo req
+
+    const activateVeiculo = async (veiculo) => {
+        let removeData = {...veiculo, ativo_veiculo: true}
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
+        setNivelAcesso(userDataParsed.nivel_acesso)
+        try {
+            await server.put(`/veiculo/${Number(veiculo.id)}`, removeData, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
+            operationSuccess('activate');
+        } catch (e) {
+            setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
+            setMessage("Erro ao ativar veículo:");
+            setStatusAlert("error");
+
+        }
+    }
+
+
+    return (
+        <>
+            <div className="page-container modal">
+                {nivelAcesso == 2 ? (
+                    <div className="page-title page-title-create-option">
+                        <div className="page-title-text">
+                            <h1>Veículos desativados</h1>
+                            <h2>Para consultar os veículos desativados, informe os dados desejados</h2>
+                        </div>
+                        <button onClick={() => closeModal('inactive')}>Voltar</button>
                     </div>
                 ) : (
-                    <VeiculosTable data={registros} levelAcesso={nivelAcesso} />
+                    <div className="page-title">
+                        <h1>Veículos</h1>
+                        <h2>Para consultar os veículos, informe os dados desejados</h2>
+                    </div>
                 )}
-                <Stack spacing={2}>
-                    <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
-                </Stack>
+                <div className="page-filters veiculo-filters">
+                    <div className="input-container">
+                        <p>Responsável</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.nome_guerra}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, nome_guerra: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>Tipo</p>
+                        <select
+                            value={filteringConditions.tipo}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, tipo: e.target.value })}
+                            className='filtering-input filtering-select-level-access'
+                        >
+                            <option value={0}>Nenhum</option>
+                            <option value={'Motocicleta'}>Motocicleta</option>
+                            <option value={'Carro'}>Carro</option>
+                            <option value={'Caminhoneta'}>Caminhoneta</option>
+                            <option value={'Ônibus'}>Ônibus</option>
+                        </select>
+                    </div>
+                    <div className="input-container">
+                        <p>Cor</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.cor_veiculo}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, cor_veiculo: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>Placa</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.placa}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>Marca</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.marca}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, marca: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>Modelo</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.modelo}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, modelo: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>RENAVAM</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.renavam}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, renavam: e.target.value })}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <p>Selo / AN</p>
+                        <input
+                            className='filtering-input'
+                            value={filteringConditions.qrcode}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode: e.target.value })}
+                        />
+                    </div>
+                    <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
+                </div>
+                <div className="page-content-table">
+                    {loading ? (
+                        <div className="loading-container">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <VeiculosTable data={registros} levelAcesso={nivelAcesso} archived={true} openModal={openModal} />
+                    )}
+                    <Stack spacing={2}>
+                        <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
+                    </Stack>
+                </div>
             </div>
-        </div>
-        <Snackbar
-            ContentProps={{ sx: { borderRadius: '8px' } }}
-            anchorOrigin={{ vertical, horizontal }}
-            open={open}
-            autoHideDuration={2000}
-            onClose={handleClose}
-            key={vertical + horizontal}
-        >
-            <Alert variant="filled" severity={statusAlert}>
-                {message}
-            </Alert>
-        </Snackbar>
-    </>
-);
+            <Snackbar
+                ContentProps={{ sx: { borderRadius: '8px' } }}
+                anchorOrigin={{ vertical, horizontal }}
+                open={open}
+                autoHideDuration={2000}
+                onClose={handleClose}
+                key={vertical + horizontal}
+            >
+                <Alert variant="filled" severity={statusAlert}>
+                    {message}
+                </Alert>
+            </Snackbar>
+        </>
+    );
 }

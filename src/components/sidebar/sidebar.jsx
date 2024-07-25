@@ -23,6 +23,7 @@ function Sidebar() {
                 }
             });
             setUserModules(response.data.entity[0].Modulos)
+            console.log(response.data.entity[0].Modulos)
         } catch (e) {
             console.log(e)
             if (e.response.status == 401) {
@@ -44,7 +45,7 @@ function Sidebar() {
                 {userModules.map((module) => (
                     <div className="tooltip" key={module.ordem}>
                         <img
-                            src={`../../../public/${module.icone}`}
+                            src={`/${module.icone}`}
                             alt={module.descricao}
                             onClick={() => handleModuleClick(module.link)}
                         />

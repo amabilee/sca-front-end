@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import UsuariosTable from '../../components/tables/usuarios';
-import EditUsuarioModal from '../../components/modals/edit/usuario';
-import DeleteUsuarioModal from '../../components/modals/delete/usuario';
-import CreateUsuarioModal from '../../components/modals/create/usuário';
 import { server } from '../../services/server';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -19,10 +16,6 @@ import '../style.css'
 
 function Usuarios() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
-    const [editModal, setOpenEditModal] = useState(false);
-    const [createModal, setOpenCreateModal] = useState(false);
-    const [deleteModal, setOpenDeleteModal] = useState(false);
-    const [sendingData, setSendingData] = useState({});
 
     const [loading, setLoading] = useState(true)
 
@@ -98,61 +91,6 @@ function Usuarios() {
         });
     };
 
-    // Open and Close Modals
-    const openModal = (type, data) => {
-        switch (type) {
-            case 'edit':
-                setOpenEditModal(true);
-                setSendingData(data);
-                break;
-            case 'create':
-                setOpenCreateModal(true);
-                break;
-            case 'delete':
-                setOpenDeleteModal(true)
-                setSendingData(data);
-            default:
-                break;
-        }
-    };
-
-    const closeModal = (type) => {
-        switch (type) {
-            case 'edit':
-                setOpenEditModal(false);
-                break;
-            case 'create':
-                setOpenCreateModal(false);
-                break;
-            case 'delete':
-                setOpenDeleteModal(false)
-            default:
-                break;
-        }
-    };
-
-    const operationSuccess = (type) => {
-        switch (type) {
-            case 'create':
-                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Usuário criado com sucesso.");
-                setStatusAlert("success");
-                break;
-            case 'edit':
-                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Usuário alterado com sucesso.");
-                setStatusAlert("success");
-                break;
-            case 'delete':
-                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Usuário deletado com sucesso.");
-                setStatusAlert("success");
-            default:
-                break;
-        }
-        getUsuarios(paginationData.filtering, paginationData.currentPage);
-    };
-
     return (
         <div className="body">
             <Header />
@@ -190,22 +128,13 @@ function Usuarios() {
                             <Loader />
                         </div>
                     ) : (
-                        <UsuariosTable data={registros} openModal={openModal} />
+                        <UsuariosTable data={registros} />
                     )}
                     <Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
                     </Stack>
                 </div>
             </div>
-            {editModal && (
-                <EditUsuarioModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
-            )}
-            {createModal && (
-                <CreateUsuarioModal closeModal={closeModal} renderTable={operationSuccess} />
-            )}
-            {deleteModal && (
-                <DeleteUsuarioModal currentData={sendingData} closeModal={closeModal} renderTable={operationSuccess} />
-            )}
             <Snackbar
                 ContentProps={{ sx: { borderRadius: '8px' } }}
                 anchorOrigin={{ vertical, horizontal }}

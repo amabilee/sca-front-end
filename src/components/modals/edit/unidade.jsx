@@ -60,7 +60,7 @@ export default function EditUnidadeModal({ currentData, closeModal, renderTable 
                     <h2>Todos os campos devem ser preenchidos</h2>
                 </div>
                 <div className="edit-form-container">
-                    <div className="page-filters filters-relatorio-efetivo">
+                    <div className="page-filters">
                         <div className="input-container">
                             <p>Nome da unidade</p>
                             <input className='filtering-input' value={receivedData.nome} onChange={(e) => setReceivedData({ ...receivedData, nome: e.target.value })} />

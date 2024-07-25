@@ -13,13 +13,12 @@
 .page-title h1 {
     font-size: 27px;
     font-weight: 500;
-    margin: 0 0 20px 0;
 }
 
 .page-title h2 {
     line-height: 0px;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .page-title-create-option {
@@ -52,6 +51,7 @@
     width: 170px;
     color: white;
     font-size: 15px;
+    font-weight: 600;
     height: 35px;
     border-radius: 7px;
     cursor: pointer;
@@ -60,16 +60,8 @@
 }
 
 .page-title-create-option button:hover {
-    margin: 20px 0 0 0;
     background-color: #36a4c9;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    width: 170px;
-    color: white;
-    font-size: 15px;
-    height: 35px;
-    border-radius: 7px;
-    cursor: pointer;
-    border: none;
     transition: all 0.5s;
 }
 
@@ -93,6 +85,7 @@
     width: 170px;
     color: white;
     font-size: 15px;
+    font-weight: 600;
     height: 35px;
     border-radius: 7px;
     cursor: pointer;
@@ -100,7 +93,78 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
-.searchButton {
+.searchButton:hover {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     transition: all 0.5s;
+}
+
+
+
+/* Password Icon Style */
+
+.iconPasswordContainer {
+    position: relative;
+}
+
+.eyePassword {
+    cursor: pointer;
+    position: absolute;
+    top: 58%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 20px;
+}
+
+.eyePasswordChange {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 80%;
+    transform: translateY(-50%);
+    width: 20px;
+}
+
+.password-input {
+    width: 100%;
+}
+
+
+
+/* Filters */
+
+.page-filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 8%;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px 0 0;
+    transition: all 0.5s;
+}
+
+.input-container input:hover,
+.input-container select:hover {
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 5px 15px;
+    transition: all 0.5s;
+}
+
+.input-container p {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.input-container .filtering-input {
+    padding: 0 0 0 10px;
+}
+
+.input-container .filtering-input {
+    border: 1px solid #BBBBBB;
+    border-radius: 5px;
+    height: 40px;
+    margin: 8px 0 0 0;
 }

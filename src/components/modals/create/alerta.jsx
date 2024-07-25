@@ -69,7 +69,7 @@ export default function CreateAlertaModal({ closeModal, renderTable }) {
                 <div className="edit-form-container">
                     <div className="page-filters filters-alerta">
                         <div className="input-container">
-                            <p>Nome da unidade</p>
+                            <p>Nome do alerta</p>
                             <input className='filtering-input' value={receivedData.nome_alerta} onChange={(e) => setReceivedData({ ...receivedData, nome_alerta: e.target.value })} />
                         </div>
                         <div className="input-container">

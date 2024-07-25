@@ -5,6 +5,7 @@ import "./style.css";
 import { server } from '../../../services/server';
 import { IMaskInput } from "react-imask";
 import Remove from '../../../assets/remove_icon.svg'
+import uploadIcon from '../../../assets/upload.svg'
 
 export default function EditEfetivoModal({ currentData, closeModal, renderTable }) {
     const [graduacaoOptions, setGraduacaoOptions] = useState([]);
@@ -150,9 +151,15 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
     const detectEntryFoto = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const fileURL = URL.createObjectURL(file);
-            setReceivedData({ ...receivedData, foto: file });
-            setEfetivoFoto(fileURL);
+            console.log(file.type)
+            if (file.type == 'image/gif' || file.type == 'image/jpeg' || file.type == 'image/png') {
+                const fileURL = URL.createObjectURL(file);
+                setReceivedData({ ...receivedData, foto: file });
+                setEfetivoFoto(fileURL);
+            } else {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Imagens somente .jpeg .png .gif");
+            }
         }
     };
 
@@ -212,6 +219,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                             <input
                                 type="number"
                                 className='filtering-input'
+                                disabled={true}
                                 value={receivedData.qrcode_efetivo}
                                 onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value })}
                             />
@@ -298,8 +306,10 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                         </div>
                         <div className="input-container">
                             <p>Foto</p>
+                            <label htmlFor="arquivo" className="label-foto-input">Enviar arquivo<img src={uploadIcon}/></label>
                             <input
                                 type="file"
+                                id="arquivo"
                                 ref={fileInputRef}
                                 className='filtering-input'
                                 onChange={detectEntryFoto}

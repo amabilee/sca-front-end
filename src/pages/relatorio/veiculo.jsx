@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Header from '../../components/sidebar/sidebar'
-import RelatoriosEfetivosTable from '../../components/tables/relatorio-efetivo'
+import RelatoriosVeiculosTable from '../../components/tables/relatorio-veiculo'
 import './style.css'
 
 import { DateRangePicker } from 'rsuite';
@@ -14,112 +14,112 @@ import Stack from '@mui/material/Stack';
 
 import Loader from '../../components/loader/index';
 
-function RelatorioEfetivo() {
+function RelatorioVeiculo() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 1, filtering: '' })
     const [loading, setLoading] = useState(false)
     const [registros, setRegistros] = useState([
         {
             tipo: "Entrada",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Entrada",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Entrada",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Entrada",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Entrada",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Entrada",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Saída",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Saída",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Saída",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Saída",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Saída",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Saída",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         },
         {
             tipo: "Saída",
             data: "12/34/5678",
-            posto: "Portão Principal",
+            adesivo: "12345",
             hora: "12:34",
-            militar: "S1 SILVA",
+            placa: "QWE1234",
             sentinela: "Cb MARQUES"
         }
     ])
@@ -147,8 +147,10 @@ function RelatorioEfetivo() {
     };
 
     const [filteringConditions, setFilteringConditions] = useState({
-        militar: '',
+        adesivo: '',
+        placa: '',
         data: []
+
     });
 
     const sendFilteringConditions = () => {
@@ -174,13 +176,17 @@ function RelatorioEfetivo() {
             <Header />
             <div className="page-container">
                 <div className="page-title">
-                    <h1>Registros de entrada e saída - Efetivos</h1>
+                    <h1>Registros de entrada e saída - Veículos</h1>
                     <h2>Para consultar os registros, informe os dados desejados</h2>
                 </div>
-                <div className="page-filters filters-relatorio-efetivo">
+                <div className="page-filters filters-relatorio-veiculo">
                     <div className="input-container">
-                        <p>Militar</p>
-                        <input className='filtering-input' value={filteringConditions.militar} onChange={(e) => setFilteringConditions({ ...filteringConditions, militar: e.target.value })} />
+                        <p>Adesivo/Selo</p>
+                        <input className='filtering-input' value={filteringConditions.adesivo} onChange={(e) => setFilteringConditions({ ...filteringConditions, adesivo: e.target.value })} />
+                    </div>
+                    <div className="input-container">
+                        <p>Placa</p>
+                        <input className='filtering-input' value={filteringConditions.placa} onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value })} />
                     </div>
                     <div className="input-container">
                         <p>Intervalo de tempo</p>
@@ -199,7 +205,7 @@ function RelatorioEfetivo() {
                             <Loader />
                         </div>
                     ) : (
-                        <RelatoriosEfetivosTable data={registros} />
+                        <RelatoriosVeiculosTable data={registros} />
                     )}
                     < Stack spacing={2}>
                         <Pagination count={paginationData.totalPages} page={paginationData.currentPage} onChange={handleChange} shape="rounded" />
@@ -222,4 +228,4 @@ function RelatorioEfetivo() {
     )
 }
 
-export default RelatorioEfetivo
+export default RelatorioVeiculo

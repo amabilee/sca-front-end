@@ -166,6 +166,7 @@ function Veiculos() {
                 break;
             case 'inactive':
                 setOpenInactiveModal(false)
+                operationSuccess()
             default:
                 break;
         }

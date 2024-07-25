@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css'
 
-const RelatorioEfetivoTable = ({ data }) => (
+const RelatorioVeiculoTable = ({ data }) => (
   <div className='table-wrapper'>
     <table className='table table-relatorio'>
       <thead>
@@ -9,8 +9,8 @@ const RelatorioEfetivoTable = ({ data }) => (
           <th scope="col">Tipo de movimentação</th>
           <th scope="col">Data</th>
           <th scope="col">Hora</th>
-          <th scope="col">Posto de serviço</th>
-          <th scope="col">Militar</th>
+          <th scope="col">Adesivo/Selo</th>
+          <th scope="col">Placa</th>
           <th scope="col">Sentinela</th>
         </tr>
       </thead>
@@ -20,8 +20,8 @@ const RelatorioEfetivoTable = ({ data }) => (
             <td>{registro.tipo}</td>
             <td>{registro.data}</td>
             <td>{registro.hora}</td>
-            <td>{registro.posto}</td>
-            <td>{registro.militar}</td>
+            <td>{registro.adesivo}</td>
+            <td>{registro.placa}</td>
             <td>{registro.sentinela}</td>
           </tr>
         ))}
@@ -30,4 +30,4 @@ const RelatorioEfetivoTable = ({ data }) => (
   </div>
 );
 
-export default RelatorioEfetivoTable;
+export default RelatorioVeiculoTable;

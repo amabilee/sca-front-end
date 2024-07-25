@@ -117,8 +117,25 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
                         'access-level': userDataParsed.nivel_acesso
                     }
                 });
-                setEfetivoData({ qrcode_efetivo: e, nome_guerra: response.data[0].nome_guerra, graduacao: response.data[0].Graduacao.sigla })
-                setReceivedData({ ...receivedData, id_efetivo: response.data[0].id })
+
+                const efetivoColected = response.data[0]
+
+                //Check VAL_CNH
+                let validCNH = false
+                let valCNH = convertDateToDDMMYYYY(efetivoColected.val_cnh)
+                if (valCNH > new Date()) {
+                    validCNH = true
+                }
+
+                //Show Efetivo
+                if (efetivoColected.cnh == null || !validCNH) {
+                    setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                    setMessage('Este efetivo apresenta irregulariedades na CNH');
+                } else {
+                    setEfetivoData({ qrcode_efetivo: e, nome_guerra: efetivoColected.nome_guerra, graduacao: efetivoColected.Graduacao.sigla })
+                    setReceivedData({ ...receivedData, id_efetivo: efetivoColected.id })
+                }
+
             } catch (e) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Não foi encontrado um efetivo com este número de ordem");
@@ -133,6 +150,15 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
             setReceivedData({ ...receivedData, id_efetivo: '' })
         }
     }
+
+
+
+
+    const convertDateToDDMMYYYY = (dateString) => {
+        const [year, month, day] = dateString.split('-');
+        var data = new Date(year, month, day);
+        return data;
+    };
 
     return (
         <>

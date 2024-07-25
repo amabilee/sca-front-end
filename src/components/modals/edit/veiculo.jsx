@@ -76,7 +76,6 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
-
         try {
             await server.put(`/veiculo/${receivedData.id}`, receivedData, {
                 headers: {
@@ -95,13 +94,13 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
 
     const searchEfetivo = async (e) => {
         setEfetivoData({ ...efetivoData, qrcode_efetivo: e })
-        if (String(e).length == 7 || String(receivedData.id_efetivo).length != 0) {
+        if (String(e).length == 7 || String(receivedData.id_efetivo).length == 4) {
             let userData = localStorage.getItem('user');
             let userDataParsed = JSON.parse(userData);
             let token = localStorage.getItem("user_token")
             try {
-                if (String(receivedData.id_efetivo).length != 0) {
-                    const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, receivedData, {
+                if (String(receivedData.id_efetivo).length == 4) {
+                    const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, {
                         headers: {
                             'Authentication': token,
                             'access-level': userDataParsed.nivel_acesso
@@ -130,13 +129,14 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                     graduacao: ''
                 }
             )
-            setReceivedData({ ...receivedData, id_efetivo: '' })
+            // setReceivedData({ ...receivedData, id_efetivo: '' })
         }
     }
 
     useEffect(() => {
         searchEfetivo()
     }, [])
+    
 
     return (
         <>
@@ -157,7 +157,7 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                         </div>
                         <div className="input-container">
                             <p>Militar</p>
-                            <input disabled={true} className='filtering-input' value={`${efetivoData.graduacao} ${efetivoData.nome_guerra}`} onChange={searchEfetivo} />
+                            <input disabled={true} className='filtering-input' value={`${efetivoData.graduacao} ${efetivoData.nome_guerra}`} />
                         </div>
                     </div>
                     <div className="veiculo-inputs-2">

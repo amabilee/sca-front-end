@@ -135,10 +135,11 @@ function Alertas() {
 
     const operationSuccess = (type) => {
         switch (type) {
-            case 'delete':
+            case 'create':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Alerta deletado com sucesso.");
+                setMessage("Alerta criado com sucesso.");
                 setStatusAlert("success");
+                break;
             case 'edit':
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Alerta alterado com sucesso.");

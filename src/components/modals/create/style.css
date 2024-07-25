@@ -28,10 +28,6 @@
     width: 200px;
 }
 
-.input-container input{
-    text-transform: capitalize;
-}
-
 .veiculo-inputs-2 .input-container:nth-child(3) input{
     text-transform: uppercase;
 }

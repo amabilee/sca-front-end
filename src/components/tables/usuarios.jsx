@@ -3,7 +3,7 @@ import Edit from '../../assets/table/edit-icon.svg';
 import Delete from '../../assets/table/delete-icon.svg';
 import '../../pages/posto/style.css';
 
-const UsuariosTable = ({ data, openModal }) => (
+const UsuariosTable = ({ data }) => (
     <div className='table-wrapper'>
         <table className='table table-usuarios'>
             <thead>
