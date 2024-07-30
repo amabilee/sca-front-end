@@ -195,7 +195,7 @@ export default function Veiculos({ closeModal }) {
                         <select
                             value={filteringConditions.tipo}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, tipo: e.target.value })}
-                            className='filtering-input filtering-select-level-access'
+                            className='filtering-input'
                         >
                             <option value={0}>Nenhum</option>
                             <option value={'Motocicleta'}>Motocicleta</option>

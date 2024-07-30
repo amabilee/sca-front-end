@@ -39,7 +39,7 @@
 
 .efetivo-inputs-1 .input-container:nth-child(1),
 .efetivo-inputs-1 .input-container:nth-child(3) {
-    width: 200px;
+    width: 250px;
 }
 
 .efetivo-inputs-1 .input-container:nth-child(2),
@@ -135,10 +135,6 @@
 
 .modulos-checkbox input {
     margin: 0 10px 0 0;
-}
-
-.table-usuarios tbody tr td:nth-child(3) {
-    padding: 10px 0;
 }
 
 .usuario-inputs-1 {

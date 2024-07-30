@@ -89,7 +89,7 @@ function Veiculos() {
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
-        nome_guerra: '',
+        militar: '',
         tipo: 0,
         cor_veiculo: '',
         placa: '',
@@ -101,8 +101,8 @@ function Veiculos() {
 
     const sendFilteringConditions = () => {
         let filter = '&ativo_veiculo=true'
-        if (filteringConditions.nome_guerra != '') {
-            filter += `&nome_guerra=${filteringConditions.nome_guerra}`
+        if (filteringConditions.militar != '') {
+            filter += `&militar=${filteringConditions.militar}`
         }
         if (filteringConditions.tipo != 0) {
             filter += `&tipo=${filteringConditions.tipo}`
@@ -220,8 +220,8 @@ function Veiculos() {
                         <p>Responsável</p>
                         <input
                             className='filtering-input'
-                            value={filteringConditions.nome_guerra}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, nome_guerra: e.target.value })}
+                            value={filteringConditions.militar}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, militar: e.target.value })}
                         />
                     </div>
                     <div className="input-container">
@@ -229,7 +229,7 @@ function Veiculos() {
                         <select
                             value={filteringConditions.tipo}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, tipo: e.target.value })}
-                            className='filtering-input filtering-select-level-access'
+                            className='filtering-input '
                         >
                             <option value={0}>Nenhum</option>
                             <option value={'Motocicleta'}>Motocicleta</option>

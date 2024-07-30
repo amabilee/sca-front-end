@@ -73,14 +73,14 @@ function Usuarios() {
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
-        nome: '',
+        militar: '',
         nivel_acesso: 0
     });
 
     const sendFilteringConditions = () => {
         let filter = ''
-        if (filteringConditions.nome != '') {
-            filter += `&nome_guerra=${filteringConditions.nome}`
+        if (filteringConditions.militar != '') {
+            filter += `&militar=${filteringConditions.militar}`
         }
         if (filteringConditions.nivel_acesso != 0) {
             filter += `&nivel_acesso=${filteringConditions.nivel_acesso}`
@@ -104,8 +104,8 @@ function Usuarios() {
                         <p>Militar</p>
                         <input
                             className='filtering-input'
-                            value={filteringConditions.nome}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, nome: e.target.value })}
+                            value={filteringConditions.militar}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, militar: e.target.value })}
                         />
                     </div>
                     <div className="input-container">
@@ -113,7 +113,7 @@ function Usuarios() {
                         <select
                             value={filteringConditions.nivel_acesso}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, nivel_acesso: e.target.value })}
-                            className='filtering-input filtering-select-level-access'
+                            className='filtering-input'
                         >
                             <option value={0}>Nenhum</option>
                             <option value={1}>Visualizador</option>

@@ -28,29 +28,25 @@
     border: 1px solid #DEE2E6;
 }
 
-.page-content-table table {
+.table {
     border-collapse: separate;
     border-spacing: 0;
     border-radius: 10px;
     width: 100%;
+    text-align: left;
 }
 
-.page-content-table tr {
+.table tr {
     height: fit-content;
     font-size: 15px;
 }
 
-.page-content-table tr td {
-    padding: 10px 0;
-}
-
-.table {
-    width: 100%;
-    text-align: left;
-}
-
 .table thead {
     background-color: #F2F2F2;
+    height: 40px;
+}
+
+.table tbody tr{
     height: 40px;
 }
 
@@ -117,4 +113,16 @@
 
 .table-relatorio thead tr th{
     width: 18%;
+}
+
+
+
+/* Table usuário */
+
+.table-usuarios thead tr th, .table-usuarios tbody tr td{
+    width: 33%;
+}
+
+.table-usuarios tbody tr td:nth-child(3) {
+    padding: 10px 0;
 }

@@ -185,7 +185,7 @@ function PostoServico() {
                         <select
                             value={filteringConditions.nivel_acesso}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, nivel_acesso: e.target.value })}
-                            className='filtering-input filtering-select-level-access'
+                            className='filtering-input'
                         >
                             <option value={0}>Nenhum</option>
                             <option value={1}>1</option>

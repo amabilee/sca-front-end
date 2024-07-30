@@ -11,6 +11,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
     const [unidadeOptions, setUnidadeOptions] = useState([])
     const [situacaoOptions, setSituacaoOptions] = useState([])
     const [efetivoFoto, setEfetivoFoto] = useState("")
+    const [graduacaoSelected, setGraduacaoSelected] = useState("")
     const [receivedData, setReceivedData] = useState(
         {
             qrcode_efetivo: '',
@@ -60,10 +61,13 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
 
     const confirmCreating = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (receivedData.qrcode_efetivo.length != 7) {
+        
+        if (graduacaoSelected != 'CIVIL' && receivedData.qrcode_efetivo.length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
+        } else if (graduacaoSelected == 'CIVIL' && receivedData.qrcode_efetivo.length != 10) {
+            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+            setMessage("Insira um CPF válido.");
         } else if (receivedData.nome_completo == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
@@ -88,13 +92,11 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         } else if (receivedData.val_cnh.length != 10) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma data de CNH válida no formato DD/MM/AAAA.");
-        } else if (receivedData.foto == 0) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira uma foto válida.");
         } else {
-            const [day, month, year] = receivedData.val_cnh.split('-');
-            const formattedValCnh = `${year}-${month}-${day}`;
+            const [day, month, year] = receivedData.val_cnh.split('/');
+            const formattedValCnh = `${year}/${month}/${day}`;
             receivedData.val_cnh = formattedValCnh;
+            console.log(receivedData.val_cnh)
             sendRequest();
         }
     };
@@ -202,6 +204,12 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         }
     }
 
+    const detectGraduacaoEntry = (element) => {
+        setReceivedData({ ...receivedData, id_graduacao: element.target.value })
+        const selectedOptionText = element.target.options[element.target.selectedIndex].innerHTML;
+        setGraduacaoSelected(selectedOptionText);
+    }
+
     return (
         <>
             <div className="page-container modal">
@@ -212,7 +220,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                 <div className="edit-form-container">
                     <div className="efetivo-inputs-1">
                         <div className="input-container">
-                            <p>Número de ordem*</p>
+                            <p>Número de ordem ou documento*</p>
                             <input
                                 type="number"
                                 className='filtering-input'
@@ -241,7 +249,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             <select
                                 value={receivedData.id_graduacao}
                                 className='filtering-input'
-                                onChange={(e) => setReceivedData({ ...receivedData, id_graduacao: e.target.value })}>
+                                onChange={(e) => detectGraduacaoEntry(e)}>
                                 <option value={0}>Nenhuma</option>
                                 {graduacaoOptions.map((modulo, i) => (
                                     <option key={i} value={modulo.id}>{modulo.sigla}</option>
@@ -296,7 +304,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             <p>Validade da CNH</p>
                             <IMaskInput
                                 type="text"
-                                mask="00-00-0000"
+                                mask="00/00/0000"
                                 value={receivedData.val_cnh}
                                 onChange={(e) => setReceivedData({ ...receivedData, val_cnh: e.target.value })}
                                 className="filtering-input"
@@ -304,7 +312,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Foto</p>
-                            <label htmlFor="arquivo" className="label-foto-input">Enviar arquivo<img src={uploadIcon}/></label>
+                            <label htmlFor="arquivo" className="label-foto-input">Enviar arquivo<img src={uploadIcon} /></label>
                             <input
                                 type="file"
                                 id="arquivo"

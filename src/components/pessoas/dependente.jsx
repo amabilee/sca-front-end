@@ -419,7 +419,7 @@ function DependenteComponent() {
       </div>
       <div className="pessoas-section-input session-input-dependente3">
         <div className="input-container">
-          <p>Esta conduzindo?*</p>
+          <p>Está conduzindo?*</p>
           <select
             className='filtering-input'
             value={formData.conduzindo}

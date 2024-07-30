@@ -23,7 +23,7 @@ function ConsultarEfetivo() {
     });
 
     const handleNumeroOrdemChange = (data) => {
-        if (data.length === 7) {
+        if (data.length === 7 || data.length === 10) {
             getEfetivo(data);
         } else {
             setEfetivoData({

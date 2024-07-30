@@ -12,7 +12,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
     const [unidadeOptions, setUnidadeOptions] = useState([]);
     const [situacaoOptions, setSituacaoOptions] = useState([]);
     const [efetivoFoto, setEfetivoFoto] = useState("");
-
+    const [graduacaoSelected, setGraduacaoSelected] = useState("")
     const [receivedData, setReceivedData] = useState(currentData || {});
     const [message, setMessage] = useState("");
     const [state, setState] = useState({
@@ -28,10 +28,13 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
 
     const confirmEditing = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (String(receivedData.qrcode_efetivo).length !== 7) {
+        console.log(receivedData)
+        if (graduacaoSelected != 'CIVIL' && String(receivedData.qrcode_efetivo).length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
+        } else if (graduacaoSelected == 'CIVIL' && String(receivedData.qrcode_efetivo).length != 10) {
+            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+            setMessage("Insira um CPF válido.");
         } else if (!receivedData.nome_completo) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
@@ -56,12 +59,9 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         } else if (receivedData.val_cnh.length !== 10) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma data de CNH válida no formato DD/MM/AAAA.");
-        } else if (!receivedData.foto) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira uma foto válida.");
-        } else {
-            const [day, month, year] = receivedData.val_cnh.split('-');
-            const formattedValCnh = `${year}-${month}-${day}`;
+        }  else {
+            const [day, month, year] = receivedData.val_cnh.split('/');
+            const formattedValCnh = `${year}/${month}/${day}`;
             receivedData.val_cnh = formattedValCnh;
             sendRequest();
         }
@@ -205,6 +205,14 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         }
     }, []);
 
+
+
+    const detectGraduacaoEntry = (element) => {
+        setReceivedData({ ...receivedData, id_graduacao: element.target.value })
+        const selectedOptionText = element.target.options[element.target.selectedIndex].innerHTML;
+        setGraduacaoSelected(selectedOptionText);
+    }
+
     return (
         <>
             <div className="page-container modal">
@@ -215,7 +223,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                 <div className="edit-form-container">
                     <div className="efetivo-inputs-1">
                         <div className="input-container">
-                            <p>Número de ordem*</p>
+                            <p>Número de ordem ou documento*</p>
                             <input
                                 type="number"
                                 className='filtering-input'
@@ -245,7 +253,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                             <select
                                 value={receivedData.id_graduacao}
                                 className='filtering-input'
-                                onChange={(e) => setReceivedData({ ...receivedData, id_graduacao: e.target.value })}>
+                                onChange={(e) => detectGraduacaoEntry(e)}>
                                 <option value={0}>Nenhuma</option>
                                 {graduacaoOptions.map((modulo, i) => (
                                     <option key={i} value={modulo.id}>{modulo.sigla}</option>
@@ -298,7 +306,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                         <div className="input-container">
                             <p>Validade da CNH*</p>
                             <IMaskInput
-                                mask="00-00-0000"
+                                mask="00/00/0000"
                                 className='filtering-input'
                                 value={receivedData.val_cnh}
                                 onChange={(e) => setReceivedData({ ...receivedData, val_cnh: e.target.value })}

@@ -68,7 +68,7 @@ export default function CreatePostoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Nível de acesso</p>
-                            <select value={dataFromPosto.nivel_acesso} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nivel_acesso: e.target.value })} className='filtering-input filtering-select-level-access'>
+                            <select value={dataFromPosto.nivel_acesso} onChange={(e) => setDataFromPosto({ ...dataFromPosto, nivel_acesso: e.target.value })} className='filtering-input'>
                                 <option value={0}>Nenhum</option>
                                 <option value={1}>1</option>
                                 <option value={2}>2</option>

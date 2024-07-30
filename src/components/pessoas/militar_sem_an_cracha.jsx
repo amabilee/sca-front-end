@@ -36,8 +36,6 @@ function MilitarSemANCrachaComponent() {
       foto: '',
       cracha: '',
 
-      autorizador_numero: '',
-      autorizador: '',
       entrada: 'Não',
       destino: '',
       conduzindo: 'Não',
@@ -61,8 +59,6 @@ function MilitarSemANCrachaComponent() {
       email: true,
       cracha: true,
 
-      autorizador_numero: true,
-      autorizador: true,
       destino: true,
       veiculo_cracha: true,
       veiculo_existente: true,
@@ -102,8 +98,7 @@ function MilitarSemANCrachaComponent() {
       email: '',
       foto: '',
       cracha: '',
-      autorizador_numero: '',
-      autorizador: '',
+
       entrada: 'Não',
       destino: '',
       conduzindo: 'Não',
@@ -124,8 +119,6 @@ function MilitarSemANCrachaComponent() {
       id_graduacao: true,
       email: true,
       cracha: true,
-      autorizador_numero: true,
-      autorizador: true,
       destino: true,
       veiculo_cracha: true,
       veiculo_existente: true,
@@ -290,47 +283,6 @@ function MilitarSemANCrachaComponent() {
     }
   }
 
-  //Find Efetivo
-
-  const searchAutorizador = async (element) => {
-    if (String(element).length === 7) {
-      let userData = localStorage.getItem('user');
-      let userDataParsed = JSON.parse(userData);
-      let token = localStorage.getItem("user_token");
-
-      try {
-        const response = await server.get(`/efetivo/consulta/${element}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'access-level': userDataParsed.nivel_acesso
-          }
-        });
-
-        let efetivoColected = response.data[0];
-
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          autorizador: `${efetivoColected.Graduacao.sigla} ${efetivoColected.nome_guerra}`,
-          autorizador_numero: element
-        }));
-      } catch (e) {
-        setState((prevState) => ({
-          ...prevState,
-          open: true,
-          vertical: 'bottom',
-          horizontal: 'center'
-        }));
-        setMessage("Não foi encontrado um efetivo com este número de ordem");
-      }
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        autorizador: '',
-        autorizador_numero: element
-      }));
-    }
-  };
-
 
   const send = () => {
     console.log(formData)
@@ -478,24 +430,6 @@ function MilitarSemANCrachaComponent() {
       </div>
       <div className="pessoas-section-input  session-input-autorizador">
         <div className="input-container">
-          <p>Número de Ordem*</p>
-          <IMaskInput
-            type='text'
-            mask='0000000'
-            className='filtering-input'
-            value={formData.autorizador_numero}
-            onChange={(e) => searchAutorizador(e.target.value)}
-          />
-        </div>
-        <div className="input-container">
-          <p>Militar</p>
-          <input
-            className='filtering-input'
-            disabled={true}
-            value={formData.autorizador}
-          />
-        </div>
-        <div className="input-container">
           <p>Destino</p>
           <input
             type="text"
@@ -521,7 +455,7 @@ function MilitarSemANCrachaComponent() {
       </div>
       <div className="pessoas-section-input">
         <div className="input-container">
-          <p>Esta conduzindo?*</p>
+          <p>Está conduzindo?*</p>
           <select
             className='filtering-input'
             value={formData.conduzindo}

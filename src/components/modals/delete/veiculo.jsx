@@ -60,7 +60,7 @@ export default function DeleteVeiculoModal({ currentData, closeModal, renderTabl
                     <div className="page-filters">
                         <div className="input-container">
                             <p>Tem certeza que deseja deletar este veículo?<br/>Esta ação não pode ser desfeita.</p>
-                            <select value={removeOption} onChange={(e) => setRemoveOption(Number(e.target.value))} className='filtering-input filtering-select-level-access'>
+                            <select value={removeOption} onChange={(e) => setRemoveOption(Number(e.target.value))} className='filtering-input'>
                                 <option value={0}>Não</option>
                                 <option value={1}>Sim</option>
                             </select>

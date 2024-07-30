@@ -2,6 +2,19 @@
     width: 100%;
 }
 
+.veiculo-filters .input-container:nth-child(1){
+    width: 200px;
+}
+
+.veiculo-filters .input-container:nth-child(2),
+.veiculo-filters .input-container:nth-child(3),
+.veiculo-filters .input-container:nth-child(4),
+.veiculo-filters .input-container:nth-child(5),
+.veiculo-filters .input-container:nth-child(7),
+.veiculo-filters .input-container:nth-child(8){
+    width: 150px;
+}
+
 .page-title-buttons {
     display: flex;
     flex-direction: row;
