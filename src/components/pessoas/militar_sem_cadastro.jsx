@@ -427,7 +427,7 @@ function MilitarSemCadastroComponent() {
       <div className="pessoas-section-title">
         <h3>Autorizador</h3>
       </div>
-      <div className="pessoas-section-input  session-input-autorizador">
+      <div className="pessoas-section-input  session-input-autorizador-simple">
         <div className="input-container">
           <p>Destino</p>
           <input

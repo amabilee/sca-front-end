@@ -61,6 +61,7 @@ function Efetivos() {
         let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
         setNivelAcesso(userDataParsed.nivel_acesso)
+        console.log(`/efetivo?page=${page}${filter}`)
         try {
             const response = await server.get(`/efetivo?page=${page}${filter}`, {
                 headers: {
@@ -109,6 +110,7 @@ function Efetivos() {
             filter += `&unidade=${filteringConditions.unidade}`;
         }
         getEfetivos(filter, 1);
+        console.log(filter)
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 };
         });

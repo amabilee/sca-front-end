@@ -68,10 +68,10 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         } else if (graduacaoSelected == 'CIVIL' && receivedData.qrcode_efetivo.length != 10) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um CPF válido.");
-        } else if (receivedData.nome_completo == 0) {
+        } else if (receivedData.nome_completo.length == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
-        } else if (receivedData.nome_guerra == 0) {
+        } else if (receivedData.nome_guerra.length == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome de guerra válido.");
         } else if (receivedData.id_graduacao == 0) {

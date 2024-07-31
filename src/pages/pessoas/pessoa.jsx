@@ -183,7 +183,7 @@ function Pessoas() {
             <div className="page-container">
                 <div className="page-title">
                     <h1>Controle de pessoas</h1>
-                    <h2>Selecione a categoria que deseja operar</h2>
+                    <h2>Selecione a categoria que deseja utilizar</h2>
                 </div>
                 <div className="page-content-pessoas">
                     <div className="nav-pessoas">
