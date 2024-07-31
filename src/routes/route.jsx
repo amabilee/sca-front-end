@@ -14,7 +14,7 @@ import {
   Veiculos,
   Crachas,
   Pessoas
-} from '../components/privateRoutes.jsx'
+} from './privateRoutes.jsx'
 
 
 function Router() {

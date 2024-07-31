@@ -8,13 +8,8 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Plus Jakarta Sans", sans-serif;
     scroll-behavior: smooth;
 }
-.input-container input{
-    font-size: 16px;
-    font-weight: 500
-}
-
-.input-container select{
-    font-size: 16px;
+.input-container input, .input-container select{
+    font-size: 15px;
     font-weight: 500
 }
 `

@@ -71,9 +71,9 @@ export default function Veiculos({ closeModal }) {
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
-        nome_guerra: '',
+        militar: '',
         tipo: 0,
-        cor_veiculo: '',
+        cor_veiculo: 'Nenhum',
         placa: '',
         marca: '',
         modelo: '',
@@ -83,13 +83,13 @@ export default function Veiculos({ closeModal }) {
 
     const sendFilteringConditions = () => {
         let filter = ''
-        if (filteringConditions.nome_guerra != '') {
-            filter += `&nome_guerra=${filteringConditions.nome_guerra}`
+        if (filteringConditions.militar != '') {
+            filter += `&militar=${filteringConditions.militar}`
         }
         if (filteringConditions.tipo != 0) {
             filter += `&tipo=${filteringConditions.tipo}`
         }
-        if (filteringConditions.cor_veiculo != '') {
+        if (filteringConditions.cor_veiculo != 'Nenhum') {
             filter += `&cor_veiculo=${filteringConditions.cor_veiculo}`
         }
         if (filteringConditions.placa != '') {
@@ -142,7 +142,7 @@ export default function Veiculos({ closeModal }) {
     // Activate Veiculo req
 
     const activateVeiculo = async (veiculo) => {
-        let removeData = {...veiculo, ativo_veiculo: true}
+        let removeData = { ...veiculo, ativo_veiculo: true }
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -186,8 +186,8 @@ export default function Veiculos({ closeModal }) {
                         <p>Responsável</p>
                         <input
                             className='filtering-input'
-                            value={filteringConditions.nome_guerra}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, nome_guerra: e.target.value })}
+                            value={filteringConditions.militar}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, militar: e.target.value })}
                         />
                     </div>
                     <div className="input-container">
@@ -206,11 +206,29 @@ export default function Veiculos({ closeModal }) {
                     </div>
                     <div className="input-container">
                         <p>Cor</p>
-                        <input
+                        <select
                             className='filtering-input'
                             value={filteringConditions.cor_veiculo}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, cor_veiculo: e.target.value })}
-                        />
+                        >
+                            <option value={'Nenhum'}>Nenhum</option>
+                            <option value={'Amarelo'}>Amarelo</option>
+                            <option value={'Azul'}>Azul</option>
+                            <option value={'Bege'}>Bege</option>
+                            <option value={'Branca'}>Branca</option>
+                            <option value={'Cinza'}>Cinza</option>
+                            <option value={'Dourada'}>Dourada</option>
+                            <option value={'Grená'}>Grená</option>
+                            <option value={'Laranja'}>Laranja</option>
+                            <option value={'Marrom'}>Marrom</option>
+                            <option value={'Prata'}>Prata</option>
+                            <option value={'Preta'}>Preta</option>
+                            <option value={'Rosa'}>Rosa</option>
+                            <option value={'Roxa'}>Roxa</option>
+                            <option value={'Verde'}>Verde</option>
+                            <option value={'Vermelha'}>Vermelha</option>
+                            <option value={'Fantasia'}>Fantasia</option>
+                        </select>
                     </div>
                     <div className="input-container">
                         <p>Placa</p>

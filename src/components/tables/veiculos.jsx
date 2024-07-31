@@ -6,7 +6,7 @@ import './style.css'
 
 const UnidadesTable = ({ data, openModal, levelAcesso, archived }) => (
     <div className='table-wrapper'>
-        <table className='table table-actions'>
+        <table className='table table-actions table-veiculos'>
             <thead>
                 <tr>
                     <th scope="col">Responsável</th>

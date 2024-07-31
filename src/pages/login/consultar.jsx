@@ -61,7 +61,7 @@ function ConsultarEfetivo() {
                     console.error('Error converting buffer to Base64:', error);
                 }
             }
-            console.log(response.data)
+            console.log(response.data[0])
             setEfetivoData({
                 qrcode_efetivo: String(qrcode_efetivo) || 0,
                 nome_completo: nome_completo || '',
@@ -73,7 +73,7 @@ function ConsultarEfetivo() {
             });
 
             try {
-                const response2 = await server.get(`/veiculo?page=1&efetivo=${response.data[0].id}&ativo_veiculo=true`);
+                const response2 = await server.get(`/veiculo?militar=${response.data[0].id}&ativo_veiculo=true`);
                 setVeiculosData(response2.data.formattedEntities)
                 console.log(response2.data.formattedEntities)
             } catch (e) {
@@ -131,7 +131,7 @@ function ConsultarEfetivo() {
                     <div className="consultar-body">
                         <h2>Consultar dados</h2>
                         <div className="input-pesquisa">
-                            <p>Número de ordem</p>
+                            <p>Número de ordem ou documento</p>
                             <input
                                 type="number"
                                 placeholder='Digite aqui para pesquisar'

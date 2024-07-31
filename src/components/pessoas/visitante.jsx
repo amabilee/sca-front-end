@@ -312,40 +312,33 @@ function VisitanteComponent() {
   //Find Efetivo
 
   const searchEfetivo = async (element) => {
+    setFormData({ ...formData, autorizador_numero: element })
     if (String(element).length === 7) {
-      let userData = localStorage.getItem('user');
-      let userDataParsed = JSON.parse(userData);
-      let token = localStorage.getItem("user_token");
-
       try {
-        const response = await server.get(`/efetivo/consulta/${element}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'access-level': userDataParsed.nivel_acesso
-          }
-        });
-
-        let efetivoColected = response.data[0];
-
+        const response = await server.get(`/efetivo/consulta/${element}`);
+        const efetivoColected = response.data[0];
         setFormData((prevFormData) => ({
           ...prevFormData,
           autorizador: `${efetivoColected.Graduacao.sigla} ${efetivoColected.nome_guerra}`,
-          autorizador_numero: element
+        }));
+
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          autorizador: true,
         }));
       } catch (e) {
-        setState((prevState) => ({
-          ...prevState,
-          open: true,
-          vertical: 'bottom',
-          horizontal: 'center'
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage('Não foi encontrado um efetivo com este Número Ordem');
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          autorizador: '',
         }));
-        setMessage("Não foi encontrado um efetivo com este número de ordem");
       }
     } else {
       setFormData((prevFormData) => ({
         ...prevFormData,
         autorizador: '',
-        autorizador_numero: element
       }));
     }
   };
@@ -560,6 +553,7 @@ function VisitanteComponent() {
             className='filtering-input'
             disabled={true}
             value={formData.autorizador}
+            onChange={(e) => setFormData({ ...formData, autorizador: e.target.value })}
           />
         </div>
         <div className="input-container">

@@ -1,10 +1,10 @@
 .veiculo-inputs-1 .input-container:nth-child(1), .veiculo-inputs-1 .input-container:nth-child(2) {
-    width: 200px;
+    width: 300px;
 }
 
 .veiculo-inputs-1 {
     display: flex;
-    width: 400px;
+    width: 500px;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;

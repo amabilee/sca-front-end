@@ -56,7 +56,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
 
     const confirmCreating = () => {
         const placaPattern = /^[a-zA-Z]{3}[0-9][A-Za-z0-9][0-9]{2}$/;
-        if (String(efetivoData.qrcode_efetivo).length != 7) {
+        if (String(efetivoData.nome_guerra).length == 0 || String(efetivoData.graduacao).length == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
         } else if (receivedData.tipo == 'Nenhum') {
@@ -106,7 +106,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
 
     const searchEfetivo = async (e) => {
         setEfetivoData({ ...efetivoData, qrcode_efetivo: e })
-        if (String(e).length == 7) {
+        if (String(e).length == 7 || String(e).length == 10) {
             let userData = localStorage.getItem('user');
             let userDataParsed = JSON.parse(userData);
             let token = localStorage.getItem("user_token")
@@ -170,10 +170,10 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
                 <div className="edit-form-container">
                     <div className="veiculo-inputs-1">
                         <div className="input-container">
-                            <p>Número de ordem</p>
+                            <p>Número de ordem ou documento</p>
                             <IMaskInput
                                 type="text"
-                                mask="0000000"
+                                mask="0000000000"
                                 className='filtering-input'
                                 value={efetivoData.qrcode_efetivo}
                                 onChange={(e) => searchEfetivo(e.target.value)}

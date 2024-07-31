@@ -146,6 +146,35 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
 
     // Image Functions
 
+    const bufferToBase64 = (buffer) => {
+        const binary = new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '');
+        return window.btoa(binary);
+    };
+
+    const convertImage = () => {
+        if (receivedData.foto && receivedData.foto.type !== 'File') {
+            const base64String = bufferToBase64(receivedData.foto.data);
+            const fileURL = `data:image/png;base64,${base64String}`;
+            const buffer = receivedData.foto.data;
+            const blob = new Blob([new Uint8Array(buffer)], { type: 'image/png' });
+            const file = new File([blob], 'received_image.png', { type: 'image/png', lastModified: Date.now() });
+
+            setReceivedData({ ...receivedData, foto: file });
+            setEfetivoFoto(fileURL);
+        } else if (receivedData.foto) {
+            const fileURL = URL.createObjectURL(receivedData.foto);
+            setEfetivoFoto(fileURL);
+        }
+    };
+
+    const removeFoto = () => {
+        setEfetivoFoto('');
+        setReceivedData({ ...receivedData, foto: '' });
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
     const fileInputRef = useRef(null);
 
     const detectEntryFoto = (e) => {
@@ -160,28 +189,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Imagens somente .jpeg .png .gif");
             }
-        }
-    };
-
-    const removeFoto = () => {
-        setReceivedData({ ...receivedData, foto: '' });
-        setEfetivoFoto('');
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    };
-
-    const convertImage = () => {
-        if (receivedData.foto && receivedData.foto.type !== 'File') {
-            const buffer = receivedData.foto.data;
-            const blob = new Blob([new Uint8Array(buffer)], { type: 'image/png' });
-            const file = new File([blob], 'received_image.png', { type: 'image/png', lastModified: Date.now() });
-            setReceivedData({ ...receivedData, foto: file });
-            const fileURL = URL.createObjectURL(file);
-            setEfetivoFoto(fileURL);
-        } else if (receivedData.foto) {
-            const fileURL = URL.createObjectURL(receivedData.foto);
-            setEfetivoFoto(fileURL);
         }
     };
 
@@ -330,6 +337,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                                     <img src={efetivoFoto} alt="Foto do Efetivo" className="militar-foto" />
                                 </div>
                             )}
+                            
                         </div>
                     </div>
                     <div className="form-buttons-container">

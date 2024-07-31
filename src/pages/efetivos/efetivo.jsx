@@ -115,18 +115,40 @@ function Efetivos() {
     };
 
     // Open and Close Modals
-    const openModal = (type, data) => {
+
+    const openModal = async (type, data) => {
+        console.log(1, data);
         switch (type) {
             case 'edit':
+                let userData = localStorage.getItem('user');
+                let userDataParsed = JSON.parse(userData);
+                let token = localStorage.getItem("user_token");
+
+                let sendData 
+                try {
+                    const response = await server.get(`/efetivo/${data.id}`, {
+                        headers: {
+                            'Authentication': token,
+                            'access-level': userDataParsed.nivel_acesso
+                        }
+                    });
+                    console.log(2, response.data);
+                    sendData = response.data;
+                } catch (e) {
+                    setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
+                    setMessage("Erro ao buscar dados");
+                    setStatusAlert("error");
+                }
+                setSendingData(sendData);
                 setOpenEditModal(true);
-                setSendingData(data);
                 break;
             case 'create':
                 setOpenCreateModal(true);
                 break;
             case 'delete':
-                setOpenDeleteModal(true)
+                setOpenDeleteModal(true);
                 setSendingData(data);
+                break;
             default:
                 break;
         }

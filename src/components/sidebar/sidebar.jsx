@@ -22,8 +22,7 @@ function Sidebar() {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            setUserModules(response.data.entity[0].Modulos)
-            console.log(response.data.entity[0].Modulos)
+            setUserModules(response.data.entity.Modulos)
         } catch (e) {
             console.log(e)
             if (e.response.status == 401) {

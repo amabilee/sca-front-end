@@ -1,7 +1,7 @@
 import React from 'react';
 import Edit from '../../assets/table/edit-icon.svg';
 import Delete from '../../assets/table/delete-icon.svg';
-import '../../pages/posto/style.css';
+import './style.css';
 
 const UsuariosTable = ({ data }) => (
     <div className='table-wrapper'>

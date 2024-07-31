@@ -7,7 +7,7 @@ import Alert from '@mui/material/Alert';
 
 function DependenteComponent() {
   // SnackBar config
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [state, setState] = useState({
     open: false,
     vertical: 'top',
@@ -19,69 +19,63 @@ function DependenteComponent() {
     setState({ ...state, open: false });
   };
 
-
   //Data from the form
 
-  const [formData, setFormData] = useState(
-    {
-      cpf: '',
-      nome_completo: '',
-      parentesco: 'Selecione',
-      numero_ordem: '',
-      militar: '',
-      cracha: '',
-      autorizador_numero: '',
-      autorizador: '',
-      entrada: 'Não',
-      destino: '',
-      conduzindo: 'Não',
-      veiculo_existente: 'Selecione',
-      veiculo_tipo: 'Selecione',
-      veiculo_cor: 'Selecione',
-      veiculo_placa: '',
-      veiculo_renavam: '',
-      veiculo_marca: '',
-      veiculo_modelo: '',
-      veiculo_cracha: ''
-    }
-  )
+  const [formData, setFormData] = useState({
+    cpf: '',
+    nome_completo: '',
+    parentesco: 'Selecione',
+    numero_ordem: '',
+    militar: '',
+    cracha: '',
+    autorizador_numero: '',
+    autorizador: '',
+    entrada: 'Não',
+    destino: '',
+    conduzindo: 'Não',
+    veiculo_existente: 'Selecione',
+    veiculo_tipo: 'Selecione',
+    veiculo_cor: 'Selecione',
+    veiculo_placa: '',
+    veiculo_renavam: '',
+    veiculo_marca: '',
+    veiculo_modelo: '',
+    veiculo_cracha: '',
+  });
 
-  const [disabledInputs, setDisabledInputs] = useState(
-    {
-      nome_completo: true,
-      parentesco: true,
-      numero_ordem: true,
-      militar: true,
-      cracha: true,
-      autorizador_numero: true,
-      autorizador: true,
-      destino: true,
-      veiculo_cracha: true,
-      veiculo_existente: true,
-      veiculo_tipo: true,
-      veiculo_cor: true,
-      veiculo_placa: true,
-      veiculo_renavam: true,
-      veiculo_marca: true,
-      veiculo_modelo: true
-    }
-  )
+  const [disabledInputs, setDisabledInputs] = useState({
+    nome_completo: true,
+    parentesco: true,
+    numero_ordem: true,
+    militar: true,
+    cracha: true,
+    autorizador_numero: true,
+    autorizador: true,
+    destino: true,
+    veiculo_cracha: true,
+    veiculo_existente: true,
+    veiculo_tipo: true,
+    veiculo_cor: true,
+    veiculo_placa: true,
+    veiculo_renavam: true,
+    veiculo_marca: true,
+    veiculo_modelo: true,
+  });
 
-  const [veiculos, setVeiculos] = useState(
-    [
-      {
-        id: 1,
-        marca: 'Honda',
-        modelo: 'Civic',
-        placa: 'ASD9876'
-      },
-      {
-        id: 2,
-        marca: 'Ford',
-        modelo: 'Fiest',
-        placa: 'MNB9876'
-      }
-    ])
+  const [veiculos, setVeiculos] = useState([
+    {
+      id: 1,
+      marca: 'Honda',
+      modelo: 'Civic',
+      placa: 'ASD9876',
+    },
+    {
+      id: 2,
+      marca: 'Ford',
+      modelo: 'Fiest',
+      placa: 'MNB9876',
+    },
+  ]);
 
   const cleanInputs = () => {
     setFormData((prevFormData) => ({
@@ -104,7 +98,7 @@ function DependenteComponent() {
       veiculo_renavam: '',
       veiculo_marca: '',
       veiculo_modelo: '',
-      veiculo_cracha: ''
+      veiculo_cracha: '',
     }));
     setDisabledInputs((prevDisabledInputs) => ({
       ...prevDisabledInputs,
@@ -122,28 +116,36 @@ function DependenteComponent() {
       veiculo_renavam: true,
       veiculo_marca: true,
       veiculo_modelo: true,
-      veiculo_cracha: true
-    }))
+      veiculo_cracha: true,
+    }));
   };
 
-  // Find Dependente  
+  // Find Dependente
 
   const searchDependente = async (element) => {
-    if (String(element).length == 14) {
+    if (String(element).length === 14) {
+      let formatedCPF = String(element).replace(/\D/g, '').slice(0, -1)
       let userData = localStorage.getItem('user');
       let userDataParsed = JSON.parse(userData);
-      let token = localStorage.getItem("user_token")
+      let token = localStorage.getItem('user_token');
       try {
-        const response = await server.get(`/dependente/consulta/${element}`, {
+        const response = await server.get(`/dependente/${formatedCPF}`, {
           headers: {
-            'Authentication': token,
-            'access-level': userDataParsed.nivel_acesso
-          }
+            Authentication: token,
+            'access-level': userDataParsed.nivel_acesso,
+          },
         });
 
-        const dependenteColected = response.data[0]
+        const dependenteColected = response.data[0];
 
-        // setFormData({ nome_completo: dependenteColected.nome, parentesco: dependenteColected.parentesco, qrcode_efetivo: dependenteColected.qrcode_efetivo })
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          nome_completo: dependenteColected.nome,
+          parentesco: dependenteColected.parentesco,
+          qrcode_efetivo: dependenteColected.qrcode_efetivo,
+          cpf: element,
+        }));
+
         setDisabledInputs((prevDisabledInputs) => ({
           ...prevDisabledInputs,
           nome_completo: true,
@@ -151,10 +153,10 @@ function DependenteComponent() {
           numero_ordem: true,
           militar: true,
           veiculo_existente: false,
-        }))
+        }));
       } catch (e) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-        setMessage("Não foi encontrado um dependente com este CPF");
+        setMessage('Não foi encontrado um dependente com este CPF');
         setDisabledInputs((prevDisabledInputs) => ({
           ...prevDisabledInputs,
           nome_completo: false,
@@ -162,24 +164,25 @@ function DependenteComponent() {
           numero_ordem: false,
           militar: false,
           veiculo_existente: false,
-        }))
+        }));
         setFormData((prevFormData) => ({
           ...prevFormData,
           nome_completo: '',
           parentesco: 'Selecione',
           numero_ordem: '',
           militar: '',
+          cpf: element,
         }));
       }
     } else {
-
       setFormData((prevFormData) => ({
         ...prevFormData,
         nome_completo: '',
         parentesco: 'Selecione',
         numero_ordem: '',
         militar: '',
-        veiculo_existente: 'Selecione'
+        veiculo_existente: 'Selecione',
+        cpf: element,
       }));
 
       setDisabledInputs((prevDisabledInputs) => ({
@@ -189,25 +192,27 @@ function DependenteComponent() {
         numero_ordem: true,
         militar: true,
         veiculo_existente: true,
-      }))
+      }));
     }
-    setFormData({ ...formData, cpf: element })
-  }
+  };
 
   //Handle Veiculo Existente Change
 
   const changeVeiculoExistente = (element) => {
-    setFormData({ ...formData, veiculo_existente: element })
-    if (element == 'Novo') {
-      setDisabledInputs({
-        ...setDisabledInputs,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      veiculo_existente: element,
+    }));
+    if (element === 'Novo') {
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
         veiculo_tipo: false,
         veiculo_cor: false,
         veiculo_placa: false,
         veiculo_renavam: false,
         veiculo_marca: false,
         veiculo_modelo: false,
-      })
+      }));
       setFormData((prevFormData) => ({
         ...prevFormData,
         veiculo_tipo: 'Selecione',
@@ -216,85 +221,66 @@ function DependenteComponent() {
         veiculo_renavam: '',
         veiculo_marca: '',
         veiculo_modelo: '',
-        veiculo_cracha: ''
+        veiculo_cracha: '',
       }));
     } else {
-      setDisabledInputs({
-        ...setDisabledInputs,
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
         veiculo_tipo: true,
         veiculo_cor: true,
         veiculo_placa: true,
         veiculo_renavam: true,
         veiculo_marca: true,
         veiculo_modelo: true,
-      })
-    }
-  }
-
-  // Handle Registrar Entrada Change
-
-  const changeRegistroEntrada = (element) => {
-    setFormData({ ...formData, entrada: element })
-    if (element == 'Sim') {
-      setDisabledInputs({
-        ...disabledInputs,
-        cracha: false,
-        veiculo_cracha: false
-      })
-    } else {
-      setDisabledInputs({
-        ...disabledInputs,
-        cracha: true,
-        veiculo_cracha: true
-      })
-    }
-  }
-
-  //Find Efetivo
-
-  const searchEfetivo = async (element) => {
-    if (String(element).length === 7) {
-      let userData = localStorage.getItem('user');
-      let userDataParsed = JSON.parse(userData);
-      let token = localStorage.getItem("user_token");
-
-      try {
-        const response = await server.get(`/efetivo/consulta/${element}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'access-level': userDataParsed.nivel_acesso
-          }
-        });
-
-        let efetivoColected = response.data[0];
-
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          autorizador: `${efetivoColected.Graduacao.sigla} ${efetivoColected.nome_guerra}`,
-          autorizador_numero: element
-        }));
-      } catch (e) {
-        setState((prevState) => ({
-          ...prevState,
-          open: true,
-          vertical: 'bottom',
-          horizontal: 'center'
-        }));
-        setMessage("Não foi encontrado um efetivo com este número de ordem");
-      }
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        autorizador: '',
-        autorizador_numero: element
       }));
     }
   };
 
+  // Handle Registrar Entrada Change
 
-  const send = () => {
-    console.log(formData)
-  }
+  const changeRegistroEntrada = (element) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      entrada: element,
+    }));
+    if (element === 'Sim') {
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
+        cracha: false,
+        destino: false,
+        veiculo_cracha: false,
+      }));
+    } else {
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
+        cracha: true,
+        destino: true,
+        veiculo_cracha: true,
+      }));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        cracha: '',
+        destino: '',
+        veiculo_cracha: ''
+      }));
+    }
+  };
+
+  const submitForm = async () => {
+
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+  };
+
+  const handleInputChange = (name, value) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="pessoas-container">
@@ -376,29 +362,12 @@ function DependenteComponent() {
       </div>
       <div className="pessoas-section-input session-input-autorizador">
         <div className="input-container">
-          <p>Número de Ordem*</p>
-          <IMaskInput
-            type='text'
-            mask='0000000'
-            className='filtering-input'
-            value={formData.autorizador_numero}
-            onChange={(e) => searchEfetivo(e.target.value)}
-          />
-        </div>
-        <div className="input-container">
-          <p>Militar</p>
-          <input
-            className='filtering-input'
-            disabled={true}
-            value={formData.autorizador}
-          />
-        </div>
-        <div className="input-container">
           <p>Destino</p>
           <input
             type="text"
             className='filtering-input'
             value={formData.destino}
+            disabled={disabledInputs.destino}
             onChange={(e) => setFormData({ ...formData, destino: e.target.value })}
           />
         </div>
@@ -416,6 +385,7 @@ function DependenteComponent() {
       </div>
       <div className="pessoas-section-title">
         <h3>Veículo</h3>
+        <p>Digite a placa para pesquisar ou cadastrar um novo veículo</p>
       </div>
       <div className="pessoas-section-input session-input-dependente3">
         <div className="input-container">
@@ -444,7 +414,7 @@ function DependenteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Veículos atrelados à esta pessoa:</p>
+              <p>Placa</p>
               <select
                 type="number"
                 className='filtering-input'
@@ -551,7 +521,7 @@ function DependenteComponent() {
           <button onClick={cleanInputs}>
             Limpar campos
           </button>
-          <button onClick={send}>
+          <button onClick={handleSubmit}>
             Confirmar
           </button>
         </div>

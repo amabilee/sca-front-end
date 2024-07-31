@@ -91,7 +91,7 @@ function Veiculos() {
     const [filteringConditions, setFilteringConditions] = useState({
         militar: '',
         tipo: 0,
-        cor_veiculo: '',
+        cor_veiculo: 'Nenhum',
         placa: '',
         marca: '',
         modelo: '',
@@ -107,7 +107,7 @@ function Veiculos() {
         if (filteringConditions.tipo != 0) {
             filter += `&tipo=${filteringConditions.tipo}`
         }
-        if (filteringConditions.cor_veiculo != '') {
+        if (filteringConditions.cor_veiculo != 'Nenhum') {
             filter += `&cor_veiculo=${filteringConditions.cor_veiculo}`
         }
         if (filteringConditions.placa != '') {
@@ -240,11 +240,29 @@ function Veiculos() {
                     </div>
                     <div className="input-container">
                         <p>Cor</p>
-                        <input
+                        <select
                             className='filtering-input'
                             value={filteringConditions.cor_veiculo}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, cor_veiculo: e.target.value })}
-                        />
+                        >
+                        <option value={'Nenhum'}>Nenhum</option>
+                        <option value={'Amarelo'}>Amarelo</option>
+                        <option value={'Azul'}>Azul</option>
+                        <option value={'Bege'}>Bege</option>
+                        <option value={'Branca'}>Branca</option>
+                        <option value={'Cinza'}>Cinza</option>
+                        <option value={'Dourada'}>Dourada</option>
+                        <option value={'Grená'}>Grená</option>
+                        <option value={'Laranja'}>Laranja</option>
+                        <option value={'Marrom'}>Marrom</option>
+                        <option value={'Prata'}>Prata</option>
+                        <option value={'Preta'}>Preta</option>
+                        <option value={'Rosa'}>Rosa</option>
+                        <option value={'Roxa'}>Roxa</option>
+                        <option value={'Verde'}>Verde</option>
+                        <option value={'Vermelha'}>Vermelha</option>
+                        <option value={'Fantasia'}>Fantasia</option>
+                        </select>
                     </div>
                     <div className="input-container">
                         <p>Placa</p>

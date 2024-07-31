@@ -123,6 +123,13 @@
     width: 33%;
 }
 
-.table-usuarios tbody tr td:nth-child(3) {
+.table-usuarios tbody tr td:nth-child(2) {
     padding: 10px 0;
+}
+
+
+/* Table veículos */
+
+.table-veiculos thead tr th:not(:last-child), .table-veiculos tbody tr td:not(:last-child) {
+    width: 11,5%;
 }

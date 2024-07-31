@@ -20,6 +20,7 @@ function Login() {
             if (auth || response === true) {
                 const modules = await getUserModulos();
                 setTimeout(() => {
+                    console.log(modules)
                     if (modules.length > 0) {
                         navigate(`${modules[0].link}`);
                     } else {
@@ -77,7 +78,7 @@ function Login() {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            return response.data.entity[0].Modulos;
+            return response.data.entity.Modulos;
         } catch (e) {
             console.log(e);
             return [];
