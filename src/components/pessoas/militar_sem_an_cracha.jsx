@@ -6,11 +6,13 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import uploadIcon from '../../assets/upload.svg'
 import Remove from '../../assets/remove_icon.svg'
+import UserPhoto from '../../assets/login/user-photo.svg'
 
 function MilitarSemANCrachaComponent() {
   const [efetivoFoto, setEfetivoFoto] = useState("")
   // SnackBar config
   const [message, setMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState('')
   const [state, setState] = useState({
     open: false,
     vertical: 'top',
@@ -27,26 +29,29 @@ function MilitarSemANCrachaComponent() {
 
   const [formData, setFormData] = useState(
     {
+      //Militar
       numero_ordem: '',
       nome_completo: '',
       nome_guerra: '',
-      id_unidade: '',
-      id_graduacao: '',
+      unidade: '',
+      graduacao: '',
       email: '',
       foto: '',
-      cracha: '',
 
+      //Registro
       entrada: 'Não',
+      cracha: '',
       destino: '',
+      veiculo_cracha: '',
+
+      //Veiculo
       conduzindo: 'Não',
-      veiculo_existente: 'Selecione',
       veiculo_tipo: 'Selecione',
       veiculo_cor: 'Selecione',
       veiculo_placa: '',
       veiculo_renavam: '',
       veiculo_marca: '',
       veiculo_modelo: '',
-      veiculo_cracha: ''
     }
   )
 
@@ -54,14 +59,14 @@ function MilitarSemANCrachaComponent() {
     {
       nome_completo: true,
       nome_guerra: true,
-      id_unidade: true,
-      id_graduacao: true,
+      unidade: true,
+      graduacao: true,
       email: true,
-      cracha: true,
 
+      cracha: true,
       destino: true,
       veiculo_cracha: true,
-      veiculo_existente: true,
+
       veiculo_tipo: true,
       veiculo_cor: true,
       veiculo_placa: true,
@@ -71,45 +76,29 @@ function MilitarSemANCrachaComponent() {
     }
   )
 
-  const [veiculos, setVeiculos] = useState(
-    [
-      {
-        id: 1,
-        marca: 'Honda',
-        modelo: 'Civic',
-        placa: 'ASD9876'
-      },
-      {
-        id: 2,
-        marca: 'Ford',
-        modelo: 'Fiest',
-        placa: 'MNB9876'
-      }
-    ])
-
   const cleanInputs = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       numero_ordem: '',
       nome_completo: '',
       nome_guerra: '',
-      id_unidade: '',
-      id_graduacao: '',
+      unidade: '',
+      graduacao: '',
       email: '',
       foto: '',
-      cracha: '',
 
+      cracha: '',
       entrada: 'Não',
       destino: '',
+      veiculo_cracha: '',
+
       conduzindo: 'Não',
-      veiculo_existente: 'Selecione',
+      veiculo_placa: '',
       veiculo_tipo: 'Selecione',
       veiculo_cor: 'Selecione',
-      veiculo_placa: '',
       veiculo_renavam: '',
       veiculo_marca: '',
       veiculo_modelo: '',
-      veiculo_cracha: ''
     }));
     setDisabledInputs((prevDisabledInputs) => ({
       ...prevDisabledInputs,
@@ -118,10 +107,11 @@ function MilitarSemANCrachaComponent() {
       id_unidade: true,
       id_graduacao: true,
       email: true,
+
       cracha: true,
       destino: true,
       veiculo_cracha: true,
-      veiculo_existente: true,
+
       veiculo_tipo: true,
       veiculo_cor: true,
       veiculo_placa: true,
@@ -134,8 +124,9 @@ function MilitarSemANCrachaComponent() {
   // Find Efetivo  
 
   const searchEfetivo = async (element) => {
-    console.log(1)
+
     if (String(element).length == 7) {
+      console.log(2)
       let userData = localStorage.getItem('user');
       let userDataParsed = JSON.parse(userData);
       let token = localStorage.getItem("user_token")
@@ -147,139 +138,207 @@ function MilitarSemANCrachaComponent() {
           }
         });
 
-        const { nome_completo, nome_guerra, Unidade, email, Graduacao, Fotos, qrcode_efetivo } = response.data[0];
+        const {
+          nome_completo,
+          nome_guerra,
+          Unidade,
+          email,
+          Graduacao,
+          Fotos
+        } = response.data[0];
+
         let fotoBase64 = '';
-            if (Fotos && Fotos.length > 0) {
-                try {
-                    const fotoBuffer = Fotos[0].foto.data;
-                    fotoBase64 = `data:image/png;base64,${bufferToBase64(fotoBuffer)}`;
-                } catch (error) {
-                    console.error('Error converting buffer to Base64:', error);
-                }
-            }
+        if (Fotos && Fotos.length > 0) {
+          try {
+            const fotoBuffer = Fotos[0].foto.data;
+            fotoBase64 = `data:image/png;base64,${bufferToBase64(fotoBuffer)}`;
+          } catch (error) {
+            console.error('Error converting buffer to Base64:', error);
+          }
+        }
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          numero_ordem: element,
+          nome_completo: nome_completo || 'Vazio',
+          nome_guerra: nome_guerra || 'Vazio',
+          unidade: Unidade.nome || 'Vazio',
+          graduacao: Graduacao.sigla || 'Vazio',
+          email: email || 'Vazio',
+          foto: fotoBase64,
+        }));
+
         setDisabledInputs((prevDisabledInputs) => ({
           ...prevDisabledInputs,
+          nome_completo: true,
+          nome_guerra: true,
+          unidade: true,
+          graduacao: true,
+          email: true,
+          veiculo_placa: false,
+        }))
+      } catch (e) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Não foi encontrado um militar com este número de ordem!");
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          numero_ordem: element,
           nome_completo: true,
           nome_guerra: true,
           id_unidade: true,
           id_graduacao: true,
           email: true,
-          veiculo_existente: false,
-        }))
-
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          nome_completo: nome_completo || 'Vazio',
-          nome_guerra: nome_guerra || 'Vazio',
-          id_unidade: Unidade.nome || 'Vazio',
-          id_graduacao: Graduacao.sigla || 'Vazio',
-          email: email || 'Vazio',
-          foto: fotoBase64,
-        }));
-
-        console.log(response.data)
-      } catch (e) {
-        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-        setMessage("Não foi encontrado um dependente com este CPF");
-        setDisabledInputs((prevDisabledInputs) => ({
-          ...prevDisabledInputs,
-          nome_completo: false,
-          nome_guerra: false,
-          id_unidade: false,
-          id_graduacao: false,
-          email: false,
-          veiculo_existente: false,
+          veiculo_placa: true,
         }))
         setFormData((prevFormData) => ({
           ...prevFormData,
+          numero_ordem: element,
           nome_completo: '',
           nome_guerra: '',
-          id_unidade: '',
-          id_graduacao: '',
+          unidade: '',
+          graduacao: '',
           email: '',
           foto: '',
-          veiculo_existente: 'Selecione'
+          veiculo_placa: ''
         }));
       }
     } else {
 
       setFormData((prevFormData) => ({
         ...prevFormData,
+        numero_ordem: element,
         nome_completo: '',
         nome_guerra: '',
-        id_unidade: '',
-        id_graduacao: '',
+        unidade: '',
+        graduacao: '',
         email: '',
         foto: '',
-        veiculo_existente: 'Selecione'
+        veiculo_placa: ''
       }));
 
       setDisabledInputs((prevDisabledInputs) => ({
         ...prevDisabledInputs,
         nome_completo: true,
         nome_guerra: true,
-        id_unidade: true,
-        id_graduacao: true,
+        unidade: true,
+        graduacao: true,
         email: true,
-        veiculo_existente: true,
-      }))
-    }
-    setFormData({ ...formData, numero_ordem: element })
-  }
-
-  //Handle Veiculo Existente Change
-
-  const changeVeiculoExistente = (element) => {
-    setFormData({ ...formData, veiculo_existente: element })
-    if (element == 'Novo') {
-      setDisabledInputs({
-        ...setDisabledInputs,
-        veiculo_tipo: false,
-        veiculo_cor: false,
-        veiculo_placa: false,
-        veiculo_renavam: false,
-        veiculo_marca: false,
-        veiculo_modelo: false,
-      })
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        veiculo_tipo: 'Selecione',
-        veiculo_cor: 'Selecione',
-        veiculo_placa: '',
-        veiculo_renavam: '',
-        veiculo_marca: '',
-        veiculo_modelo: '',
-        veiculo_cracha: ''
-      }));
-    } else {
-      setDisabledInputs({
-        ...setDisabledInputs,
-        veiculo_tipo: true,
-        veiculo_cor: true,
         veiculo_placa: true,
-        veiculo_renavam: true,
-        veiculo_marca: true,
-        veiculo_modelo: true,
-      })
+      }))
     }
   }
 
   // Handle Registrar Entrada Change
 
   const changeRegistroEntrada = (element) => {
-    setFormData({ ...formData, entrada: element })
-    if (element == 'Sim') {
-      setDisabledInputs({
-        ...disabledInputs,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      entrada: element,
+    }));
+    if (element === 'Sim') {
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
         cracha: false,
-        veiculo_cracha: false
-      })
+        destino: false,
+        veiculo_cracha: false,
+      }));
     } else {
-      setDisabledInputs({
-        ...disabledInputs,
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
         cracha: true,
-        veiculo_cracha: true
-      })
+        destino: true,
+        veiculo_cracha: true,
+      }));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        cracha: '',
+        destino: '',
+        veiculo_cracha: ''
+      }));
+    }
+  };
+
+  //Find Veiculo
+
+  const searchVeiculos = async (element) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      veiculo_placa: element,
+    }));
+    if (String(element).length === 7) {
+      let userData = localStorage.getItem('user');
+      let userDataParsed = JSON.parse(userData);
+      let token = localStorage.getItem('user_token');
+      try {
+        const response = await server.get(`/veiculo_an/consulta/${element}`, {
+          headers: {
+            'Authentication': token,
+            'access-level': userDataParsed.nivel_acesso,
+          },
+        });
+
+        const veiculoColected = response.data;
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          veiculo_tipo: veiculoColected.tipo,
+          veiculo_cor: veiculoColected.cor_veiculo,
+          veiculo_placa: element,
+          veiculo_renavam: veiculoColected.renavam,
+          veiculo_marca: veiculoColected.marca,
+          veiculo_modelo: veiculoColected.modelo,
+        }));
+
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          veiculo_tipo: true,
+          veiculo_cor: true,
+          veiculo_renavam: true,
+          veiculo_marca: true,
+          veiculo_modelo: true,
+        }));
+      } catch (e) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage('Não foi encontrado um veículo com esta placa');
+        setAlertSeverity("error");
+
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          veiculo_tipo: false,
+          veiculo_cor: false,
+          veiculo_renavam: false,
+          veiculo_marca: false,
+          veiculo_modelo: false,
+        }));
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          veiculo_tipo: 'Selecione',
+          veiculo_cor: 'Selecione',
+          veiculo_placa: element,
+          veiculo_renavam: '',
+          veiculo_marca: '',
+          veiculo_modelo: ''
+        }));
+      }
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        veiculo_tipo: 'Selecione',
+        veiculo_cor: 'Selecione',
+        veiculo_placa: element,
+        veiculo_renavam: '',
+        veiculo_marca: '',
+        veiculo_modelo: ''
+      }));
+
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
+        veiculo_tipo: true,
+        veiculo_cor: true,
+        veiculo_renavam: true,
+        veiculo_marca: true,
+        veiculo_modelo: true
+      }));
     }
   }
 
@@ -290,42 +349,20 @@ function MilitarSemANCrachaComponent() {
 
   //Handle Foto Input
 
-  const fileInputRef = useRef(null);
-
-  const detectEntryFoto = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const fileURL = URL.createObjectURL(file);
-      setFormData({ ...formData, foto: file });
-      setEfetivoFoto(fileURL);
-    }
-    console.log(file)
-  }
-
-  const removeFoto = () => {
-    setFormData({ ...formData, foto: '' });
-    setEfetivoFoto('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  }
-
-  // Convert Image
-
   const bufferToBase64 = (data) => {
     let binaryString = "";
     const bytes = new Uint8Array(data);
     for (let i = 0; i < bytes.length; i++) {
-        binaryString += String.fromCharCode(bytes[i]);
+      binaryString += String.fromCharCode(bytes[i]);
     }
     return btoa(binaryString);
-};
+  };
 
   return (
     <div className="pessoas-container">
       <div className="pessoas-section-title">
         <h3>Dados militar sem AN/Crachá</h3>
-        <p>Digite o número de ordem para pesquisar ou cadastrar um novo militar sem AN/Crachá</p>
+        <p>Digite o número de ordem para pesquisar um militar</p>
       </div>
       <div className="session-input-militar1">
         <div className="session-input-militar-box-input">
@@ -352,23 +389,12 @@ function MilitarSemANCrachaComponent() {
             </div>
             <div className="input-container">
               <p>Nome de guerra*</p>
-              <IMaskInput
-                mask='(00) 0 0000-0000'
+              <input
                 type='text'
                 className='filtering-input'
                 disabled={disabledInputs.nome_guerra}
                 value={formData.nome_guerra}
                 onChange={(e) => setFormData({ ...formData, nome_guerra: e.target.value })}
-              />
-            </div>
-            <div className="input-container">
-              <p>Crachá*</p>
-              <input
-                type="text"
-                disabled={disabledInputs.cracha}
-                className='filtering-input'
-                value={formData.cracha}
-                onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
               />
             </div>
           </div>
@@ -378,9 +404,9 @@ function MilitarSemANCrachaComponent() {
               <input
                 type='text'
                 className='filtering-input'
-                disabled={disabledInputs.id_unidade}
-                value={formData.id_unidade}
-                onChange={(e) => setFormData({ ...formData, id_unidade: e.target.value })}
+                disabled={disabledInputs.unidade}
+                value={formData.unidade}
+                onChange={(e) => setFormData({ ...formData, unidade: e.target.value })}
               />
             </div>
             <div className="input-container">
@@ -388,9 +414,9 @@ function MilitarSemANCrachaComponent() {
               <input
                 type='text'
                 className='filtering-input'
-                disabled={disabledInputs.id_graduacao}
-                value={formData.id_graduacao}
-                onChange={(e) => setFormData({ ...formData, id_graduacao: e.target.value })}
+                disabled={disabledInputs.graduacao}
+                value={formData.graduacao}
+                onChange={(e) => setFormData({ ...formData, graduacao: e.target.value })}
               />
             </div>
             <div className="input-container">
@@ -407,38 +433,20 @@ function MilitarSemANCrachaComponent() {
         </div>
         <div className="input-container">
           <p>Foto</p>
-          <label htmlFor="arquivo" className="label-foto-input">Enviar arquivo<img src={uploadIcon} /></label>
-          <input
-            type="file"
-            id="arquivo"
-            ref={fileInputRef}
-            className='filtering-input'
-            onChange={detectEntryFoto}
-          />
-          {efetivoFoto && (
-            <div className="foto-pessoa-preview">
-              <button className="remove-foto-button" onClick={removeFoto}>
-                <img src={Remove} />
-              </button>
-              <img src={efetivoFoto} alt="Foto do Efetivo" className="pessoa-foto" />
-            </div>
-          )}
+          <div className="input-container input-foto">
+            {formData.foto != '' ? (
+              <img src={formData.foto} alt="Foto do Militar" className='photo-consulta' />
+            ) : (
+              <img src={UserPhoto} alt="Sem foto" className='no-photo-consulta' />
+            )}
+          </div>
         </div>
       </div>
       <div className="pessoas-section-title">
         <h3>Autorizador</h3>
       </div>
       <div className="pessoas-section-input  session-input-autorizador-simple">
-        <div className="input-container">
-          <p>Destino</p>
-          <input
-            type="text"
-            className='filtering-input'
-            value={formData.destino}
-            onChange={(e) => setFormData({ ...formData, destino: e.target.value })}
-          />
-        </div>
-        <div className="input-container">
+      <div className="input-container">
           <p>Inserir entrada deste dependente no sistema? </p>
           <select
             className='filtering-input'
@@ -448,6 +456,26 @@ function MilitarSemANCrachaComponent() {
             <option value={'Não'}>Não</option>
             <option value={'Sim'}>Sim</option>
           </select>
+        </div>
+        <div className="input-container">
+          <p>Destino</p>
+          <input
+            type="text"
+            className='filtering-input'
+            value={formData.destino}
+            disabled={disabledInputs.destino}
+            onChange={(e) => setFormData({ ...formData, destino: e.target.value })}
+          />
+        </div>
+        <div className="input-container">
+          <p>Crachá*</p>
+          <input
+            type="text"
+            disabled={disabledInputs.cracha}
+            className='filtering-input'
+            value={formData.cracha}
+            onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
+          />
         </div>
       </div>
       <div className="pessoas-section-title">
@@ -480,21 +508,15 @@ function MilitarSemANCrachaComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Veículos atrelados à esta pessoa:</p>
-              <select
-                type="number"
-                className='filtering-input'
-                value={formData.veiculo_existente}
-                disabled={disabledInputs.veiculo_existente}
-                onChange={(e) => changeVeiculoExistente(e.target.value)}
-              >
-                <option value={'Selecione'}>Selecione</option>
-                <option value={'Novo'}>Cadastrar um novo</option>
-                {veiculos.map((veiculo, i) => (
-                  <option key={i} value={veiculo.id}>{veiculo.marca} {veiculo.modelo} {veiculo.placa}</option>
-                ))}
-              </select>
-            </div>
+                <p>Placa</p>
+                <input
+                  type="text"
+                  className='filtering-input'
+                  disabled={disabledInputs.veiculo_placa}
+                  value={formData.veiculo_placa}
+                  onChange={(e) => searchVeiculos(e.target.value )}
+                />
+              </div>
             <div className="box-input-veiculo">
               <div className="input-container">
                 <p>Tipo</p>
@@ -537,16 +559,6 @@ function MilitarSemANCrachaComponent() {
                   <option value={'Vermelha'}>Vermelha</option>
                   <option value={'Fantasia'}>Fantasia</option>
                 </select>
-              </div>
-              <div className="input-container">
-                <p>Placa</p>
-                <input
-                  type="text"
-                  className='filtering-input'
-                  disabled={disabledInputs.veiculo_placa}
-                  value={formData.veiculo_placa}
-                  onChange={(e) => setFormData({ ...formData, veiculo_placa: e.target.value })}
-                />
               </div>
               <div className="input-container">
                 <p>RENAVAM</p>
@@ -600,7 +612,7 @@ function MilitarSemANCrachaComponent() {
         onClose={handleClose}
         key={vertical + horizontal}
       >
-        <Alert variant="filled" severity="error">
+        <Alert variant="filled" severity={alertSeverity}>
           {message}
         </Alert>
       </Snackbar>

@@ -61,7 +61,6 @@ function ConsultarEfetivo() {
                     console.error('Error converting buffer to Base64:', error);
                 }
             }
-            console.log(response.data[0])
             setEfetivoData({
                 qrcode_efetivo: String(qrcode_efetivo) || 0,
                 nome_completo: nome_completo || '',
@@ -75,7 +74,6 @@ function ConsultarEfetivo() {
             try {
                 const response2 = await server.get(`/veiculo?militar=${response.data[0].id}&ativo_veiculo=true`);
                 setVeiculosData(response2.data.formattedEntities)
-                console.log(response2.data.formattedEntities)
             } catch (e) {
                 console.log(e)
             }
@@ -99,10 +97,8 @@ function ConsultarEfetivo() {
 
     const viewQrCodes = (state) => {
         if (state) {
-            console.log(efetivoData)
             setViewQr(true)
         } else {
-            console.log(efetivoData)
             setViewQr(false)
         }
     }

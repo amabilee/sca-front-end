@@ -53,19 +53,25 @@
 
 .session-input-dependente .input-container:nth-child(1),
 .session-input-dependente .input-container:nth-child(3),
-.session-input-dependente .input-container:nth-child(4),
-.session-input-autorizador .input-container:nth-child(1) {
+.session-input-dependente .input-container:nth-child(4) {
     width: 150px;
 }
 
+.session-input-autorizador-simple .input-container:nth-child(1),
+.session-input-autorizador-simple .input-container:nth-child(2),
+.session-input-autorizador .input-container:nth-child(1),
 .session-input-dependente .input-container:nth-child(2),
-.session-input-autorizador .input-container:nth-child(2),
-.session-input-autorizador .input-container:nth-child(3) {
+.session-input-autorizador .input-container:nth-child(4){
     width: 330px;
 }
 
-.session-input-autorizador-simple .input-container:nth-child(1){
-    width: 330px;
+.session-input-autorizador .input-container:nth-child(2),
+.session-input-autorizador .input-container:nth-child(5){
+    width: 150px;
+}
+
+.session-input-autorizador .input-container:nth-child(3){
+    width: 200px;
 }
 
 .session-input-dependente .input-container:nth-child(3) input{
@@ -150,6 +156,7 @@ input[type="file"] {
     align-items: flex-start;
     justify-content: flex-start;
     height: 160px;
+    margin: 0 0 30px 0;
 }
 
 
@@ -237,4 +244,5 @@ input[type="file"] {
     align-items: flex-start;
     justify-content: flex-start;
     height: 160px;
+    margin: 0 0 50px 0;
 }

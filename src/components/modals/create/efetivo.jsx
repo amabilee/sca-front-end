@@ -223,6 +223,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             <p>Número de ordem ou documento*</p>
                             <input
                                 type="number"
+                                maxLength={10}
                                 className='filtering-input'
                                 value={receivedData.qrcode_efetivo}
                                 onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value })}

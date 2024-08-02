@@ -6,11 +6,13 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import uploadIcon from '../../assets/upload.svg'
 import Remove from '../../assets/remove_icon.svg'
+import UserPhoto from '../../assets/login/user-photo.svg'
 
 function VisitanteComponent() {
   const [efetivoFoto, setEfetivoFoto] = useState("")
   // SnackBar config
   const [message, setMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState('')
   const [state, setState] = useState({
     open: false,
     vertical: 'top',
@@ -29,26 +31,28 @@ function VisitanteComponent() {
     {
       cpf: '',
       nome_completo: '',
-      telefone: '',
-      empresa: '',
-      foto: '',
-      endereco: '',
+      rua: '',
       numero: '',
       bairro: '',
       estado: 'Selecione',
-      complemento: '',
-      estado: 'Selecione',
-      cracha: '',
 
+      complemento: '',
+      telefone: '',
+      foto: '',
+      empresa: '',
+
+
+      cracha: '',
       autorizador_numero: '',
       autorizador: '',
       entrada: 'Não',
       destino: '',
+
+
       conduzindo: 'Não',
-      veiculo_existente: 'Selecione',
+      veiculo_placa: '',
       veiculo_tipo: 'Selecione',
       veiculo_cor: 'Selecione',
-      veiculo_placa: '',
       veiculo_renavam: '',
       veiculo_marca: '',
       veiculo_modelo: '',
@@ -59,83 +63,73 @@ function VisitanteComponent() {
   const [disabledInputs, setDisabledInputs] = useState(
     {
       nome_completo: true,
-      telefone: true,
-      empresa: true,
-      foto: true,
-      endereco: true,
+      rua: true,
       numero: true,
       bairro: true,
       estado: true,
-      complemento: true,
-      estado: true,
-      cracha: true,
 
+      complemento: true,
+      telefone: true,
+      foto: true,
+      empresa: true,
+
+
+      cracha: true,
       autorizador_numero: true,
       autorizador: true,
       destino: true,
       veiculo_cracha: true,
-      veiculo_existente: true,
+
+
+      veiculo_placa: true,
       veiculo_tipo: true,
       veiculo_cor: true,
-      veiculo_placa: true,
       veiculo_renavam: true,
       veiculo_marca: true,
       veiculo_modelo: true
     }
   )
 
-  const [veiculos, setVeiculos] = useState(
-    [
-      {
-        id: 1,
-        marca: 'Honda',
-        modelo: 'Civic',
-        placa: 'ASD9876'
-      },
-      {
-        id: 2,
-        marca: 'Ford',
-        modelo: 'Fiest',
-        placa: 'MNB9876'
-      }
-    ])
-
   const cleanInputs = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       cpf: '',
       nome_completo: '',
-      telefone: '',
-      empresa: '',
-      foto: '',
-      endereco: '',
+      rua: '',
       numero: '',
       bairro: '',
       estado: 'Selecione',
+
       complemento: '',
-      estado: 'Selecione',
+      telefone: '',
+      foto: '',
+      empresa: '',
+
+
       cracha: '',
       autorizador_numero: '',
       autorizador: '',
       entrada: 'Não',
       destino: '',
+
+
       conduzindo: 'Não',
-      veiculo_existente: 'Selecione',
+      veiculo_placa: '',
       veiculo_tipo: 'Selecione',
       veiculo_cor: 'Selecione',
-      veiculo_placa: '',
       veiculo_renavam: '',
       veiculo_marca: '',
       veiculo_modelo: '',
       veiculo_cracha: ''
     }));
+    setEfetivoFoto('')
     setDisabledInputs((prevDisabledInputs) => ({
       ...prevDisabledInputs,
       nome_completo: true,
       telefone: true,
       empresa: true,
       foto: true,
-      endereco: true,
+      rua: true,
       numero: true,
       bairro: true,
       estado: true,
@@ -156,139 +150,163 @@ function VisitanteComponent() {
     }))
   };
 
-  // Find Dependente  
+  // Find Visitante  
 
   const searchVisitante = async (element) => {
-    console.log(1)
     if (String(element).length == 14) {
+      let formattedCPF = String(element).replace(/\D/g, '');
       let userData = localStorage.getItem('user');
       let userDataParsed = JSON.parse(userData);
-      let token = localStorage.getItem("user_token")
+      let token = localStorage.getItem('user_token');
+
       try {
-        const response = await server.get(`/dependente/consulta/${element}`, {
+        const response = await server.get(`/visitante?cpf=${formattedCPF}`, {
           headers: {
             'Authentication': token,
-            'access-level': userDataParsed.nivel_acesso
-          }
+            'access-level': userDataParsed.nivel_acesso,
+          },
         });
 
-        const dependenteColected = response.data[0]
+        const entities = response.data.entities;
 
-        // setFormData({ nome_completo: dependenteColected.nome, telefone: dependenteColected.telefone, qrcode_efetivo: dependenteColected.qrcode_efetivo })
-        setDisabledInputs((prevDisabledInputs) => ({
-          ...prevDisabledInputs,
-          nome_completo: true,
-          telefone: true,
-          empresa: true,
-          foto: true,
-          endereco: true,
-          complemento: true,
-          numero: true,
-          bairro: true,
-          estado: true,
-          veiculo_existente: false,
-        }))
+        if (entities.length >= 1) {
+          const visitanteColected = entities[0];
+
+          let fotoBase64 = '';
+          if (visitanteColected.foto && visitanteColected.foto != null) {
+            try {
+              const fotoBuffer = visitanteColected.foto.data;
+              fotoBase64 = `data:image/png;base64,${bufferToBase64(fotoBuffer)}`;
+            } catch (error) {
+              console.error('Error converting buffer to Base64:', error);
+            }
+          }
+
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            cpf: element,
+            nome_completo: visitanteColected.nome,
+            rua: visitanteColected.rua,
+            numero: visitanteColected.numero,
+            bairro: visitanteColected.bairro,
+            estado: visitanteColected.estado,
+            complemento: visitanteColected.complemento == null || visitanteColected.complemento == "null" ? 'Não informado' : visitanteColected.complemento,
+            telefone: visitanteColected.telefone && visitanteColected.telefone.length >= 13 ? visitanteColected.telefone : '',
+            foto: fotoBase64,
+            empresa: visitanteColected.empresa == null || visitanteColected.empresa == "null" ? 'Não informado' : visitanteColected.empresa,
+          }));
+
+          setDisabledInputs((prevDisabledInputs) => ({
+            ...prevDisabledInputs,
+            nome_completo: true,
+            rua: true,
+            numero: true,
+            bairro: true,
+            estado: true,
+            complemento: true,
+            telefone: true,
+            foto: true,
+            empresa: true,
+            veiculo_placa: false,
+          }));
+        } else {
+          setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+          setMessage('Não foi encontrado um visitante com este CPF');
+          setAlertSeverity("error");
+          setDisabledInputs((prevDisabledInputs) => ({
+            ...prevDisabledInputs,
+            nome_completo: false,
+            rua: false,
+            numero: false,
+            bairro: false,
+            estado: false,
+            complemento: false,
+            telefone: false,
+            foto: false,
+            empresa: false,
+            veiculo_placa: false,
+          }));
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            cpf: element,
+            nome_completo: '',
+            rua: '',
+            numero: '',
+            bairro: '',
+            estado: 'Selecione',
+            complemento: '',
+            telefone: '',
+            foto: '',
+            empresa: '',
+          }));
+          setEfetivoFoto('')
+        }
+        return;
       } catch (e) {
+        console.error('Error fetching visitante:', e);
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-        setMessage("Não foi encontrado um dependente com este CPF");
+        setMessage('Não foi encontrado um visitante com este CPF');
+        setAlertSeverity("error");
         setDisabledInputs((prevDisabledInputs) => ({
           ...prevDisabledInputs,
           nome_completo: false,
-          telefone: false,
-          empresa: false,
-          foto: false,
-          endereco: false,
-          complemento: false,
+          rua: false,
           numero: false,
           bairro: false,
           estado: false,
-          veiculo_existente: false,
-        }))
+          complemento: false,
+          telefone: false,
+          foto: false,
+          empresa: false,
+          veiculo_placa: false,
+        }));
         setFormData((prevFormData) => ({
           ...prevFormData,
+          cpf: element,
           nome_completo: '',
-          telefone: '',
-          empresa: '',
-          foto: '',
-          endereco: '',
+          rua: '',
           numero: '',
           bairro: '',
           estado: 'Selecione',
           complemento: '',
-          estado: 'Selecione',
-          veiculo_existente: 'Selecione'
+          telefone: '',
+          foto: '',
+          empresa: '',
         }));
+        setEfetivoFoto('')
       }
     } else {
-
       setFormData((prevFormData) => ({
         ...prevFormData,
+        cpf: element,
         nome_completo: '',
-        telefone: '',
-        empresa: '',
-        foto: '',
-        endereco: '',
+        rua: '',
         numero: '',
         bairro: '',
         estado: 'Selecione',
         complemento: '',
-        estado: 'Selecione',
-        veiculo_existente: 'Selecione'
+        telefone: '',
+        foto: '',
+        empresa: '',
+        veiculo_placa: '',
       }));
 
       setDisabledInputs((prevDisabledInputs) => ({
         ...prevDisabledInputs,
         nome_completo: true,
-        telefone: true,
-        empresa: true,
-        foto: true,
-        endereco: true,
-        complemento: true,
+        rua: true,
         numero: true,
         bairro: true,
         estado: true,
-        veiculo_existente: true,
-      }))
-    }
-    setFormData({ ...formData, cpf: element })
-  }
-
-  //Handle Veiculo Existente Change
-
-  const changeVeiculoExistente = (element) => {
-    setFormData({ ...formData, veiculo_existente: element })
-    if (element == 'Novo') {
-      setDisabledInputs({
-        ...setDisabledInputs,
-        veiculo_tipo: false,
-        veiculo_cor: false,
-        veiculo_placa: false,
-        veiculo_renavam: false,
-        veiculo_marca: false,
-        veiculo_modelo: false,
-      })
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        veiculo_tipo: 'Selecione',
-        veiculo_cor: 'Selecione',
-        veiculo_placa: '',
-        veiculo_renavam: '',
-        veiculo_marca: '',
-        veiculo_modelo: '',
-        veiculo_cracha: ''
-      }));
-    } else {
-      setDisabledInputs({
-        ...setDisabledInputs,
-        veiculo_tipo: true,
-        veiculo_cor: true,
+        complemento: true,
+        telefone: true,
+        foto: true,
+        empresa: true,
         veiculo_placa: true,
-        veiculo_renavam: true,
-        veiculo_marca: true,
-        veiculo_modelo: true,
-      })
+      }));
+      setEfetivoFoto('')
     }
-  }
+  };
 
   // Handle Registrar Entrada Change
 
@@ -298,13 +316,17 @@ function VisitanteComponent() {
       setDisabledInputs({
         ...disabledInputs,
         cracha: false,
-        veiculo_cracha: false
+        veiculo_cracha: false,
+        autorizador_numero: false,
+        destino: false
       })
     } else {
       setDisabledInputs({
         ...disabledInputs,
         cracha: true,
-        veiculo_cracha: true
+        veiculo_cracha: true,
+        autorizador_numero: true,
+        destino: true
       })
     }
   }
@@ -343,9 +365,91 @@ function VisitanteComponent() {
     }
   };
 
+  //Find Veiculo
 
-  const send = () => {
-    console.log(formData)
+  const searchVeiculos = async (element) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      veiculo_placa: element,
+    }));
+    if (String(element).length === 7) {
+      let userData = localStorage.getItem('user');
+      let userDataParsed = JSON.parse(userData);
+      let token = localStorage.getItem('user_token');
+      try {
+        const response = await server.get(`/veiculo_an/consulta/${element}`, {
+          headers: {
+            'Authentication': token,
+            'access-level': userDataParsed.nivel_acesso,
+          },
+        });
+
+        const veiculoColected = response.data;
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          veiculo_tipo: veiculoColected.tipo,
+          veiculo_cor: veiculoColected.cor_veiculo,
+          veiculo_placa: element,
+          veiculo_renavam: veiculoColected.renavam,
+          veiculo_marca: veiculoColected.marca,
+          veiculo_modelo: veiculoColected.modelo,
+        }));
+
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          veiculo_tipo: true,
+          veiculo_cor: true,
+          veiculo_renavam: true,
+          veiculo_marca: true,
+          veiculo_modelo: true,
+        }));
+        return
+      } catch (e) {
+        console.log(2)
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage('Não foi encontrado um veículo com esta placa');
+        setAlertSeverity("error");
+
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          veiculo_tipo: false,
+          veiculo_cor: false,
+          veiculo_renavam: false,
+          veiculo_marca: false,
+          veiculo_modelo: false,
+        }));
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          veiculo_tipo: 'Selecione',
+          veiculo_cor: 'Selecione',
+          veiculo_placa: element,
+          veiculo_renavam: '',
+          veiculo_marca: '',
+          veiculo_modelo: ''
+        }));
+      }
+    } else {
+      console.log(3)
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        veiculo_tipo: 'Selecione',
+        veiculo_cor: 'Selecione',
+        veiculo_placa: element,
+        veiculo_renavam: '',
+        veiculo_marca: '',
+        veiculo_modelo: ''
+      }));
+
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
+        veiculo_tipo: true,
+        veiculo_cor: true,
+        veiculo_renavam: true,
+        veiculo_marca: true,
+        veiculo_modelo: true
+      }));
+    }
   }
 
   //Handle Foto Input
@@ -359,7 +463,6 @@ function VisitanteComponent() {
       setFormData({ ...formData, foto: file });
       setEfetivoFoto(fileURL);
     }
-    console.log(file)
   }
 
   const removeFoto = () => {
@@ -367,6 +470,176 @@ function VisitanteComponent() {
     setEfetivoFoto('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  }
+
+  const bufferToBase64 = (data) => {
+    let binaryString = "";
+    const bytes = new Uint8Array(data);
+    for (let i = 0; i < bytes.length; i++) {
+      binaryString += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binaryString);
+  };
+
+  //Handle submit form
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (formData.cpf.length != 14) {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um CPF válido.");
+    } else if (formData.nome_completo.length === 0) {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um nome completo válido.");
+    } else if (formData.bairro === '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um bairro.");
+    } else if (formData.numero === '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um número.");
+    } else if (formData.rua === '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira uma rua.");
+    } else if (formData.estado === 'Selecione') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um estado.");
+    } else if (formData.entrada === 'Sim' && formData.cracha == '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um crachá para o visitante válido.");
+    } else if (formData.entrada === 'Sim' && formData.destino == '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um destino válido.");
+    } else if (formData.entrada === 'Sim' && formData.autorizador == '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um autorizador válido.");
+    } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && formData.veiculo_cracha == '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um crachá para o veículo válido.");
+    } else if (formData.conduzindo === 'Sim' && formData.veiculo_placa.length != 7) {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira uma placa válida.");
+    } else if (formData.conduzindo === 'Sim' && formData.veiculo_tipo == 'Selecione') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um tipo válido.");
+    } else if (formData.conduzindo === 'Sim' && formData.veiculo_cor == 'Selecione') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira uma cor válida.");
+    } else if (formData.conduzindo === 'Sim' && formData.veiculo_renavam == '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um RENAVAM válido.");
+    } else if (formData.conduzindo === 'Sim' && formData.veiculo_marca == '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira uma marca válida.");
+    } else if (formData.conduzindo === 'Sim' && formData.veiculo_modelo == '') {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um modelo válido.");
+    } else {
+      console.log(formData)
+      formatSendRequest();
+    }
+  };
+
+  //Types of requests
+
+  const formatSendRequest = async () => {
+    let userData = localStorage.getItem('user');
+    let userDataParsed = JSON.parse(userData);
+    let token = localStorage.getItem("user_token")
+
+    if (formData.entrada == 'Sim' && formData.conduzindo == 'Sim') {
+      sendRequestVisitante(token, userDataParsed, 'visitante+veiculo+registro')
+    } else if (formData.conduzindo == 'Sim' && formData.entrada == 'Não') {
+      sendRequestVisitante(token, userDataParsed, 'visitante+veiculo')
+    } else if (formData.entrada == 'Sim' && formData.conduzindo == 'Não') {
+      sendRequestVisitante(token, userDataParsed, 'visitante+registro')
+    } else if (formData.conduzindo == 'Não' && formData.entrada == 'Não') {
+      sendRequestVisitante(token, userDataParsed, 'visitante')
+    }
+  };
+
+  //Visitante
+
+  const sendRequestVisitante = async (token, userDataParsed, typeRequest) => {
+    let formattedCPF = String(formData.cpf).replace(/\D/g, '')
+
+    const formDataVisitante = new FormData();
+    formDataVisitante.append('cpf', Number(formattedCPF),);
+    formDataVisitante.append('nome', formData.nome_completo,);
+    formDataVisitante.append('rua', formData.rua,);
+    formDataVisitante.append('numero', formData.numero,);
+    formDataVisitante.append('bairro', formData.bairro,);
+    formDataVisitante.append('estado', formData.estado,);
+    formDataVisitante.append('complemento', formData.complemento != '' ? formData.complemento : null,);
+    formDataVisitante.append('telefone', formData.telefone != '' ? formData.telefone : null,);
+    formDataVisitante.append('empresa', formData.empresa != '' ? formData.empresa : null,);
+    formDataVisitante.append('foto', formData.foto != '' ? formData.foto : null);
+
+    try {
+      await server.post(`/visitante`, formDataVisitante, {
+        headers: {
+          'Authentication': token,
+          'access-level': userDataParsed.nivel_acesso
+        }
+      });
+
+      if (typeRequest = 'visitante') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Visitante cadastrado com sucesso.");
+        setAlertSeverity("success");
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          cpf: '',
+          nome_completo: '',
+          rua: '',
+          numero: '',
+          bairro: '',
+          estado: 'Selecione',
+          complemento: '',
+          telefone: '',
+          foto: '',
+          empresa: '',
+        }));
+        setEfetivoFoto('')
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          nome_completo: true,
+          telefone: true,
+          empresa: true,
+          foto: true,
+          rua: true,
+          numero: true,
+          bairro: true,
+          estado: true,
+          complemento: true,
+          estado: true,
+        }));
+      } else if (typeRequest = 'visitante+veiculo') {
+        sendRequestVeiculo(token, userDataParsed, typeRequest)
+      } else if (typeRequest = 'visitante+registro') {
+        sendRequestRegistro(token, userDataParsed, typeRequest)
+      } else if (typeRequest = 'visitante+veiculo+registro') {
+        sendRequestVeiculo(token, userDataParsed, typeRequest)
+      }
+    } catch (e) {
+      if (e.response.status == 400) {
+        if (typeRequest == 'dependente') {
+          setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+          setMessage(e.response.data.message);
+          setAlertSeverity("error");
+        } else if (typeRequest == 'dependente+veiculo') {
+          sendRequestVeiculo(token, userDataParsed, typeRequest)
+        } else if (typeRequest === 'dependente+registro') {
+          sendRequestRegistro(token, userDataParsed, typeRequest)
+        } else if (typeRequest === 'dependente+veiculo+registro') {
+          sendRequestVeiculo(token, userDataParsed, typeRequest)
+        }
+      } else {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage('Erro ao criar dependente.');
+        setAlertSeverity("error");
+      }
     }
   }
 
@@ -400,7 +673,7 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Telefone*</p>
+              <p>Telefone</p>
               <IMaskInput
                 mask='(00) 0 0000-0000'
                 type='text'
@@ -411,7 +684,7 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Empresa*</p>
+              <p>Empresa</p>
               <input
                 type="text"
                 className='filtering-input'
@@ -420,26 +693,16 @@ function VisitanteComponent() {
                 onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
               />
             </div>
-            <div className="input-container">
-              <p>Crachá*</p>
-              <input
-                type="text"
-                disabled={disabledInputs.cracha}
-                className='filtering-input'
-                value={formData.cracha}
-                onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
-              />
-            </div>
           </div>
           <div className="session-input-line2">
             <div className="input-container">
-              <p>Endereço*</p>
+              <p>Bairro*</p>
               <input
                 type='text'
                 className='filtering-input'
-                disabled={disabledInputs.endereco}
-                value={formData.endereco}
-                onChange={(e) => setFormData({ ...formData, endereco: e.target.value })}
+                disabled={disabledInputs.bairro}
+                value={formData.bairro}
+                onChange={(e) => setFormData({ ...formData, bairro: e.target.value })}
               />
             </div>
             <div className="input-container">
@@ -453,17 +716,17 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Bairro*</p>
+              <p>Rua*</p>
               <input
                 type='text'
                 className='filtering-input'
-                disabled={disabledInputs.bairro}
-                value={formData.bairro}
-                onChange={(e) => setFormData({ ...formData, bairro: e.target.value })}
+                disabled={disabledInputs.rua}
+                value={formData.rua}
+                onChange={(e) => setFormData({ ...formData, rua: e.target.value })}
               />
             </div>
             <div className="input-container">
-              <p>Complemento*</p>
+              <p>Complemento</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -515,20 +778,32 @@ function VisitanteComponent() {
         </div>
         <div className="input-container">
           <p>Foto</p>
-          <label htmlFor="arquivo" className="label-foto-input">Enviar arquivo<img src={uploadIcon} /></label>
-          <input
-            type="file"
-            id="arquivo"
-            ref={fileInputRef}
-            className='filtering-input'
-            onChange={detectEntryFoto}
-          />
-          {efetivoFoto && (
-            <div className="foto-pessoa-preview">
-              <button className="remove-foto-button" onClick={removeFoto}>
-                <img src={Remove} />
-              </button>
-              <img src={efetivoFoto} alt="Foto do Efetivo" className="pessoa-foto" />
+          {!disabledInputs.foto ? (
+            <>
+              <label htmlFor="arquivo" className="label-foto-input">Enviar arquivo<img src={uploadIcon} /></label>
+              <input
+                type="file"
+                id="arquivo"
+                ref={fileInputRef}
+                className='filtering-input'
+                onChange={detectEntryFoto}
+              />
+              {efetivoFoto && (
+                <div className="foto-pessoa-preview">
+                  <button className="remove-foto-button" onClick={removeFoto}>
+                    <img src={Remove} />
+                  </button>
+                  <img src={efetivoFoto} alt="Foto do Efetivo" className="pessoa-foto" />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="input-container input-foto">
+              {formData.foto != '' ? (
+                <img src={formData.foto} alt="Foto do Militar" className='photo-consulta' />
+              ) : (
+                <img src={UserPhoto} alt="Sem foto" className='no-photo-consulta' />
+              )}
             </div>
           )}
         </div>
@@ -538,12 +813,24 @@ function VisitanteComponent() {
       </div>
       <div className="pessoas-section-input session-input-autorizador">
         <div className="input-container">
+          <p>Inserir entrada deste visitante no sistema? </p>
+          <select
+            className='filtering-input'
+            value={formData.entrada}
+            onChange={(e) => changeRegistroEntrada(e.target.value)}
+          >
+            <option value={'Não'}>Não</option>
+            <option value={'Sim'}>Sim</option>
+          </select>
+        </div>
+        <div className="input-container">
           <p>Número de Ordem*</p>
           <IMaskInput
             type='text'
             mask='0000000'
             className='filtering-input'
             value={formData.autorizador_numero}
+            disabled={disabledInputs.autorizador_numero}
             onChange={(e) => searchEfetivo(e.target.value)}
           />
         </div>
@@ -562,19 +849,19 @@ function VisitanteComponent() {
             type="text"
             className='filtering-input'
             value={formData.destino}
+            disabled={disabledInputs.destino}
             onChange={(e) => setFormData({ ...formData, destino: e.target.value })}
           />
         </div>
         <div className="input-container">
-          <p>Inserir entrada deste dependente no sistema? </p>
-          <select
+          <p>Crachá*</p>
+          <input
+            type="text"
+            disabled={disabledInputs.cracha}
             className='filtering-input'
-            value={formData.entrada}
-            onChange={(e) => changeRegistroEntrada(e.target.value)}
-          >
-            <option value={'Não'}>Não</option>
-            <option value={'Sim'}>Sim</option>
-          </select>
+            value={formData.cracha}
+            onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
+          />
         </div>
       </div>
       <div className="pessoas-section-title">
@@ -607,20 +894,14 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Veículos atrelados à esta pessoa:</p>
-              <select
-                type="number"
+              <p>Placa</p>
+              <input
+                type="text"
                 className='filtering-input'
-                value={formData.veiculo_existente}
-                disabled={disabledInputs.veiculo_existente}
-                onChange={(e) => changeVeiculoExistente(e.target.value)}
-              >
-                <option value={'Selecione'}>Selecione</option>
-                <option value={'Novo'}>Cadastrar um novo</option>
-                {veiculos.map((veiculo, i) => (
-                  <option key={i} value={veiculo.id}>{veiculo.marca} {veiculo.modelo} {veiculo.placa}</option>
-                ))}
-              </select>
+                disabled={disabledInputs.veiculo_placa}
+                value={formData.veiculo_placa}
+                onChange={(e) => searchVeiculos(e.target.value)}
+              />
             </div>
             <div className="box-input-veiculo">
               <div className="input-container">
@@ -666,16 +947,6 @@ function VisitanteComponent() {
                 </select>
               </div>
               <div className="input-container">
-                <p>Placa</p>
-                <input
-                  type="text"
-                  className='filtering-input'
-                  disabled={disabledInputs.veiculo_placa}
-                  value={formData.veiculo_placa}
-                  onChange={(e) => setFormData({ ...formData, veiculo_placa: e.target.value })}
-                />
-              </div>
-              <div className="input-container">
                 <p>RENAVAM</p>
                 <input
                   type="text"
@@ -714,7 +985,7 @@ function VisitanteComponent() {
           <button onClick={cleanInputs}>
             Limpar campos
           </button>
-          <button onClick={send}>
+          <button onClick={handleSubmit}>
             Confirmar
           </button>
         </div>
@@ -727,7 +998,7 @@ function VisitanteComponent() {
         onClose={handleClose}
         key={vertical + horizontal}
       >
-        <Alert variant="filled" severity="error">
+        <Alert variant="filled" severity={alertSeverity}>
           {message}
         </Alert>
       </Snackbar>

@@ -52,19 +52,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
           setHasAccess(access);
 
           if (!access) {
-            console.log(1)
             setRedirect(true);
           }
         } catch (e) {
           console.error('Erro ao buscar módulos:', e);
-          console.log(2)
           setRedirect(true);
         } finally {
-          console.log(3)
           setLoading(false);
         }
       } else {
-        console.log(4)
         setRedirect(true);
         setLoading(false);
       }
@@ -75,7 +71,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     if (redirect) {
-      console.log(5)
       signOut();
     }
   }, [redirect, signOut]);
@@ -85,7 +80,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }
 
   if (redirect) {
-    console.log(6)
     return <Navigate to="/" />;
   }
 

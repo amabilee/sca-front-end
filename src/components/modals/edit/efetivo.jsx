@@ -233,6 +233,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                             <p>Número de ordem ou documento*</p>
                             <input
                                 type="number"
+                                maxLength={10}
                                 className='filtering-input'
                                 disabled={true}
                                 value={receivedData.qrcode_efetivo}
