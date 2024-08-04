@@ -13,7 +13,8 @@ import {
   Efetivos,
   Veiculos,
   Crachas,
-  Pessoas
+  Pessoas,
+  Gerencia
 } from './privateRoutes.jsx'
 
 
@@ -33,7 +34,7 @@ function Router() {
         <Route path="/veiculos" element={<Veiculos />} />
         <Route path="/crachas" element={<Crachas />} />
         <Route path="/pessoas" element={<Pessoas />} />
-        {/* <Route path="/gerencia" element={<Gerencia />} /> */}
+        <Route path="/gerencia" element={<Gerencia />} />
       </Routes>
     </BrowserRouter>
   )

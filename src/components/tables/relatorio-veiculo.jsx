@@ -10,7 +10,7 @@ const RelatorioVeiculoTable = ({ data }) => {
 
   return (
     <div className='table-wrapper'>
-      <table className='table table-relatorio'>
+      <table className='table table-relatorio table-relatorio-veiculo'>
         <thead>
           <tr>
             <th scope="col">Tipo de movimentação</th>

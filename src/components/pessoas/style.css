@@ -74,7 +74,9 @@
     width: 200px;
 }
 
-.session-input-dependente .input-container:nth-child(3) input{
+.session-input-dependente .input-container:nth-child(3) input,
+.session-input-visitante4 .input-container:nth-child(2) input
+{
     text-transform: uppercase;
 }
 

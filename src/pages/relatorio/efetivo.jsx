@@ -72,8 +72,6 @@ function RelatorioEfetivo() {
         if (filteringConditions.sentinela_autorizador !== '') {
             filter += `&sentinela_autorizador=${filteringConditions.sentinela_autorizador}`;
         }
-        console.log(filteringConditions)
-        console.log(filter)
         getRegistros(filter, 1)
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 }
@@ -109,7 +107,6 @@ function RelatorioEfetivo() {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            console.log(response.data.entities)
             setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }

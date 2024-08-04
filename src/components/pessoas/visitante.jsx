@@ -9,7 +9,7 @@ import Remove from '../../assets/remove_icon.svg'
 import UserPhoto from '../../assets/login/user-photo.svg'
 
 function VisitanteComponent() {
-  const [efetivoFoto, setEfetivoFoto] = useState("")
+  const [visitanteFoto, setVisitanteFoto] = useState("")
   // SnackBar config
   const [message, setMessage] = useState("");
   const [alertSeverity, setAlertSeverity] = useState('')
@@ -122,7 +122,7 @@ function VisitanteComponent() {
       veiculo_modelo: '',
       veiculo_cracha: ''
     }));
-    setEfetivoFoto('')
+    setVisitanteFoto('')
     setDisabledInputs((prevDisabledInputs) => ({
       ...prevDisabledInputs,
       nome_completo: true,
@@ -140,6 +140,7 @@ function VisitanteComponent() {
       autorizador: true,
       destino: true,
       veiculo_cracha: true,
+
       veiculo_existente: true,
       veiculo_tipo: true,
       veiculo_cor: true,
@@ -239,7 +240,7 @@ function VisitanteComponent() {
             foto: '',
             empresa: '',
           }));
-          setEfetivoFoto('')
+          setVisitanteFoto('')
         }
         return;
       } catch (e) {
@@ -273,7 +274,7 @@ function VisitanteComponent() {
           foto: '',
           empresa: '',
         }));
-        setEfetivoFoto('')
+        setVisitanteFoto('')
       }
     } else {
       setFormData((prevFormData) => ({
@@ -304,7 +305,7 @@ function VisitanteComponent() {
         empresa: true,
         veiculo_placa: true,
       }));
-      setEfetivoFoto('')
+      setVisitanteFoto('')
     }
   };
 
@@ -406,7 +407,6 @@ function VisitanteComponent() {
         }));
         return
       } catch (e) {
-        console.log(2)
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage('Não foi encontrado um veículo com esta placa');
         setAlertSeverity("error");
@@ -430,7 +430,6 @@ function VisitanteComponent() {
         }));
       }
     } else {
-      console.log(3)
       setFormData((prevFormData) => ({
         ...prevFormData,
         veiculo_tipo: 'Selecione',
@@ -461,13 +460,13 @@ function VisitanteComponent() {
     if (file) {
       const fileURL = URL.createObjectURL(file);
       setFormData({ ...formData, foto: file });
-      setEfetivoFoto(fileURL);
+      setVisitanteFoto(fileURL);
     }
   }
 
   const removeFoto = () => {
     setFormData({ ...formData, foto: '' });
-    setEfetivoFoto('');
+    setVisitanteFoto('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -526,7 +525,7 @@ function VisitanteComponent() {
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_cor == 'Selecione') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma cor válida.");
-    } else if (formData.conduzindo === 'Sim' && formData.veiculo_renavam == '') {
+    } else if (formData.conduzindo === 'Sim' && String(formData.veiculo_renavam).length != 11) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um RENAVAM válido.");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_marca == '') {
@@ -536,7 +535,6 @@ function VisitanteComponent() {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um modelo válido.");
     } else {
-      console.log(formData)
       formatSendRequest();
     }
   };
@@ -584,7 +582,7 @@ function VisitanteComponent() {
         }
       });
 
-      if (typeRequest = 'visitante') {
+      if (typeRequest === 'visitante') {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Visitante cadastrado com sucesso.");
         setAlertSeverity("success");
@@ -601,7 +599,7 @@ function VisitanteComponent() {
           foto: '',
           empresa: '',
         }));
-        setEfetivoFoto('')
+        setVisitanteFoto('')
         setDisabledInputs((prevDisabledInputs) => ({
           ...prevDisabledInputs,
           nome_completo: true,
@@ -615,33 +613,202 @@ function VisitanteComponent() {
           complemento: true,
           estado: true,
         }));
-      } else if (typeRequest = 'visitante+veiculo') {
+      } else if (typeRequest === 'visitante+veiculo') {
         sendRequestVeiculo(token, userDataParsed, typeRequest)
-      } else if (typeRequest = 'visitante+registro') {
+      } else if (typeRequest === 'visitante+registro') {
         sendRequestRegistro(token, userDataParsed, typeRequest)
-      } else if (typeRequest = 'visitante+veiculo+registro') {
+      } else if (typeRequest === 'visitante+veiculo+registro') {
         sendRequestVeiculo(token, userDataParsed, typeRequest)
       }
     } catch (e) {
-      if (e.response.status == 400) {
-        if (typeRequest == 'dependente') {
+      if (e.response.status && e.response.status == 400) {
+        if (typeRequest === 'visitante') {
           setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
           setMessage(e.response.data.message);
           setAlertSeverity("error");
-        } else if (typeRequest == 'dependente+veiculo') {
+        } else if (typeRequest === 'visitante+veiculo') {
           sendRequestVeiculo(token, userDataParsed, typeRequest)
-        } else if (typeRequest === 'dependente+registro') {
+        } else if (typeRequest === 'visitante+registro') {
           sendRequestRegistro(token, userDataParsed, typeRequest)
-        } else if (typeRequest === 'dependente+veiculo+registro') {
+        } else if (typeRequest === 'visitante+veiculo+registro') {
           sendRequestVeiculo(token, userDataParsed, typeRequest)
         }
       } else {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-        setMessage('Erro ao criar dependente.');
+        setMessage('Erro ao criar visitante.');
         setAlertSeverity("error");
       }
     }
   }
+
+  //Veículo
+
+  const sendRequestVeiculo = async (token, userDataParsed, typeRequest) => {
+
+    let veiculoFormattedData = {
+      tipo: formData.veiculo_tipo,
+      cor_veiculo: formData.veiculo_cor,
+      placa: formData.veiculo_placa,
+      modelo: formData.veiculo_modelo,
+      marca: formData.veiculo_marca,
+      renavam: Number(formData.veiculo_renavam)
+    };
+
+    try {
+      await server.post(`/veiculo_an`, veiculoFormattedData, {
+        headers: {
+          'Authentication': token,
+          'access-level': userDataParsed.nivel_acesso
+        }
+      });
+
+      if (typeRequest === 'visitante+veiculo+registro') {
+        sendRequestRegistro(token, userDataParsed, typeRequest)
+      } else if (typeRequest === 'visitante+veiculo') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Visitante e veículo cadastrados com sucesso.");
+        setAlertSeverity("success");
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          cpf: '',
+          nome_completo: '',
+          rua: '',
+          numero: '',
+          bairro: '',
+          estado: 'Selecione',
+          complemento: '',
+          telefone: '',
+          foto: '',
+          empresa: '',
+
+          conduzindo: 'Não',
+          veiculo_placa: '',
+          veiculo_tipo: 'Selecione',
+          veiculo_cor: 'Selecione',
+          veiculo_renavam: '',
+          veiculo_marca: '',
+          veiculo_modelo: '',
+        }));
+
+        setDisabledInputs((prevDisabledInputs) => ({
+          ...prevDisabledInputs,
+          nome_completo: true,
+          telefone: true,
+          empresa: true,
+          foto: true,
+          rua: true,
+          numero: true,
+          bairro: true,
+          estado: true,
+          complemento: true,
+          estado: true,
+          veiculo_placa: true,
+
+          veiculo_tipo: true,
+          veiculo_cor: true,
+          veiculo_renavam: true,
+          veiculo_marca: true,
+          veiculo_modelo: true,
+        }));
+      }
+    } catch (e) {
+      if (e.response.status && e.response.status == 400) {
+        if (typeRequest === 'visitante+veiculo+registro') {
+          sendRequestRegistro(token, userDataParsed, typeRequest)
+        } else if (typeRequest === 'visitante+veiculo') {
+          setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+          setMessage(e.response.data.message);
+          setAlertSeverity("error");
+        }
+      } else {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage('Erro ao criar veículo.');
+        setAlertSeverity("error");
+      }
+    }
+  }
+
+  //Registro
+
+  const sendRequestRegistro = async (token, userDataParsed, typeRequest) => {
+    let formattedCPF = String(formData.cpf).replace(/\D/g, '')
+    let registroFormattedData
+
+    const { formattedDate, formattedTime } = getFormattedDateTime();
+
+    if (typeRequest === 'visitante+registro') {
+      registroFormattedData = {
+        data: formattedDate,
+        hora: formattedTime,
+        tipo: 'Entrada',
+        posto: 2, //nivel_acesso posto principal
+        cracha_pessoa_numero: formData.cracha,
+        cpf_visitante: formattedCPF,
+        autorizador: formData.autorizador,
+        detalhe: formData.destino
+      }
+    } else if (typeRequest === 'visitante+veiculo+registro') {
+      registroFormattedData = {
+        data: formattedDate,
+        hora: formattedTime,
+        tipo: 'Entrada',
+        posto: 2,  //nivel_acesso posto principal
+        cracha_pessoa_numero: formData.cracha,
+        cracha_veiculo_numero: formData.veiculo_cracha,
+        cpf_visitante: formattedCPF,
+        placa_veiculo_sem_an: formData.veiculo_placa,
+        autorizador: formData.autorizador,
+        detalhe: formData.destino
+      };
+    }
+
+    try {
+      await server.post(`/registro_acesso`, registroFormattedData, {
+        headers: {
+          'Authentication': token,
+          'access-level': userDataParsed.nivel_acesso
+        }
+      });
+
+      if (typeRequest === 'visitante+registro') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Visitante e registro cadastrados com sucesso.");
+        setAlertSeverity("success");
+        cleanInputs()
+      } else if (typeRequest === 'visitante+veiculo+registro') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Visitante, veículo e registro cadastrados com sucesso.");
+        setAlertSeverity("success");
+        cleanInputs()
+      }
+    } catch (e) {
+      if (e.response.status && e.response.status == 400) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage(e.response.data.message);
+        setAlertSeverity("error");
+      } else {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage('Erro ao criar registro.');
+        setAlertSeverity("error");
+      }
+    }
+  }
+
+  const getFormattedDateTime = () => {
+    const date = new Date();
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    const formattedDate = `${year}/${month}/${day}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    return { formattedDate, formattedTime };
+  };
 
   return (
     <div className="pessoas-container">
@@ -788,12 +955,12 @@ function VisitanteComponent() {
                 className='filtering-input'
                 onChange={detectEntryFoto}
               />
-              {efetivoFoto && (
+              {visitanteFoto && (
                 <div className="foto-pessoa-preview">
                   <button className="remove-foto-button" onClick={removeFoto}>
                     <img src={Remove} />
                   </button>
-                  <img src={efetivoFoto} alt="Foto do Efetivo" className="pessoa-foto" />
+                  <img src={visitanteFoto} alt="Foto do Efetivo" className="pessoa-foto" />
                 </div>
               )}
             </>
@@ -949,7 +1116,7 @@ function VisitanteComponent() {
               <div className="input-container">
                 <p>RENAVAM</p>
                 <input
-                  type="text"
+                  type="number"
                   className='filtering-input'
                   disabled={disabledInputs.veiculo_renavam}
                   value={formData.veiculo_renavam}

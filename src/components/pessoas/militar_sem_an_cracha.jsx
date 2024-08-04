@@ -1,15 +1,12 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { server } from '../../services/server'
 import './style.css'
 import { IMaskInput } from "react-imask";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import uploadIcon from '../../assets/upload.svg'
-import Remove from '../../assets/remove_icon.svg'
 import UserPhoto from '../../assets/login/user-photo.svg'
 
 function MilitarSemANCrachaComponent() {
-  const [efetivoFoto, setEfetivoFoto] = useState("")
   // SnackBar config
   const [message, setMessage] = useState("");
   const [alertSeverity, setAlertSeverity] = useState('')
@@ -39,7 +36,7 @@ function MilitarSemANCrachaComponent() {
       foto: '',
 
       //Registro
-      entrada: 'Não',
+      entrada: 'militar',
       cracha: '',
       destino: '',
       veiculo_cracha: '',
@@ -69,7 +66,6 @@ function MilitarSemANCrachaComponent() {
 
       veiculo_tipo: true,
       veiculo_cor: true,
-      veiculo_placa: true,
       veiculo_renavam: true,
       veiculo_marca: true,
       veiculo_modelo: true
@@ -88,7 +84,7 @@ function MilitarSemANCrachaComponent() {
       foto: '',
 
       cracha: '',
-      entrada: 'Não',
+      entrada: 'militar',
       destino: '',
       veiculo_cracha: '',
 
@@ -114,7 +110,6 @@ function MilitarSemANCrachaComponent() {
 
       veiculo_tipo: true,
       veiculo_cor: true,
-      veiculo_placa: true,
       veiculo_renavam: true,
       veiculo_marca: true,
       veiculo_modelo: true
@@ -126,7 +121,6 @@ function MilitarSemANCrachaComponent() {
   const searchEfetivo = async (element) => {
 
     if (String(element).length == 7) {
-      console.log(2)
       let userData = localStorage.getItem('user');
       let userDataParsed = JSON.parse(userData);
       let token = localStorage.getItem("user_token")
@@ -174,12 +168,12 @@ function MilitarSemANCrachaComponent() {
           nome_guerra: true,
           unidade: true,
           graduacao: true,
-          email: true,
-          veiculo_placa: false,
+          email: true
         }))
       } catch (e) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Não foi encontrado um militar com este número de ordem!");
+        setAlertSeverity("error");
         setDisabledInputs((prevDisabledInputs) => ({
           ...prevDisabledInputs,
           numero_ordem: element,
@@ -188,7 +182,6 @@ function MilitarSemANCrachaComponent() {
           id_unidade: true,
           id_graduacao: true,
           email: true,
-          veiculo_placa: true,
         }))
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -199,7 +192,6 @@ function MilitarSemANCrachaComponent() {
           graduacao: '',
           email: '',
           foto: '',
-          veiculo_placa: ''
         }));
       }
     } else {
@@ -213,7 +205,6 @@ function MilitarSemANCrachaComponent() {
         graduacao: '',
         email: '',
         foto: '',
-        veiculo_placa: ''
       }));
 
       setDisabledInputs((prevDisabledInputs) => ({
@@ -223,7 +214,6 @@ function MilitarSemANCrachaComponent() {
         unidade: true,
         graduacao: true,
         email: true,
-        veiculo_placa: true,
       }))
     }
   }
@@ -231,11 +221,22 @@ function MilitarSemANCrachaComponent() {
   // Handle Registrar Entrada Change
 
   const changeRegistroEntrada = (element) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      entrada: element,
-    }));
-    if (element === 'Sim') {
+    setFormData((prevFormData) => ({ ...prevFormData, entrada: element }));
+    if (element == 'militar') {
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
+        cracha: false,
+        destino: false,
+        veiculo_cracha: true,
+      }));
+    } else if (element == 'veiculo') {
+      setDisabledInputs((prevDisabledInputs) => ({
+        ...prevDisabledInputs,
+        cracha: true,
+        destino: false,
+        veiculo_cracha: false,
+      }));
+    } else if (element == 'ambos') {
       setDisabledInputs((prevDisabledInputs) => ({
         ...prevDisabledInputs,
         cracha: false,
@@ -265,7 +266,7 @@ function MilitarSemANCrachaComponent() {
       ...prevFormData,
       veiculo_placa: element,
     }));
-    if (String(element).length === 7) {
+    if (String(element).length == 7) {
       let userData = localStorage.getItem('user');
       let userDataParsed = JSON.parse(userData);
       let token = localStorage.getItem('user_token');
@@ -342,11 +343,6 @@ function MilitarSemANCrachaComponent() {
     }
   }
 
-
-  const send = () => {
-    console.log(formData)
-  }
-
   //Handle Foto Input
 
   const bufferToBase64 = (data) => {
@@ -356,6 +352,252 @@ function MilitarSemANCrachaComponent() {
       binaryString += String.fromCharCode(bytes[i]);
     }
     return btoa(binaryString);
+  };
+
+  //Handle submit form
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (formData.entrada == 'militar') {
+      if (String(formData.numero_ordem).length != 7) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um número de ordem válido.");
+        setAlertSeverity("error");
+      } else if (formData.nome_completo == '' || formData.nome_guerra == '' || formData.unidade == '' || formData.email == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um militar válido.");
+        setAlertSeverity("error");
+      } else if (formData.cracha == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um crachá para o militar válido.");
+        setAlertSeverity("error");
+      } else if (formData.destino == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um destino válido.");
+        setAlertSeverity("error");
+      } else {
+        formatSendRequest();
+      }
+    } else if (formData.entrada == 'veiculo') {
+      if (formData.veiculo_cracha == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um crachá para o veículo válido.");
+        setAlertSeverity("error");
+      } else if (formData.destino == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um destino válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_placa.length != 7) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira uma placa válida.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_tipo == 'Selecione') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um tipo válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_cor == 'Selecione') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira uma cor válida.");
+        setAlertSeverity("error");
+      } else if (String(formData.veiculo_renavam).length != 11) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um RENAVAM válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_marca == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira uma marca válida.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_modelo == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um modelo válido.");
+        setAlertSeverity("error");
+      } else {
+        formatSendRequest();
+      }
+    } else if (formData.entrada == 'ambos') {
+      if (formData.numero_ordem.length != 7) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um número de ordem válido.");
+        setAlertSeverity("error");
+      } else if (formData.nome_completo == '' || formData.nome_guerra == '' || formData.unidade == '' || formData.email) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um militar válido.");
+        setAlertSeverity("error");
+      } else if (formData.cracha == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um crachá para o militar válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_cracha == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um crachá para o veículo válido.");
+        setAlertSeverity("error");
+      } else if (formData.destino == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um destino válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_placa.length != 7) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira uma placa válida.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_tipo == 'Selecione') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um tipo válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_cor == 'Selecione') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira uma cor válida.");
+        setAlertSeverity("error");
+      } else if (String(formData.veiculo_renavam).length != 11) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um RENAVAM válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_marca == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira uma marca válida.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_modelo == '') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um modelo válido.");
+        setAlertSeverity("error");
+      } else {
+        formatSendRequest();
+      }
+    }
+  };
+
+  //Types of requests
+
+  const formatSendRequest = async () => {
+    let userData = localStorage.getItem('user');
+    let userDataParsed = JSON.parse(userData);
+    let token = localStorage.getItem("user_token")
+
+    if (formData.entrada == 'ambos') {
+      sendRequestVeiculo(token, userDataParsed, 'ambos')
+    } else if (formData.entrada == 'militar') {
+      sendRequestRegistro(token, userDataParsed, 'militar')
+    } else if (formData.entrada == 'veiculo') {
+      sendRequestVeiculo(token, userDataParsed, 'veiculo')
+    }
+  };
+
+  //Veículo
+
+  const sendRequestVeiculo = async (token, userDataParsed, typeRequest) => {
+
+    let veiculoFormattedData = {
+      tipo: formData.veiculo_tipo,
+      cor_veiculo: formData.veiculo_cor,
+      placa: formData.veiculo_placa,
+      modelo: formData.veiculo_modelo,
+      marca: formData.veiculo_marca,
+      renavam: Number(formData.veiculo_renavam)
+    };
+    try {
+      await server.post(`/veiculo_an`, veiculoFormattedData, {
+        headers: {
+          'Authentication': token,
+          'access-level': userDataParsed.nivel_acesso
+        }
+      });
+      sendRequestRegistro(token, userDataParsed, typeRequest)
+    } catch (e) {
+      if (e.response.status && e.response.status == 400) {
+        sendRequestRegistro(token, userDataParsed, typeRequest)
+      } else {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage('Erro inesperado ao criar veículo.');
+        setAlertSeverity("error");
+      }
+    }
+  }
+
+  //Registro
+
+  const sendRequestRegistro = async (token, userDataParsed, typeRequest) => {
+    let registroFormattedData
+
+    const { formattedDate, formattedTime } = getFormattedDateTime();
+
+    if (typeRequest == 'militar') {
+      registroFormattedData = {
+        data: formattedDate,
+        hora: formattedTime,
+        tipo: 'Entrada',
+        posto: 2, //nivel_acesso posto principal
+        cracha_pessoa_numero: formData.cracha,
+        qrcode: formData.numero_ordem,
+        qrcode_autorizador: userDataParsed.usuario,
+        detalhe: formData.destino
+      }
+    } else if (typeRequest == 'veiculo') {
+      registroFormattedData = {
+        data: formattedDate,
+        hora: formattedTime,
+        tipo: 'Entrada',
+        posto: 2,  //nivel_acesso posto principal
+        cracha_veiculo_numero: formData.veiculo_cracha,
+        placa_veiculo_sem_an: formData.veiculo_placa,
+        qrcode_autorizador: userDataParsed.usuario,
+        detalhe: formData.destino
+      }
+    } else if (typeRequest == 'ambos') {
+      registroFormattedData = {
+        data: formattedDate,
+        hora: formattedTime,
+        tipo: 'Entrada',
+        posto: 2,  //nivel_acesso posto principal
+        cracha_pessoa_numero: formData.cracha,
+        cracha_veiculo_numero: formData.veiculo_cracha,
+        qrcode: formData.numero_ordem,
+        placa_veiculo_sem_an: formData.veiculo_placa,
+        qrcode_autorizador: userDataParsed.usuario,
+        detalhe: formData.destino
+      };
+    }
+    try {
+      await server.post(`/registro_acesso`, registroFormattedData, {
+        headers: {
+          'Authentication': token,
+          'access-level': userDataParsed.nivel_acesso
+        }
+      });
+
+      if (typeRequest == 'militar') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Militar e registro cadastrados com sucesso.");
+        setAlertSeverity("success");
+      } else if (typeRequest == 'veiculo') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Veículo e registro cadastrados com sucesso.");
+        setAlertSeverity("success");
+      } else if (typeRequest == 'ambos') {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Militar, veículo e registro cadastrados com sucesso.");
+        setAlertSeverity("success");
+      }
+      cleanInputs()
+    } catch (e) {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage('Erro ao inesperado ao criar registro.');
+      setAlertSeverity("error");
+    }
+  }
+
+  const getFormattedDateTime = () => {
+    const date = new Date();
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    const formattedDate = `${year}/${month}/${day}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    return { formattedDate, formattedTime };
   };
 
   return (
@@ -368,7 +610,7 @@ function MilitarSemANCrachaComponent() {
         <div className="session-input-militar-box-input">
           <div className="session-input-line1">
             <div className="input-container">
-              <p>Número de ordem*</p>
+              <p>Número de ordem</p>
               <IMaskInput
                 type="text"
                 mask="0000000"
@@ -378,7 +620,7 @@ function MilitarSemANCrachaComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Nome completo*</p>
+              <p>Nome completo</p>
               <input
                 type="text"
                 disabled={disabledInputs.nome_completo}
@@ -388,7 +630,7 @@ function MilitarSemANCrachaComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Nome de guerra*</p>
+              <p>Nome de guerra</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -400,7 +642,7 @@ function MilitarSemANCrachaComponent() {
           </div>
           <div className="session-input-line2">
             <div className="input-container">
-              <p>Unidade*</p>
+              <p>Unidade</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -410,7 +652,7 @@ function MilitarSemANCrachaComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Posto/Graduação*</p>
+              <p>Posto/Graduação</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -420,7 +662,7 @@ function MilitarSemANCrachaComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Email*</p>
+              <p>Email</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -446,15 +688,16 @@ function MilitarSemANCrachaComponent() {
         <h3>Autorizador</h3>
       </div>
       <div className="pessoas-section-input  session-input-autorizador-simple">
-      <div className="input-container">
-          <p>Inserir entrada deste dependente no sistema? </p>
+        <div className="input-container">
+          <p>Inserir entrada no sistema? </p>
           <select
             className='filtering-input'
             value={formData.entrada}
             onChange={(e) => changeRegistroEntrada(e.target.value)}
           >
-            <option value={'Não'}>Não</option>
-            <option value={'Sim'}>Sim</option>
+            <option value={'militar'}>Somente militar</option>
+            <option value={'veiculo'}>Somente veículo</option>
+            <option value={'ambos'}>Militar e veículo</option>
           </select>
         </div>
         <div className="input-container">
@@ -468,7 +711,7 @@ function MilitarSemANCrachaComponent() {
           />
         </div>
         <div className="input-container">
-          <p>Crachá*</p>
+          <p>Crachá</p>
           <input
             type="text"
             disabled={disabledInputs.cracha}
@@ -478,25 +721,12 @@ function MilitarSemANCrachaComponent() {
           />
         </div>
       </div>
-      <div className="pessoas-section-title">
-        <h3>Veículo</h3>
-      </div>
-      <div className="pessoas-section-input">
-        <div className="input-container">
-          <p>Está conduzindo?*</p>
-          <select
-            className='filtering-input'
-            value={formData.conduzindo}
-            onChange={(e) => setFormData({ ...formData, conduzindo: e.target.value })}
-          >
-            <option value={'Não'}>Não</option>
-            <option value={'Sim'}>Sim</option>
-          </select>
-        </div>
-      </div>
-      <div className="pessoas-section-input session-input-visitante4">
-        {formData.conduzindo != 'Não' && (
-          <>
+      {formData.entrada != 'militar' && (
+        <>
+          <div className="pessoas-section-title">
+            <h3>Veículo</h3>
+          </div>
+          <div className="pessoas-section-input session-input-visitante4">
             <div className="input-container">
               <p>Crachá</p>
               <input
@@ -508,15 +738,15 @@ function MilitarSemANCrachaComponent() {
               />
             </div>
             <div className="input-container">
-                <p>Placa</p>
-                <input
-                  type="text"
-                  className='filtering-input'
-                  disabled={disabledInputs.veiculo_placa}
-                  value={formData.veiculo_placa}
-                  onChange={(e) => searchVeiculos(e.target.value )}
-                />
-              </div>
+              <p>Placa</p>
+              <input
+                type="text"
+                className='filtering-input'
+                disabled={disabledInputs.veiculo_placa}
+                value={formData.veiculo_placa}
+                onChange={(e) => searchVeiculos(e.target.value)}
+              />
+            </div>
             <div className="box-input-veiculo">
               <div className="input-container">
                 <p>Tipo</p>
@@ -591,15 +821,15 @@ function MilitarSemANCrachaComponent() {
                 />
               </div>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
       <div className="form-buttons-container-pessoas">
         <div className="form-buttons">
           <button onClick={cleanInputs}>
             Limpar campos
           </button>
-          <button onClick={send}>
+          <button onClick={handleSubmit}>
             Confirmar
           </button>
         </div>
@@ -616,7 +846,7 @@ function MilitarSemANCrachaComponent() {
           {message}
         </Alert>
       </Snackbar>
-    </div>
+    </div >
 
   )
 }

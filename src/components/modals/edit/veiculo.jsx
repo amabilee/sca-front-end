@@ -136,7 +136,7 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
     useEffect(() => {
         searchEfetivo()
     }, [])
-    
+
 
     return (
         <>
@@ -216,6 +216,7 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                         <div className="input-container">
                             <p>RENAVAM</p>
                             <input
+                                type="number"
                                 className='filtering-input'
                                 value={receivedData.renavam}
                                 onChange={(e) => setReceivedData({ ...receivedData, renavam: e.target.value })} />

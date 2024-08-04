@@ -113,24 +113,40 @@
     font-weight: 500;
 }
 
-/* Table relatório */
+/* Table relatórios */
 
 .table-relatorio thead tr th{
     width: 15%;
 }
 
-.table-relatorio thead tr th:nth-child(1),
 .table-relatorio thead tr th:nth-child(2),
 .table-relatorio thead tr th:nth-child(3),
 .table-relatorio thead tr th:nth-child(4){
     width: 11%;
 }
+.table-relatorio thead tr th:nth-child(1),
+.table-relatorio thead tr th:nth-child(7){
+    width: 14%;
+}
 
 .table-relatorio thead tr th:nth-child(5),
-.table-relatorio thead tr th:nth-child(6),
-.table-relatorio thead tr th:nth-child(7){
+.table-relatorio thead tr th:nth-child(6){
     width: 20%;
 }
+
+.table-relatorio-veiculo thead tr th:nth-child(1),
+.table-relatorio-veiculo thead tr th:nth-child(2),
+.table-relatorio-veiculo thead tr th:nth-child(3),
+.table-relatorio-veiculo thead tr th:nth-child(4),
+.table-relatorio-veiculo thead tr th:nth-child(5),
+.table-relatorio-veiculo thead tr th:nth-child(6),
+.table-relatorio-veiculo thead tr th:nth-child(7){
+    width: 15%;
+}
+
+.table-relatorio-veiculo tbody tr td:nth-child(5){
+    text-transform: uppercase;
+} 
 
 
 

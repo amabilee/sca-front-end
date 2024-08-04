@@ -14,6 +14,7 @@ import EfetivosPage from '../pages/efetivos/efetivo.jsx';
 import VeiculosPage from '../pages/veiculos/veiculo.jsx';
 import CrachasPage from '../pages/crachas/cracha.jsx';
 import PessoasPage from '../pages/pessoas/pessoa.jsx';
+import GerenciaPage from '../pages/gerencia/gerencia.jsx';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const { signOut } = UseAuth();
@@ -96,6 +97,8 @@ const Efetivos = (props) => <PrivateRoute component={EfetivosPage} {...props} />
 const Veiculos = (props) => <PrivateRoute component={VeiculosPage} {...props} />;
 const Crachas = (props) => <PrivateRoute component={CrachasPage} {...props} />;
 const Pessoas = (props) => <PrivateRoute component={PessoasPage} {...props} />;
+const Gerencia = (props) => <PrivateRoute component={GerenciaPage} {...props} />;
+
 
 export {
   Usuarios,
@@ -108,4 +111,5 @@ export {
   Veiculos,
   Crachas,
   Pessoas,
+  Gerencia
 };

@@ -347,7 +347,6 @@ function DependenteComponent() {
           militar: ''
         }));
         if (String(element).length === 7) {
-          console.log('entrou')
           let userData = localStorage.getItem('user');
           let userDataParsed = JSON.parse(userData);
           let token = localStorage.getItem('user_token');
@@ -358,8 +357,6 @@ function DependenteComponent() {
                 'access-level': userDataParsed.nivel_acesso,
               },
             });
-
-            console.log(response.data.length)
             if (response.data.length !== 0) {
               const efetivoColected = response.data[0];
 
@@ -490,42 +487,55 @@ function DependenteComponent() {
     if (formData.cpf.length != 14) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um CPF válido.");
+      setAlertSeverity("error");
     } else if (formData.nome_completo.length === 0) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um nome completo válido.");
+      setAlertSeverity("error");
     } else if (formData.parentesco === 'Selecione') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um parentesco válido.");
+      setAlertSeverity("error");
     } else if (formData.id_efetivo === '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um militar válido.");
+      setAlertSeverity("error");
     } else if (formData.entrada === 'Sim' && formData.cracha == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o dependente válido.");
+      setAlertSeverity("error");
     } else if (formData.entrada === 'Sim' && formData.destino == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um destino válido.");
+      setAlertSeverity("error");
     } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && formData.veiculo_cracha == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o veículo válido.");
+      setAlertSeverity("error");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_placa.length != 7) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma placa válida.");
+      setAlertSeverity("error");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_tipo == 'Selecione') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um tipo válido.");
+      setAlertSeverity("error");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_cor == 'Selecione') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma cor válida.");
-    } else if (formData.conduzindo === 'Sim' && formData.veiculo_renavam == '') {
+      setAlertSeverity("error");
+    } else if (formData.conduzindo === 'Sim' && String(formData.veiculo_renavam).length != 11) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um RENAVAM válido.");
+      setAlertSeverity("error");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_marca == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma marca válida.");
+      setAlertSeverity("error");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_modelo == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um modelo válido.");
+      setAlertSeverity("error");
     } else {
       formatSendRequest();
     }
@@ -597,7 +607,7 @@ function DependenteComponent() {
         sendRequestVeiculo(token, userDataParsed, typeRequest)
       }
     } catch (e) {
-      if (e.response.status == 400) {
+      if (e.response.status && e.response.status == 400) {
         if (typeRequest == 'dependente') {
           setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
           setMessage(e.response.data.message);
@@ -629,7 +639,6 @@ function DependenteComponent() {
       marca: formData.veiculo_marca,
       renavam: Number(formData.veiculo_renavam)
     };
-    console.log(veiculoFormattedData)
     try {
       await server.post(`/veiculo_an`, veiculoFormattedData, {
         headers: {
@@ -638,7 +647,7 @@ function DependenteComponent() {
         }
       });
 
-      if ('dependente+veiculo+registro') {
+      if (typeRequest === 'dependente+veiculo+registro') {
         sendRequestRegistro(token, userDataParsed, typeRequest)
       } else if (typeRequest === 'dependente+veiculo') {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
@@ -678,12 +687,10 @@ function DependenteComponent() {
         }));
       }
     } catch (e) {
-      if (e.response.status == 400) {
+      if (e.response.status && e.response.status == 400) {
         if (typeRequest === 'dependente+veiculo+registro') {
-          console.log(1)
           sendRequestRegistro(token, userDataParsed, typeRequest)
         } else if (typeRequest === 'dependente+veiculo') {
-          console.log(2)
           setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
           setMessage(e.response.data.message);
           setAlertSeverity("error");
@@ -712,7 +719,7 @@ function DependenteComponent() {
         posto: 2, //nivel_acesso posto principal
         cracha_pessoa_numero: formData.cracha,
         cpf_dependente: formattedCPF,
-        autorizador: formData.militar,
+        qrcode_autorizador: userDataParsed.usuario,
         detalhe: formData.destino
       }
     } else if (typeRequest === 'dependente+veiculo+registro') {
@@ -725,12 +732,10 @@ function DependenteComponent() {
         cracha_veiculo_numero: formData.veiculo_cracha,
         cpf_dependente: formattedCPF,
         placa_veiculo_sem_an: formData.veiculo_placa,
-        autorizador: formData.militar,
+        qrcode_autorizador: userDataParsed.usuario,
         detalhe: formData.destino
       };
     }
-
-    console.log(registroFormattedData)
     try {
       await server.post(`/registro_acesso`, registroFormattedData, {
         headers: {
@@ -743,82 +748,16 @@ function DependenteComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Dependente e registro cadastrados com sucesso.");
         setAlertSeverity("success");
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          id_efetivo: '',
-          numero_ordem: '',
-          militar: '',
-          nome_completo: '',
-          parentesco: 'Selecione',
-          cpf: '',
-
-          cracha: '',
-          entrada: 'Não',
-          destino: '',
-          veiculo_cracha: '',
-        }))
-
-        setDisabledInputs((prevDisabledInputs) => ({
-          ...prevDisabledInputs,
-          nome_completo: true,
-          parentesco: true,
-          numero_ordem: true,
-          militar: true,
-          veiculo_placa: true,
-
-          cracha: true,
-          destino: true,
-          veiculo_cracha: true,
-        }));
+        cleanInputs()
 
       } else if (typeRequest === 'dependente+veiculo+registro') {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Dependente, veículo e registro cadastrados com sucesso.");
         setAlertSeverity("success");
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          id_efetivo: '',
-          numero_ordem: '',
-          militar: '',
-          nome_completo: '',
-          parentesco: 'Selecione',
-          cpf: '',
-
-          conduzindo: 'Não',
-          veiculo_placa: '',
-          veiculo_tipo: 'Selecione',
-          veiculo_cor: 'Selecione',
-          veiculo_renavam: '',
-          veiculo_marca: '',
-          veiculo_modelo: '',
-
-          cracha: '',
-          entrada: 'Não',
-          destino: '',
-          veiculo_cracha: '',
-        }));
-
-        setDisabledInputs((prevDisabledInputs) => ({
-          ...prevDisabledInputs,
-          nome_completo: true,
-          parentesco: true,
-          numero_ordem: true,
-          militar: true,
-          veiculo_placa: true,
-
-          veiculo_tipo: true,
-          veiculo_cor: true,
-          veiculo_renavam: true,
-          veiculo_marca: true,
-          veiculo_modelo: true,
-
-          cracha: true,
-          destino: true,
-          veiculo_cracha: true,
-        }));
+        cleanInputs()
       }
     } catch (e) {
-      if (e.response.status == 400) {
+      if (e.response.status && e.response.status == 400) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage(e.response.data.message);
         setAlertSeverity("error");
@@ -1039,8 +978,7 @@ function DependenteComponent() {
               <div className="input-container">
                 <p>RENAVAM</p>
                 <input
-                  type="text"
-                  maxLength={9}
+                  type="number"
                   className='filtering-input'
                   disabled={disabledInputs.veiculo_renavam}
                   value={formData.veiculo_renavam}

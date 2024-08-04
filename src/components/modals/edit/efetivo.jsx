@@ -28,7 +28,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
 
     const confirmEditing = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        console.log(receivedData)
         if (graduacaoSelected != 'CIVIL' && String(receivedData.qrcode_efetivo).length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
@@ -180,7 +179,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
     const detectEntryFoto = (e) => {
         const file = e.target.files[0];
         if (file) {
-            console.log(file.type)
             if (file.type == 'image/gif' || file.type == 'image/jpeg' || file.type == 'image/png') {
                 const fileURL = URL.createObjectURL(file);
                 setReceivedData({ ...receivedData, foto: file });

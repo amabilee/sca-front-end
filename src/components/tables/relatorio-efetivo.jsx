@@ -35,9 +35,10 @@ const RelatorioEfetivoTable = ({ data }) => {
               <td>{formatDate(registro.data)}</td>
               <td>{registro.hora}</td>
               <td>{registro.Posto.nome}</td>
-              <td>{registro.EfetivoQrcode ?
-                `${registro.EfetivoQrcode.Efetivo.Graduacao.sigla} ${registro.EfetivoQrcode.Efetivo.nome_guerra}` : `${registro.Dependente.nome} (${registro.Dependente.cpf})`}
-              </td>
+              <td>{registro.EfetivoQrcode ? `${registro.EfetivoQrcode.Efetivo.Graduacao.sigla} ${registro.EfetivoQrcode.Efetivo.nome_guerra}` :
+                registro.Dependente ? `${registro.Dependente.nome} (${registro.Dependente.cpf})` :
+                registro.Visitante ? `${registro.Visitante.nome} (${registro.Visitante.cpf})` : null
+              }</td>
               <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: registro.autorizador}</td>
               <td>{registro.detalhe ? registro.detalhe : null}</td>
             </tr>

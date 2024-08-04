@@ -96,7 +96,6 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             const [day, month, year] = receivedData.val_cnh.split('/');
             const formattedValCnh = `${year}/${month}/${day}`;
             receivedData.val_cnh = formattedValCnh;
-            console.log(receivedData.val_cnh)
             sendRequest();
         }
     };
@@ -193,7 +192,6 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             setReceivedData({ ...receivedData, foto: file });
             setEfetivoFoto(fileURL);
         }
-        console.log(file)
     }
 
     const removeFoto = () => {

@@ -61,7 +61,6 @@ function Efetivos() {
         let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
         setNivelAcesso(userDataParsed.nivel_acesso)
-        console.log(`/efetivo?page=${page}${filter}`)
         try {
             const response = await server.get(`/efetivo?page=${page}${filter}`, {
                 headers: {
@@ -110,7 +109,6 @@ function Efetivos() {
             filter += `&unidade=${filteringConditions.unidade}`;
         }
         getEfetivos(filter, 1);
-        console.log(filter)
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 };
         });
@@ -119,7 +117,6 @@ function Efetivos() {
     // Open and Close Modals
 
     const openModal = async (type, data) => {
-        console.log(1, data);
         switch (type) {
             case 'edit':
                 let userData = localStorage.getItem('user');
@@ -134,7 +131,6 @@ function Efetivos() {
                             'access-level': userDataParsed.nivel_acesso
                         }
                     });
-                    console.log(2, response.data);
                     sendData = response.data;
                 } catch (e) {
                     setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
