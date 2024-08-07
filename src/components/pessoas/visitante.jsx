@@ -485,7 +485,7 @@ function VisitanteComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    
     if (formData.cpf.length != 14) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um CPF válido.");
@@ -561,6 +561,7 @@ function VisitanteComponent() {
 
   const sendRequestVisitante = async (token, userDataParsed, typeRequest) => {
     let formattedCPF = String(formData.cpf).replace(/\D/g, '')
+    let formattedTelefone = String(formData.telefone).replace(/\D/g, '')
 
     const formDataVisitante = new FormData();
     formDataVisitante.append('cpf', Number(formattedCPF),);
@@ -570,7 +571,7 @@ function VisitanteComponent() {
     formDataVisitante.append('bairro', formData.bairro,);
     formDataVisitante.append('estado', formData.estado,);
     formDataVisitante.append('complemento', formData.complemento != '' ? formData.complemento : null,);
-    formDataVisitante.append('telefone', formData.telefone != '' ? formData.telefone : null,);
+    formDataVisitante.append('telefone', formData.telefone != '' ? formattedTelefone : null,);
     formDataVisitante.append('empresa', formData.empresa != '' ? formData.empresa : null,);
     formDataVisitante.append('foto', formData.foto != '' ? formData.foto : null);
 
@@ -621,7 +622,7 @@ function VisitanteComponent() {
         sendRequestVeiculo(token, userDataParsed, typeRequest)
       }
     } catch (e) {
-      if (e.response.status && e.response.status == 400) {
+      if (e.response && e.response.status == 400) {
         if (typeRequest === 'visitante') {
           setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
           setMessage(e.response.data.message);

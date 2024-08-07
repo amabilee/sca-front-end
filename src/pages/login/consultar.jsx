@@ -72,7 +72,7 @@ function ConsultarEfetivo() {
             });
 
             try {
-                const response2 = await server.get(`/veiculo?militar=${response.data[0].id}&ativo_veiculo=true`);
+                const response2 = await server.get(`/veiculo?ativo_veiculo=true&efetivo=${response.data[0].id}`);
                 setVeiculosData(response2.data.formattedEntities)
             } catch (e) {
                 console.log(e)
