@@ -48,7 +48,7 @@ export default function Veiculos({ closeModal }) {
         let token = localStorage.getItem("user_token")
         setNivelAcesso(userDataParsed.nivel_acesso)
         try {
-            const response = await server.get(`/veiculo?page=${page}${filter}`, {
+            const response = await server.get(`/veiculo?page=${page}&inativo=true${filter}`, {
                 headers: {
                     'Authentication': token,
                     'access-level': userDataParsed.nivel_acesso

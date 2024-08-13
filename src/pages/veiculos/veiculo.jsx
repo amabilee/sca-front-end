@@ -53,7 +53,7 @@ function Veiculos() {
 
     // Data from the DB
     useEffect(() => {
-        getVeiculos('&ativo_veiculo=true', 1);
+        getVeiculos('', 1);
     }, []);
 
     const getVeiculos = async (filter, page) => {
@@ -61,8 +61,9 @@ function Veiculos() {
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
         setNivelAcesso(userDataParsed.nivel_acesso)
+        console.log(filter)
         try {
-            const response = await server.get(`/veiculo?page=${page}${filter}`, {
+            const response = await server.get(`/veiculo?page=${page}&ativo=true${filter}`, {
                 headers: {
                     'Authentication': token,
                     'access-level': userDataParsed.nivel_acesso

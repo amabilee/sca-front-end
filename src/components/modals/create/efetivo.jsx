@@ -61,7 +61,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
 
     const confirmCreating = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
+
         if (graduacaoSelected != 'CIVIL' && receivedData.qrcode_efetivo.length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
@@ -86,16 +86,12 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         } else if (receivedData.id_alerta == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
-        } else if (receivedData.cnh.length != 9) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira um número de cnh válido.");
-        } else if (receivedData.val_cnh.length != 10) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira uma data de CNH válida no formato DD/MM/AAAA.");
         } else {
-            const [day, month, year] = receivedData.val_cnh.split('/');
-            const formattedValCnh = `${year}/${month}/${day}`;
-            receivedData.val_cnh = formattedValCnh;
+            if (receivedData.val_cnh != null) {
+                const [day, month, year] = receivedData.val_cnh.split('/');
+                const formattedValCnh = `${year}/${month}/${day}`;
+                receivedData.val_cnh = formattedValCnh;
+            }
             sendRequest();
         }
     };
@@ -110,8 +106,12 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         formData.append('id_graduacao', receivedData.id_graduacao);
         formData.append('email', receivedData.email);
         formData.append('id_alerta', receivedData.id_alerta);
-        formData.append('cnh', receivedData.cnh);
-        formData.append('val_cnh', receivedData.val_cnh);
+        if (receivedData.cnh != null) {
+            formData.append('cnh', receivedData.cnh);
+        }
+        if (receivedData.val_cnh != null) {
+            formData.append('val_cnh', receivedData.val_cnh);
+        }
         formData.append('ativo_efetivo', receivedData.ativo_efetivo);
         formData.append('foto', receivedData.foto);
 
@@ -293,7 +293,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             <p>Número da CNH</p>
                             <IMaskInput
                                 type="text"
-                                mask="000000000"
+                                mask="00000000000"
                                 className='filtering-input'
                                 value={receivedData.cnh}
                                 onChange={(e) => setReceivedData({ ...receivedData, cnh: e.target.value })}
