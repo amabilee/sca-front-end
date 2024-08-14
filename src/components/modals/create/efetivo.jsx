@@ -107,11 +107,16 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         formData.append('email', receivedData.email);
         formData.append('id_alerta', receivedData.id_alerta);
         if (receivedData.cnh != null) {
-            formData.append('cnh', receivedData.cnh);
+            formData.append('cnh', Number(receivedData.cnh));
+        } else {
+            formData.append('cnh', null);
         }
-        if (receivedData.val_cnh != null) {
+        if (receivedData.val_cnh.length == 10) {
             formData.append('val_cnh', receivedData.val_cnh);
+        } else {
+            formData.append('val_cnh', null);
         }
+        console.log(formData.val_cnh)
         formData.append('ativo_efetivo', receivedData.ativo_efetivo);
         formData.append('foto', receivedData.foto);
 
@@ -131,6 +136,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Erro ao enviar dados.");
+            console.log(e.response.data.message)
         }
     };
 
@@ -221,7 +227,6 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             <p>Número de ordem ou documento*</p>
                             <input
                                 type="number"
-                                maxLength={10}
                                 className='filtering-input'
                                 value={receivedData.qrcode_efetivo}
                                 onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value })}

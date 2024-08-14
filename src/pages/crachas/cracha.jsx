@@ -373,27 +373,29 @@ function Crachas() {
                 break;
             default:
                 setDomType(BAANDom)
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    unidade: 'BAAN',
+                }))
                 break;
         }
     }
 
     //Handle imprimir
 
-    const [isPrinting, setIsPrinting] = useState(false)
-
     const print = () => {
         setTimeout(async () => {
             const dataUrl = await domToPng(document.querySelector('#print'), {
                 backgroundColor: null,
-                width: 400 * 2,
-                height: 569 * 2,
+                width: 400,
+                height: 569,
                 scale: 2
             });
             const img = document.createElement('img');
             img.src = dataUrl;
-            img.style.width = '100%';
-            img.style.height = 'auto';
-            const printWindow = window.open('', '', 'height=600,width=800');
+            img.style.width = '260px';
+            img.style.height = '370px';
+            const printWindow = window.open('', '', 'height=569,width=400');
             printWindow.document.open();
             printWindow.document.write(`
                     <html>
@@ -613,7 +615,7 @@ function Crachas() {
                             {crachaType != null && formData.categoria == 'Qrcode' && (
                                 <>
                                     {domType != '' && (
-                                        <img src={domType} className={domType != '' ? 'cracha-normal-dom' : 'cracha-normal-dom-empty'} />
+                                        <img src={domType} className={domType != '' ? 'cracha-qrcode-dom' : 'cracha-normal-dom-empty'} />
                                     )}
                                     <p className='cracha-qrcode-dom-title'>{formData.unidade}</p>
                                     <p className='cracha-qrcode-militar'>{formData.militar}</p>

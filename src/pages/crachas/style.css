@@ -68,11 +68,11 @@
     width: 250px;
 }
 
-.input-foto {
+.cracha-form-section .input-foto {
     margin: 90px 0 0 30px;
 }
 
-.input-foto img {
+.cracha-form-section .input-foto img {
     object-fit: cover;
 }
 
@@ -204,6 +204,15 @@
 
 /* Cracha Qrcode result config */
 
+.cracha-qrcode-dom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px 0px 0px 47px;
+    width: 130px;
+    height: 110px;
+}
+
 .cracha-qrcode-dom-title {
     position: absolute;
     top: 0;
@@ -229,10 +238,10 @@
     position: absolute;
     top: 0;
     left: 0;
-    padding: 275px 0px 0px 34px;
+    padding: 270px 0px 0px 32px;
     object-fit: cover;
     width: 185px;
-    height: 455px;
+    height: 457px;
 }
 
 .cracha-qrcode-foto-empty {

@@ -21,7 +21,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         horizontal: 'center',
     });
     const { vertical, horizontal, open } = state;
-
+    
     const handleClose = () => {
         setState({ ...state, open: false });
     };
@@ -306,14 +306,14 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                                 type="text"
                                 mask="00000000000"
                                 className='filtering-input'
-                                value={receivedData.cnh}
+                                value={String(receivedData.cnh)}
                                 onChange={(e) => setReceivedData({ ...receivedData, cnh: e.target.value })}
                             />
                         </div>
                         <div className="input-container">
                             <p>Validade da CNH*</p>
                             <IMaskInput
-                                mask="00/00/0000"
+                                mask="00-00-0000"
                                 className='filtering-input'
                                 value={receivedData.val_cnh}
                                 onChange={(e) => setReceivedData({ ...receivedData, val_cnh: e.target.value })}
