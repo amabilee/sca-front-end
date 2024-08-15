@@ -934,11 +934,11 @@ function DependenteComponent() {
               <p>Placa</p>
               <input
                 type="text"
-                maxLength="7"
+                maxLength={7}
                 className='filtering-input'
                 value={formData.veiculo_placa}
                 disabled={disabledInputs.veiculo_placa}
-                onChange={(e) => searchVeiculos(e.target.value)}
+                onChange={(e) => searchVeiculos(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))}
               />
             </div>
             <div className="box-input-veiculo">

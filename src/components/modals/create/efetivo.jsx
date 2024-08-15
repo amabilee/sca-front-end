@@ -120,7 +120,6 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         }
         formData.append('ativo_efetivo', receivedData.ativo_efetivo);
         formData.append('foto', receivedData.foto);
-        // console.log(qrcodeCurrent.slice(0, -1))
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")

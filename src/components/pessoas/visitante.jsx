@@ -536,7 +536,7 @@ function VisitanteComponent() {
     } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && formData.veiculo_cracha == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o veículo válido.");
-    } else if (formData.conduzindo === 'Sim' && formData.veiculo_placa.length != 7) {
+    } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa)) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma placa válida.");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_tipo == 'Selecione') {
@@ -558,6 +558,11 @@ function VisitanteComponent() {
       formatSendRequest();
     }
   };
+
+  const validarPlaca = (placa) => {
+    return /^[A-Z]{3}\d{3}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
+  };
+  
 
   //Types of requests
 
@@ -1087,10 +1092,11 @@ function VisitanteComponent() {
               <p>Placa</p>
               <input
                 type="text"
+                maxLength={7}
                 className='filtering-input'
                 disabled={disabledInputs.veiculo_placa}
                 value={formData.veiculo_placa}
-                onChange={(e) => searchVeiculos(e.target.value)}
+                onChange={(e) => searchVeiculos(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))}
               />
             </div>
             <div className="box-input-veiculo">
@@ -1139,11 +1145,11 @@ function VisitanteComponent() {
               <div className="input-container">
                 <p>RENAVAM</p>
                 <input
-                  type="number"
+                  type="text"
                   className='filtering-input'
                   disabled={disabledInputs.veiculo_renavam}
                   value={formData.veiculo_renavam}
-                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value.replace(/[^0-9]/g, "") })}
                 />
               </div>
               <div className="input-container">

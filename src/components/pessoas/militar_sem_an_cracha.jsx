@@ -752,10 +752,11 @@ function MilitarSemANCrachaComponent() {
               <p>Placa</p>
               <input
                 type="text"
+                maxLength={7}
                 className='filtering-input'
-                disabled={disabledInputs.veiculo_placa}
                 value={formData.veiculo_placa}
-                onChange={(e) => searchVeiculos(e.target.value)}
+                onChange={(e) => searchVeiculos(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))}
+
               />
             </div>
             <div className="box-input-veiculo">

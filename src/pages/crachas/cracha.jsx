@@ -252,7 +252,7 @@ function Crachas() {
                     }
                     break;
                 case 'Qrcode':
-                    if (formData.validade.length != 10) {
+                    if (formData.validade.length != 10 || !validarData(formData.validade)) {
                         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                         setMessage("Insira uma validade válida.");
                     } else if (formData.saram.length != 7) {
@@ -316,7 +316,7 @@ function Crachas() {
                     }
                     break;
                 case 'Qrcode':
-                    if (formData.validade.length != 10) {
+                    if (formData.validade.length != 10 || !validarData(formData.validade)) {
                         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                         setMessage("Insira uma validade válida.");
                     } else if (formData.saram.length != 7) {
@@ -380,6 +380,11 @@ function Crachas() {
                 break;
         }
     }
+
+    const validarData = (data) => {
+        return /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/.test(data);
+    }
+      
 
     //Handle imprimir
 
