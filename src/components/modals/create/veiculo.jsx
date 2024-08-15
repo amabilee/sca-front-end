@@ -171,12 +171,12 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
                     <div className="veiculo-inputs-1">
                         <div className="input-container">
                             <p>Número de ordem ou documento</p>
-                            <IMaskInput
+                            <input
                                 type="text"
-                                mask="0000000000"
+                                maxLength={11}
                                 className='filtering-input'
                                 value={efetivoData.qrcode_efetivo}
-                                onChange={(e) => searchEfetivo(e.target.value)}
+                                onChange={(e) => searchEfetivo(e.target.value.replace(/[^0-9]/g, ""))}
                             />
                         </div>
                         <div className="input-container">

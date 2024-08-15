@@ -150,9 +150,11 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                         <div className="input-container">
                             <p>Número de ordem</p>
                             <input
+                                type="text"
+                                maxLength={11}
                                 className='filtering-input'
                                 value={efetivoData.qrcode_efetivo}
-                                onChange={(e) => searchEfetivo(e.target.value)}
+                                onChange={(e) => searchEfetivo(e.target.value.replace(/[^0-9]/g, ""))}
                             />
                         </div>
                         <div className="input-container">

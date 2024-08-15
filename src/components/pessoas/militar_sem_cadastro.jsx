@@ -191,6 +191,7 @@ function MilitarSemCadastroComponent() {
           'access-level': userDataParsed.nivel_acesso
         }
       });
+      console.log(response.data.entities)
       setSituacaoOptions(response.data.entities)
     } catch (e) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
@@ -351,12 +352,21 @@ function MilitarSemCadastroComponent() {
 
         const veiculoColected = response.data;
 
+        let revanamLength = String(veiculoColected.renavam).length
+        let finalRenavam = veiculoColected.renavam
+        if (revanamLength != 11) {
+          let diferenceRenavamLength = 11 - revanamLength
+          for (let i = 0; i < diferenceRenavamLength; i++) {
+            finalRenavam = "0" + finalRenavam
+          }
+        }
+
         setFormData((prevFormData) => ({
           ...prevFormData,
           veiculo_tipo: veiculoColected.tipo,
           veiculo_cor: veiculoColected.cor_veiculo,
           veiculo_placa: element,
-          veiculo_renavam: veiculoColected.renavam,
+          veiculo_renavam: finalRenavam,
           veiculo_marca: veiculoColected.marca,
           veiculo_modelo: veiculoColected.modelo,
         }));
@@ -755,12 +765,12 @@ function MilitarSemCadastroComponent() {
           <div className="session-input-line1">
             <div className="input-container">
               <p>Número de ordem*</p>
-              <IMaskInput
+              <input
                 type="text"
-                mask="0000000"
+                maxLength={7}
                 className='filtering-input'
                 value={formData.numero_ordem}
-                onChange={(e) => searchEfetivo(e.target.value)}
+                onChange={(e) => searchEfetivo(e.target.value.replace(/[^0-9]/g, ""))}
               />
             </div>
             <div className="input-container">
@@ -789,7 +799,7 @@ function MilitarSemCadastroComponent() {
                 value={formData.id_alerta}
                 disabled={disabledInputs.id_alerta}
                 className='filtering-input'
-                onChange={(e) => setReceivedData({ ...receivedData, id_alerta: e.target.value })}>
+                onChange={(e) => setFormData({ ...formData, id_alerta: e.target.value })}>
                 <option value={0}>Nenhuma</option>
                 {situacaoOptions.map((modulo, i) => (
                   <option key={i} value={modulo.id}>{modulo.nome_alerta}</option>
@@ -897,10 +907,11 @@ function MilitarSemCadastroComponent() {
           <p>Crachá*</p>
           <input
             type="text"
+            maxLength={5}
             disabled={disabledInputs.cracha}
             className='filtering-input'
             value={formData.cracha}
-            onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, cracha: e.target.value.replace(/[^0-9]/g, "")})}
           />
         </div>
       </div>
@@ -927,10 +938,11 @@ function MilitarSemCadastroComponent() {
               <p>Crachá</p>
               <input
                 type="text"
+                maxLength={5}
                 className='filtering-input'
                 disabled={disabledInputs.veiculo_cracha}
                 value={formData.veiculo_cracha}
-                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value.replace(/[^0-9]/g, "") })}
               />
             </div>
             <div className="input-container">
@@ -989,11 +1001,12 @@ function MilitarSemCadastroComponent() {
               <div className="input-container">
                 <p>RENAVAM</p>
                 <input
-                  type="number"
+                  type="text"
+                  maxLength={11}
                   className='filtering-input'
                   disabled={disabledInputs.veiculo_renavam}
                   value={formData.veiculo_renavam}
-                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value.replace(/[^0-9]/g, "")  })}
                 />
               </div>
               <div className="input-container">

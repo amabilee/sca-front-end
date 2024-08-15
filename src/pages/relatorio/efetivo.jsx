@@ -72,6 +72,8 @@ function RelatorioEfetivo() {
         if (filteringConditions.sentinela_autorizador !== '') {
             filter += `&sentinela_autorizador=${filteringConditions.sentinela_autorizador}`;
         }
+
+        console.log(filter)
         getRegistros(filter, 1)
         setPaginationData(prevState => {
             return { ...prevState, filtering: filter, currentPage: 1 }

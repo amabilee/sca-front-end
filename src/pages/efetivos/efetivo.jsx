@@ -246,11 +246,11 @@ function Efetivos() {
                     <div className="input-container">
                         <p>Número de ordem ou documento</p>
                         <input
-                            type="number"
+                            type="text"
                             maxLength={10}
                             className='filtering-input'
                             value={filteringConditions.qrcode_efetivo}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode_efetivo: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode_efetivo: e.target.value.replace(/[^0-9]/g, "") })}
                         />
                     </div>
                     <div className="input-container">

@@ -23,6 +23,7 @@ function ConsultarEfetivo() {
     });
 
     const handleNumeroOrdemChange = (data) => {
+        
         if (data.length === 7 || data.length === 10) {
             getEfetivo(data);
         } else {
@@ -51,31 +52,34 @@ function ConsultarEfetivo() {
     const getEfetivo = async (numero) => {
         try {
             const response = await server.get(`/efetivo/consulta/${numero}`);
-            const { nome_completo, nome_guerra, foto, Unidade, email, Graduacao, Fotos, qrcode_efetivo } = response.data[0];
-            let fotoBase64 = '';
-            if (Fotos && Fotos.length > 0) {
-                try {
-                    const fotoBuffer = Fotos[0].foto.data;
-                    fotoBase64 = `data:image/png;base64,${bufferToBase64(fotoBuffer)}`;
-                } catch (error) {
-                    console.error('Error converting buffer to Base64:', error);
-                }
-            }
-            setEfetivoData({
-                qrcode_efetivo: String(qrcode_efetivo) || 0,
-                nome_completo: nome_completo || '',
-                nome_guerra: nome_guerra || '',
-                foto: fotoBase64,
-                id_unidade: Unidade.nome || '',
-                email: email || '',
-                id_graduacao: Graduacao.sigla || ''
-            });
 
-            try {
-                const response2 = await server.get(`/veiculo?ativo_veiculo=true&efetivo=${response.data[0].id}`);
-                setVeiculosData(response2.data.formattedEntities)
-            } catch (e) {
-                console.log(e)
+            if (response.data[0]) {
+                const { nome_completo, nome_guerra, foto, Unidade, email, Graduacao, Fotos, qrcode_efetivo } = response.data[0];
+                let fotoBase64 = '';
+                if (Fotos && Fotos.length > 0) {
+                    try {
+                        const fotoBuffer = Fotos[0].foto.data;
+                        fotoBase64 = `data:image/png;base64,${bufferToBase64(fotoBuffer)}`;
+                    } catch (error) {
+                        console.error('Error converting buffer to Base64:', error);
+                    }
+                }
+                setEfetivoData({
+                    qrcode_efetivo: String(qrcode_efetivo) || 0,
+                    nome_completo: nome_completo || '',
+                    nome_guerra: nome_guerra || '',
+                    foto: fotoBase64,
+                    id_unidade: Unidade.nome || '',
+                    email: email || '',
+                    id_graduacao: Graduacao.sigla || ''
+                });
+
+                try {
+                    const response2 = await server.get(`/veiculo?ativo_veiculo=true&efetivo=${response.data[0].id}`);
+                    setVeiculosData(response2.data.formattedEntities)
+                } catch (e) {
+                    console.log(e)
+                }
             }
 
         } catch (e) {
@@ -129,9 +133,10 @@ function ConsultarEfetivo() {
                         <div className="input-pesquisa">
                             <p>Número de ordem ou documento</p>
                             <input
-                                type="number"
+                                type="text"
+                                maxLength={7}
                                 placeholder='Digite aqui para pesquisar'
-                                onChange={(e) => handleNumeroOrdemChange(e.target.value)}
+                                onChange={(e) => handleNumeroOrdemChange(e.target.value.replace(/[^0-9]/g, ""))}
                             />
                         </div>
                         <div className="consultar-dados">

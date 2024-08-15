@@ -60,8 +60,8 @@ function MilitarSemANCrachaComponent() {
       graduacao: true,
       email: true,
 
-      cracha: true,
-      destino: true,
+      cracha: false,
+      destino: false,
       veiculo_cracha: true,
 
       veiculo_tipo: true,
@@ -280,12 +280,21 @@ function MilitarSemANCrachaComponent() {
 
         const veiculoColected = response.data;
 
+        let revanamLength = String(veiculoColected.renavam).length
+        let finalRenavam = veiculoColected.renavam
+        if (revanamLength != 11) {
+          let diferenceRenavamLength = 11 - revanamLength
+          for (let i = 0; i < diferenceRenavamLength; i++) {
+            finalRenavam = "0" + finalRenavam
+          }
+        }
+
         setFormData((prevFormData) => ({
           ...prevFormData,
           veiculo_tipo: veiculoColected.tipo,
           veiculo_cor: veiculoColected.cor_veiculo,
           veiculo_placa: element,
-          veiculo_renavam: veiculoColected.renavam,
+          veiculo_renavam: finalRenavam,
           veiculo_marca: veiculoColected.marca,
           veiculo_modelo: veiculoColected.modelo,
         }));
@@ -611,12 +620,12 @@ function MilitarSemANCrachaComponent() {
           <div className="session-input-line1">
             <div className="input-container">
               <p>Número de ordem</p>
-              <IMaskInput
+              <input
                 type="text"
-                mask="0000000"
+                maxLength={7}
                 className='filtering-input'
                 value={formData.numero_ordem}
-                onChange={(e) => searchEfetivo(e.target.value)}
+                onChange={(e) => searchEfetivo(e.target.value.replace(/[^0-9]/g, ""))}
               />
             </div>
             <div className="input-container">
@@ -714,10 +723,11 @@ function MilitarSemANCrachaComponent() {
           <p>Crachá</p>
           <input
             type="text"
+            maxLength={5}
             disabled={disabledInputs.cracha}
             className='filtering-input'
             value={formData.cracha}
-            onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, cracha: e.target.value.replace(/[^0-9]/g, "") })}
           />
         </div>
       </div>
@@ -731,10 +741,11 @@ function MilitarSemANCrachaComponent() {
               <p>Crachá</p>
               <input
                 type="text"
+                maxLength={5}
                 className='filtering-input'
                 disabled={disabledInputs.veiculo_cracha}
                 value={formData.veiculo_cracha}
-                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value.replace(/[^0-9]/g, "") })}
               />
             </div>
             <div className="input-container">
@@ -794,10 +805,11 @@ function MilitarSemANCrachaComponent() {
                 <p>RENAVAM</p>
                 <input
                   type="text"
+                  maxLength={11}
                   className='filtering-input'
                   disabled={disabledInputs.veiculo_renavam}
                   value={formData.veiculo_renavam}
-                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value.replace(/[^0-9]/g, "") })}
                 />
               </div>
               <div className="input-container">

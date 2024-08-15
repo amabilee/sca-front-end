@@ -230,12 +230,12 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                         <div className="input-container">
                             <p>Número de ordem ou documento*</p>
                             <input
-                                type="number"
-                                maxLength={10}
+                                type="text"
+                                maxLength={11}
                                 className='filtering-input'
                                 disabled={true}
                                 value={receivedData.qrcode_efetivo}
-                                onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value })}
+                                onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value.replace(/[^0-9]/g, "") })}
                             />
                         </div>
                         <div className="input-container">

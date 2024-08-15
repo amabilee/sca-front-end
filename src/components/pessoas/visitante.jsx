@@ -339,20 +339,31 @@ function VisitanteComponent() {
     if (String(element).length === 7) {
       try {
         const response = await server.get(`/efetivo/consulta/${element}`);
-        const efetivoColected = response.data[0];
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          autorizador: `${efetivoColected.Graduacao.sigla} ${efetivoColected.nome_guerra}`,
-        }));
 
-        setDisabledInputs((prevDisabledInputs) => ({
-          ...prevDisabledInputs,
-          autorizador: true,
-        }));
+        if (response.data[0]) {
+          const efetivoColected = response.data[0];
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            autorizador: `${efetivoColected.Graduacao.sigla} ${efetivoColected.nome_guerra}`,
+          }));
+
+          setDisabledInputs((prevDisabledInputs) => ({
+            ...prevDisabledInputs,
+            autorizador: true,
+          }));
+        } else {
+          setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+          setMessage('Não foi encontrado um efetivo com este Número Ordem');
+          setAlertSeverity("error");
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            autorizador: '',
+          }));
+        }
       } catch (e) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage('Não foi encontrado um efetivo com este Número Ordem');
-
+        setAlertSeverity("error");
         setFormData((prevFormData) => ({
           ...prevFormData,
           autorizador: '',
@@ -387,12 +398,21 @@ function VisitanteComponent() {
 
         const veiculoColected = response.data;
 
+        let revanamLength = String(veiculoColected.renavam).length
+        let finalRenavam = veiculoColected.renavam
+        if (revanamLength != 11) {
+          let diferenceRenavamLength = 11 - revanamLength
+          for (let i = 0; i < diferenceRenavamLength; i++) {
+            finalRenavam = "0" + finalRenavam
+          }
+        }
+
         setFormData((prevFormData) => ({
           ...prevFormData,
           veiculo_tipo: veiculoColected.tipo,
           veiculo_cor: veiculoColected.cor_veiculo,
           veiculo_placa: element,
-          veiculo_renavam: veiculoColected.renavam,
+          veiculo_renavam: finalRenavam,
           veiculo_marca: veiculoColected.marca,
           veiculo_modelo: veiculoColected.modelo,
         }));
@@ -485,7 +505,7 @@ function VisitanteComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     if (formData.cpf.length != 14) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um CPF válido.");
@@ -993,13 +1013,13 @@ function VisitanteComponent() {
         </div>
         <div className="input-container">
           <p>Número de Ordem*</p>
-          <IMaskInput
-            type='text'
-            mask='0000000'
+          <input
+            type="text"
+            maxLength={7}
             className='filtering-input'
             value={formData.autorizador_numero}
             disabled={disabledInputs.autorizador_numero}
-            onChange={(e) => searchEfetivo(e.target.value)}
+            onChange={(e) => searchEfetivo(e.target.value.replace(/[^0-9]/g, ""))}
           />
         </div>
         <div className="input-container">
@@ -1025,10 +1045,11 @@ function VisitanteComponent() {
           <p>Crachá*</p>
           <input
             type="text"
+            maxLength={5}
             disabled={disabledInputs.cracha}
             className='filtering-input'
             value={formData.cracha}
-            onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, cracha: e.target.value.replace(/[^0-9]/g, "") })}
           />
         </div>
       </div>
@@ -1055,10 +1076,11 @@ function VisitanteComponent() {
               <p>Crachá</p>
               <input
                 type="text"
+                maxLength={5}
                 className='filtering-input'
                 disabled={disabledInputs.veiculo_cracha}
                 value={formData.veiculo_cracha}
-                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value.replace(/[^0-9]/g, "") })}
               />
             </div>
             <div className="input-container">

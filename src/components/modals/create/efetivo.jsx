@@ -65,7 +65,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         if (graduacaoSelected != 'CIVIL' && receivedData.qrcode_efetivo.length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
-        } else if (graduacaoSelected == 'CIVIL' && receivedData.qrcode_efetivo.length != 10) {
+        } else if (graduacaoSelected == 'CIVIL' && receivedData.qrcode_efetivo.length != 11) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um CPF válido.");
         } else if (receivedData.nome_completo.length == 0) {
@@ -99,7 +99,9 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
 
     const sendRequest = async () => {
         const formData = new FormData();
-        formData.append('qrcode_efetivo', receivedData.qrcode_efetivo);
+        let qrcodeData = String(receivedData.qrcode_efetivo).slice(0, -1)
+
+        formData.append('qrcode_efetivo', Number(qrcodeData));
         formData.append('nome_guerra', receivedData.nome_guerra);
         formData.append('nome_completo', receivedData.nome_completo);
         formData.append('id_unidade', receivedData.id_unidade);
@@ -116,10 +118,9 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         } else {
             formData.append('val_cnh', null);
         }
-        console.log(formData.val_cnh)
         formData.append('ativo_efetivo', receivedData.ativo_efetivo);
         formData.append('foto', receivedData.foto);
-
+        // console.log(qrcodeCurrent.slice(0, -1))
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -226,10 +227,11 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                         <div className="input-container">
                             <p>Número de ordem ou documento*</p>
                             <input
-                                type="number"
+                                type="text"
+                                maxLength={11}
                                 className='filtering-input'
                                 value={receivedData.qrcode_efetivo}
-                                onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value })}
+                                onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value.replace(/[^0-9]/g, "")})}
                             />
                         </div>
                         <div className="input-container">

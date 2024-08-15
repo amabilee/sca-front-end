@@ -261,12 +261,21 @@ function DependenteComponent() {
 
         const veiculoColected = response.data;
 
+        let revanamLength = String(veiculoColected.renavam).length
+        let finalRenavam = veiculoColected.renavam
+        if (revanamLength != 11) {
+          let diferenceRenavamLength = 11 - revanamLength
+          for (let i = 0; i < diferenceRenavamLength; i++) {
+            finalRenavam = "0" + finalRenavam
+          }
+        }
+
         setFormData((prevFormData) => ({
           ...prevFormData,
           veiculo_tipo: veiculoColected.tipo,
           veiculo_cor: veiculoColected.cor_veiculo,
           veiculo_placa: element,
-          veiculo_renavam: veiculoColected.renavam,
+          veiculo_renavam: finalRenavam,
           veiculo_marca: veiculoColected.marca,
           veiculo_modelo: veiculoColected.modelo,
         }));
@@ -577,7 +586,7 @@ function DependenteComponent() {
         }
       });
 
-      if (typeRequest = 'dependente') {
+      if (typeRequest == 'dependente') {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Dependente cadastrado com sucesso.");
         setAlertSeverity("success");
@@ -599,11 +608,11 @@ function DependenteComponent() {
           militar: true,
           veiculo_placa: true,
         }));
-      } else if (typeRequest = 'dependente+veiculo') {
+      } else if (typeRequest == 'dependente+veiculo') {
         sendRequestVeiculo(token, userDataParsed, typeRequest)
-      } else if (typeRequest = 'dependente+registro') {
+      } else if (typeRequest == 'dependente+registro') {
         sendRequestRegistro(token, userDataParsed, typeRequest)
-      } else if (typeRequest = 'dependente+veiculo+registro') {
+      } else if (typeRequest == 'dependente+veiculo+registro') {
         sendRequestVeiculo(token, userDataParsed, typeRequest)
       }
     } catch (e) {
@@ -630,7 +639,6 @@ function DependenteComponent() {
   //Veículo
 
   const sendRequestVeiculo = async (token, userDataParsed, typeRequest) => {
-
     let veiculoFormattedData = {
       tipo: formData.veiculo_tipo,
       cor_veiculo: formData.veiculo_cor,
@@ -831,12 +839,12 @@ function DependenteComponent() {
           <div className="input-container">
             <p>Número de ordem*</p>
             <input
-              maxLength="7"
               type="text"
+              maxLength={7}
               className='filtering-input'
               disabled={disabledInputs.numero_ordem}
               value={formData.numero_ordem}
-              onChange={(e) => militarInputType(1, e.target.value)}
+              onChange={(e) => militarInputType(1, e.target.value.replace(/[^0-9]/g, "") )}
             />
           </div>
           <p>ou</p>
@@ -845,6 +853,7 @@ function DependenteComponent() {
             <input
               type="text"
               disabled={disabledInputs.militar}
+              placeholder='Graduação e Nome de Guerra'
               className='filtering-input'
               value={formData.militar}
               onChange={(e) => militarInputType(2, e.target.value)}
@@ -886,7 +895,7 @@ function DependenteComponent() {
             disabled={disabledInputs.cracha}
             className='filtering-input'
             value={formData.cracha}
-            onChange={(e) => setFormData({ ...formData, cracha: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, cracha: e.target.value.replace(/[^0-9]/g, "") })}
           />
         </div>
       </div>
@@ -914,11 +923,11 @@ function DependenteComponent() {
               <p>Crachá</p>
               <input
                 type="text"
-                className='filtering-input'
                 maxLength={5}
+                className='filtering-input'
                 disabled={disabledInputs.veiculo_cracha}
                 value={formData.veiculo_cracha}
-                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, veiculo_cracha: e.target.value.replace(/[^0-9]/g, "") })}
               />
             </div>
             <div className="input-container">
