@@ -64,7 +64,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     };
 
     fetchModules();
-  }, [isAuthenticated, currentPath]);
+  }, [isAuthenticated, currentPath, token, userDataParsed.id, userDataParsed.nivel_acesso]);
 
   useEffect(() => {
     if (redirect) {

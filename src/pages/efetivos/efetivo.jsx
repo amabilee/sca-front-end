@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import EfetivosTable from '../../components/tables/efetivos';
 import EditEfetivoModal from '../../components/modals/edit/efetivo';
@@ -22,7 +22,7 @@ function Efetivos() {
     const [createModal, setOpenCreateModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
-
+    const [registros, setRegistros] = useState([]);
     const [graduacaoOptions, setGraduacaoOptions] = useState([]);
     const [unidadeOptions, setUnidadeOptions] = useState([]);
 
@@ -50,13 +50,7 @@ function Efetivos() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getEfetivos('', 1);
-        getSelectOptions();
-    }, []);
-
-    const getEfetivos = async (filter, page) => {
+    const getEfetivos = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
@@ -78,9 +72,13 @@ function Efetivos() {
             setMessage("Erro ao buscar dados");
             setStatusAlert("error");
         }
-    };
+    }, [state, setRegistros, setPaginationData, setLoading, setState, setMessage, setStatusAlert]);
 
-    const [registros, setRegistros] = useState([]);
+    useEffect(() => {
+        getEfetivos('', 1);
+        getSelectOptions();
+    }, [getEfetivos, getSelectOptions]);
+
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
@@ -194,7 +192,7 @@ function Efetivos() {
 
     //Filtering Options
 
-    const getSelectOptions = async () => {
+    const getSelectOptions = useCallback(async () => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
@@ -225,7 +223,7 @@ function Efetivos() {
             setMessage("Erro ao buscar unidades.");
             setStatusAlert("error");
         }
-    };
+    }, [state, setGraduacaoOptions, setState, setMessage, setStatusAlert, setUnidadeOptions]);
 
     return (
         <div className="body">

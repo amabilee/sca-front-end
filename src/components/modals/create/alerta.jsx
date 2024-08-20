@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
 import { MuiColorInput } from 'mui-color-input'
+
+import PropTypes from 'prop-types';
 
 import '../style.css'
 
@@ -109,3 +111,8 @@ export default function CreateAlertaModal({ closeModal, renderTable }) {
         </>
     );
 }
+
+CreateAlertaModal.propTypes = {
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

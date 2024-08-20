@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import UnidadesTable from '../../components/tables/unidades';
 import EditUnidadeModal from '../../components/modals/edit/unidade';
@@ -22,7 +22,7 @@ function Unidades() {
     const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
-
+    const [registros, setRegistros] = useState([]);
     const [loading, setLoading] = useState(true)
 
     //Paginator conifg
@@ -47,12 +47,7 @@ function Unidades() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getUnidades('', 1);
-    }, []);
-
-    const getUnidades = async (filter, page) => {
+    const getUnidades = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -74,9 +69,11 @@ function Unidades() {
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
         }
-    };
+    }, [state, setRegistros, setPaginationData, setLoading, setState, setMessage, setStatusAlert]);
 
-    const [registros, setRegistros] = useState([]);
+    useEffect(() => {
+        getUnidades('', 1);
+    }, [getUnidades]);
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({

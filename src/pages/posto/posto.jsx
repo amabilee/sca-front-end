@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import PostosTable from '../../components/tables/postos';
 import '../relatorio/style.css';
@@ -22,7 +22,7 @@ function PostoServico() {
     const [deleteModal, setOpenDeleteModal] = useState(false);
     const [sendingPosto, setSendingPosto] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
-
+    const [registros, setRegistros] = useState([]);
     const [loading, setLoading] = useState(true)
 
     //Paginator conifg
@@ -47,12 +47,7 @@ function PostoServico() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getPostos('', 1);
-    }, []);
-
-    const getPostos = async (filter, page) => {
+    const getPostos = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -74,9 +69,11 @@ function PostoServico() {
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
         }
-    };
+    }, [state, setRegistros, setPaginationData, setState, setMessage, setStatusAlert]);
 
-    const [registros, setRegistros] = useState([]);
+    useEffect(() => {
+        getPostos('', 1);
+    }, [getPostos]);
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({

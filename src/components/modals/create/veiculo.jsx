@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
 import './style.css'
-import { IMaskInput } from "react-imask";
-import { UseAuth } from '../../../hooks';
+
+import PropTypes from 'prop-types';
 
 export default function CreateVeiculoModal({ closeModal, renderTable }) {
-    const { signOut } = UseAuth();
     const [receivedData, setReceivedData] = useState(
         {
             id_efetivo: "",
@@ -56,6 +55,11 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
 
     const confirmCreating = () => {
 
+        setReceivedData((prevReceivedData) => ({
+            ...prevReceivedData,
+            placa: receivedData.placa.toUpperCase(),
+          }));
+
         if (String(efetivoData.nome_guerra).length == 0 || String(efetivoData.graduacao).length == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
@@ -65,7 +69,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
         } else if (receivedData.cor_veiculo == 'Nenhum') {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma cor válida.");
-        } else if (!validarPlaca(receivedData.placa)) {
+        } else if (!validarPlaca(receivedData.placa.toUpperCase())) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma placa válida.");
         } else if (receivedData.marca.length == 0) {
@@ -233,7 +237,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
                             <p>Placa</p>
                             <input
                                 type="text"
-                                maxLength={5}
+                                maxLength={7}
                                 className='filtering-input'
                                 value={receivedData.placa}
                                 onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })} />
@@ -299,3 +303,8 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
         </>
     );
 }
+
+CreateVeiculoModal.propTypes = {
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

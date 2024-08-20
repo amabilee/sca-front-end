@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Header from '../../components/sidebar/sidebar'
 import RelatoriosEfetivosTable from '../../components/tables/relatorio-efetivo'
 import './style.css'
@@ -91,13 +91,7 @@ function RelatorioEfetivo() {
         return `${year}-${month}-${day}%20${hours}:${minutes}:${seconds}`;
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getRegistros('', 1);
-        getSelectOptions()
-    }, []);
-
-    const getRegistros = async (filter, page) => {
+    const getRegistros = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -115,17 +109,15 @@ function RelatorioEfetivo() {
             });
             setLoading(false)
         } catch (e) {
-            console.log(e)
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
         }
-    };
-
+    }, [state, setRegistros, setPaginationData, setLoading, setState, setMessage, setStatusAlert]);
 
     //Filtering Options
 
-    const getSelectOptions = async () => {
+    const getSelectOptions = useCallback(async () => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
@@ -142,7 +134,12 @@ function RelatorioEfetivo() {
             setMessage("Erro ao buscar postos de serviço.");
             setStatusAlert("error");
         }
-    };
+    }, [state, setPostosOptions, setState, setMessage, setStatusAlert]);
+
+    useEffect(() => {
+        getRegistros('', 1);
+        getSelectOptions()
+    }, [getRegistros, getSelectOptions]);
 
     return (
         <div className="body">

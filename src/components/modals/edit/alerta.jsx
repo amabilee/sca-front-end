@@ -7,7 +7,7 @@ import { server } from '../../../services/server';
 import { MuiColorInput } from 'mui-color-input'
 import PropTypes from 'prop-types';
 
-export default function EditUnidadeModal({ currentData, closeModal, renderTable }) {
+export default function EditAlertaModal({ currentData, closeModal, renderTable }) {
     const [receivedData, setReceivedData] = useState(currentData || {});
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -109,3 +109,13 @@ export default function EditUnidadeModal({ currentData, closeModal, renderTable 
         </>
     );
 }
+
+EditAlertaModal.propTypes = {
+    currentData: PropTypes.shape({
+        id: PropTypes.number,
+        nome_alerta: PropTypes.string,
+        cor: PropTypes.string,
+    }),
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

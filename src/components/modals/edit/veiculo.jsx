@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import PropTypes from 'prop-types';
@@ -43,6 +43,11 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
     )
 
     const confirmEditing = () => {
+
+        setReceivedData((prevReceivedData) => ({
+            ...prevReceivedData,
+            placa: receivedData.placa.toUpperCase(),
+          }));
         
         if (String(efetivoData.qrcode_efetivo).length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
@@ -53,7 +58,7 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
         } else if (receivedData.cor_veiculo == 'Nenhum') {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma cor válida.");
-        } else if (!validarPlaca(receivedData.placa)) {
+        } else if (!validarPlaca(receivedData.placa.toUpperCase())) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma placa válida.");
         } else if (receivedData.marca.length == 0) {
@@ -97,14 +102,13 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
     };
 
 
-    const searchEfetivo = async (e) => {
+    const searchEfetivo = useCallback(async (e) => {
         setEfetivoData({ ...efetivoData, qrcode_efetivo: e })
         if (String(e).length == 7 || String(receivedData.id_efetivo).length == 4) {
             let userData = localStorage.getItem('user');
             let userDataParsed = JSON.parse(userData);
             let token = localStorage.getItem("user_token")
             try {
-                console.log(receivedData)
                 if (String(receivedData.id_efetivo).length == 4) {
                     const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, {
                         headers: {
@@ -112,7 +116,6 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
                             'access-level': userDataParsed.nivel_acesso
                         }
                     });
-                    console.log(response.data)
                     setEfetivoData({ qrcode_efetivo: response.data.qrcode_efetivo, nome_guerra: response.data.nome_guerra, graduacao: response.data.graduacao })
                     setReceivedData({ ...receivedData, id_efetivo: response.data.id })
                 } else {
@@ -127,7 +130,6 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
                 }
             } catch (e) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-                console.log(e)
                 setMessage("Não foi encontrado um efetivo com este número de ordem");
             }
         } else {
@@ -138,11 +140,11 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
                 }
             )
         }
-    }
+    }, [efetivoData, receivedData, state, setEfetivoData, setReceivedData, setState, setMessage])
 
     useEffect(() => {
         searchEfetivo()
-    }, [])
+    }, [searchEfetivo])
 
 
     return (
@@ -214,7 +216,7 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
                             <p>Placa</p>
                             <input
                             type="text"
-                            maxLength={5}
+                            maxLength={7}
                             className='filtering-input'
                             value={receivedData.placa}
                             onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })} />

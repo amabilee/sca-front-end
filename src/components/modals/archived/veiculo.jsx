@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { server } from '../../../services/server';
 import VeiculosTable from '../../tables/veiculos';
 import Snackbar from '@mui/material/Snackbar';
@@ -14,6 +14,7 @@ export default function Veiculos({ closeModal }) {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
     const [nivelAcesso, setNivelAcesso] = useState(1)
     const [loading, setLoading] = useState(true)
+    const [registros, setRegistros] = useState([]);
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -37,12 +38,7 @@ export default function Veiculos({ closeModal }) {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getVeiculos('', 1);
-    }, []);
-
-    const getVeiculos = async (filter, page) => {
+    const getVeiculos = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -65,9 +61,11 @@ export default function Veiculos({ closeModal }) {
             setStatusAlert("error");
 
         }
-    };
+    }, [state, setRegistros, setPaginationData, setState, setMessage, setStatusAlert]);
 
-    const [registros, setRegistros] = useState([]);
+    useEffect(() => {
+        getVeiculos('', 1);
+    }, [getVeiculos]);
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({

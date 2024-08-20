@@ -4,7 +4,7 @@ import Activate from '../../assets/table/active-icon.svg'
 import './style.css'
 import PropTypes from 'prop-types';
 
-const UnidadesTable = ({ data, openModal, levelAcesso, archived }) => (
+const VeiculosTable = ({ data, openModal, levelAcesso, archived }) => (
     <div className='table-wrapper'>
         <table className='table table-actions table-veiculos'>
             <thead>
@@ -52,7 +52,7 @@ const UnidadesTable = ({ data, openModal, levelAcesso, archived }) => (
     </div>
 );
 
-UnidadesTable.propTypes = {
+VeiculosTable.propTypes = {
     data: PropTypes.arrayOf(
         PropTypes.shape({
             graduacao: PropTypes.string.isRequired,
@@ -71,8 +71,4 @@ UnidadesTable.propTypes = {
     archived: PropTypes.bool,
 };
 
-UnidadesTable.defaultProps = {
-    archived: false,
-};
-
-export default UnidadesTable;
+export default VeiculosTable;

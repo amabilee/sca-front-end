@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import VeiculosTable from '../../components/tables/veiculos';
 import EditVeiculoModal from '../../components/modals/edit/veiculo';
@@ -31,6 +31,7 @@ function Veiculos() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
     const { signOut } = UseAuth();
+    const [registros, setRegistros] = useState([]);
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -54,17 +55,11 @@ function Veiculos() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getVeiculos('', 1);
-    }, []);
-
-    const getVeiculos = async (filter, page) => {
+    const getVeiculos = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
         setNivelAcesso(userDataParsed.nivel_acesso)
-        console.log(filter)
         try {
             const response = await server.get(`/veiculo?page=${page}&ativo=true${filter}`, {
                 headers: {
@@ -87,9 +82,11 @@ function Veiculos() {
                 setStatusAlert("error");
             }
         }
-    };
+    },  [navigate, signOut, state, setRegistros, setPaginationData, setLoading, setState, setMessage, setStatusAlert]);
 
-    const [registros, setRegistros] = useState([]);
+    useEffect(() => {
+        getVeiculos('', 1);
+    }, [getVeiculos]);
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({

@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server';
 
+import PropTypes from 'prop-types';
+
 export default function DeleteVeiculoModal({ currentData, closeModal, renderTable }) {
     const [removeOption, setRemoveOption] = useState(0);
-    const [receivedData, setDataReceived] = useState(currentData || {});
+    const [receivedData] = useState(currentData || {});
     
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -95,3 +97,14 @@ export default function DeleteVeiculoModal({ currentData, closeModal, renderTabl
         </>
     );
 }
+
+DeleteVeiculoModal.propTypes = {
+    currentData: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        marca: PropTypes.string.isRequired,
+        modelo: PropTypes.string.isRequired,
+        placa: PropTypes.string.isRequired,
+    }).isRequired,
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

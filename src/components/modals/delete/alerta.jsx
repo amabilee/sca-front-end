@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server';
 
+import PropTypes from 'prop-types';
 
 export default function DeleteAlertaModal({ currentData, closeModal, renderTable }) {
 
     const [removeOption, setRemoveOption] = useState(0);
-    const [receivedData, setDataReceived] = useState(currentData || {});
+    const [receivedData] = useState(currentData || {});
     
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -97,3 +98,13 @@ export default function DeleteAlertaModal({ currentData, closeModal, renderTable
         </>
     );
 }
+
+DeleteAlertaModal.propTypes = {
+    currentData: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        nome_alerta: PropTypes.string.isRequired,
+        ativo_alerta: PropTypes.bool
+    }).isRequired,
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

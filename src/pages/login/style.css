@@ -44,7 +44,7 @@
     background-color: white;
 }
 
-.card-login-title{
+.card-login-title {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -313,8 +313,10 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid black;
-    padding: 10px 0 10px 0;
-    margin: 0 20px 0 0;
+    padding: 10px;
+    box-sizing: border-box;
+    flex: 1 0 30%;
+    max-width: 30%;
 }
 
 .qrcode-box p {
@@ -331,34 +333,41 @@
     color: black;
 }
 
-.consultar-body .qrcode-title{
+.consultar-body .qrcode-title {
     margin: 20px 0;
 }
 
 
-.qrcode-container{
+.qrcode-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.qrcode-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.qrcode-container-veiculos {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
 }
 
-.qrcode-container-veiculos{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.qrcode-container-veiculos .qrcode-box{
+.qrcode-container-veiculos .qrcode-box {
     margin: 0 20px 0 0;
 }
 
-.consulta-button{
+.consulta-button {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     width: 100%;
+    margin: 0 0 50px 0;
 }
 
 .consulta-button button:nth-child(2) {
@@ -372,7 +381,7 @@
     border: none;
 }
 
-.consulta-button button:nth-child(1){
+.consulta-button button:nth-child(1) {
     background-color: white;
     color: #1B599B;
     width: 170px;
@@ -386,7 +395,7 @@
     transition: all 0.5s;
 }
 
-.consulta-button button:nth-child(1):hover{
+.consulta-button button:nth-child(1):hover {
     background-color: #1b599b27;
     color: #1B599B;
     width: 170px;

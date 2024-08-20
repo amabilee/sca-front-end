@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { server } from '../../services/server'
 import './style.css'
 import Snackbar from '@mui/material/Snackbar';
@@ -152,7 +152,7 @@ function MilitarSemCadastroComponent() {
 
   //Selectors options
 
-  const getSelectOptions = async () => {
+  const getSelectOptions = useCallback(async () => {
     let userData = localStorage.getItem('user');
     let userDataParsed = JSON.parse(userData);
     let token = localStorage.getItem("user_token")
@@ -197,11 +197,11 @@ function MilitarSemCadastroComponent() {
       setMessage("Erro ao buscar situações.");
       setAlertSeverity("error");
     }
-  }
+  }, [state, setGraduacaoOptions, setUnidadeOptions, setSituacaoOptions, setState, setMessage, setAlertSeverity])
 
   useEffect(() => {
     getSelectOptions()
-  }, [])
+  }, [getSelectOptions])
 
   // Find Efetivo  
 
@@ -428,6 +428,12 @@ function MilitarSemCadastroComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      veiculo_placa: formData.veiculo_placa.toUpperCase(),
+    }));
+
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.numero_ordem.length != 7) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
@@ -465,7 +471,7 @@ function MilitarSemCadastroComponent() {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o veículo válido.");
       setAlertSeverity("error");
-    } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa)) {
+    } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa.toUpperCase())) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma placa válida.");
       setAlertSeverity("error");

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 
 import { server } from '../../services/server';
@@ -63,12 +63,7 @@ function Veiculos() {
     const [gerenciaDadosBarChartPessoa, setGerenciaDadosBarChartPessoa] = useState([{ data: [0, 0, 0, 0, 0, 0, 0] }, { data: [0, 0, 0, 0, 0, 0, 0] },])
     const [gerenciaDadosBarChartVeiculo, setGerenciaDadosBarChartVeiculo] = useState([{ data: [0, 0, 0, 0, 0, 0, 0] }, { data: [0, 0, 0, 0, 0, 0, 0] },])
 
-    // Data from the DB
-    useEffect(() => {
-        getGerencia('&ativo_veiculo=true', 1);
-    }, []);
-
-    const getGerencia = async () => {
+    const getGerencia = useCallback(async () => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -165,7 +160,11 @@ function Veiculos() {
                 setStatusAlert("error");
             }
         }
-    };
+    }, [state, navigate, signOut, setGerenciaDadosPessoas, setPessoaTitle, setGerenciaDadosVeiculos, setVeiculoTitle, setGerenciaDadosCards, setMovimentacaoTitle, setGerenciaDadosBarChartMilitar, setGerenciaDadosBarChartPessoa, setGerenciaDadosBarChartVeiculo, setLoading, setState, setMessage, setStatusAlert]);
+
+    useEffect(() => {
+        getGerencia('&ativo_veiculo=true', 1);
+    }, [getGerencia]);
 
     return (
         <div className="body">

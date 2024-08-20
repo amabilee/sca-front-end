@@ -1,29 +1,27 @@
 import { useState } from 'react';
-import Logo from '../../assets/sidebar/air-force-logo.svg'
-import LeaveIcon from '../../assets/sidebar/sair-icon.svg'
-import ConsultarTable from '../../components/tables/consultar.jsx'
+import Logo from '../../assets/sidebar/air-force-logo.svg';
+import LeaveIcon from '../../assets/sidebar/sair-icon.svg';
+import ConsultarTable from '../../components/tables/consultar.jsx';
 import { server } from "../../services/server.js";
-import { useNavigate } from 'react-router-dom'
-import UserPhoto from '../../assets/login/user-photo.svg'
+import { useNavigate } from 'react-router-dom';
+import UserPhoto from '../../assets/login/user-photo.svg';
 import QRCode from "react-qr-code";
 
 function ConsultarEfetivo() {
-    const navigate = useNavigate()
-    const [viewQr, setViewQr] = useState(false)
-
-    const [veiculosData, setVeiculosData] = useState([])
-
+    const navigate = useNavigate();
+    const [viewQr, setViewQr] = useState(false);
+    const [veiculosData, setVeiculosData] = useState([]);
     const [efetivoData, setEfetivoData] = useState({
         nome_completo: '',
         nome_guerra: '',
         foto: '',
         id_unidade: '',
         email: '',
-        id_graduacao: ''
+        id_graduacao: '',
+        qrcode_efetivo: ''
     });
 
     const handleNumeroOrdemChange = (data) => {
-        
         if (data.length === 7 || data.length === 10) {
             getEfetivo(data);
         } else {
@@ -36,7 +34,7 @@ function ConsultarEfetivo() {
                 email: '',
                 id_graduacao: ''
             });
-            setVeiculosData([])
+            setVeiculosData([]);
         }
     };
 
@@ -52,7 +50,6 @@ function ConsultarEfetivo() {
     const getEfetivo = async (numero) => {
         try {
             const response = await server.get(`/efetivo/consulta/${numero}`);
-
             if (response.data[0]) {
                 const { nome_completo, nome_guerra, Unidade, email, Graduacao, Fotos, qrcode_efetivo } = response.data[0];
                 let fotoBase64 = '';
@@ -76,12 +73,11 @@ function ConsultarEfetivo() {
 
                 try {
                     const response2 = await server.get(`/veiculo?ativo_veiculo=true&efetivo=${response.data[0].id}`);
-                    setVeiculosData(response2.data.formattedEntities)
+                    setVeiculosData(response2.data.formattedEntities);
                 } catch (e) {
-                    console.log(e)
+                    console.log(e);
                 }
             }
-
         } catch (e) {
             console.error('Error fetching efetivo data:', e);
             setEfetivoData({
@@ -100,22 +96,31 @@ function ConsultarEfetivo() {
     };
 
     const viewQrCodes = (state) => {
-        if (state) {
-            setViewQr(true)
-        } else {
-            setViewQr(false)
-        }
-    }
+        setViewQr(state);
+    };
 
-    const [isPrinting, setIsPrinting] = useState(false)
+    const [isPrinting, setIsPrinting] = useState(false);
 
     const print = () => {
-        setIsPrinting(true)
+        setIsPrinting(true);
         setTimeout(() => {
             window.print();
-            setIsPrinting(false)
-        }, 300)
-    }
+            setIsPrinting(false);
+        }, 300);
+    };
+
+    const qrCodes = [
+        efetivoData.qrcode_efetivo ? {
+            type: 'efetivo',
+            value: efetivoData.qrcode_efetivo,
+            label: `${efetivoData.id_graduacao} ${efetivoData.nome_guerra} <br />${efetivoData.id_unidade}`
+        } : null,
+        ...veiculosData.map(veiculo => ({
+            type: 'veiculo',
+            value: veiculo.qrcode,
+            label: `${veiculo.tipo} ${veiculo.modelo} <br />Placa: ${veiculo.placa}`
+        }))
+    ].filter(Boolean);
 
     return (
         <>
@@ -194,30 +199,17 @@ function ConsultarEfetivo() {
                         </div>
                     )}
                     <div className="qrcode-container">
-                        {efetivoData && efetivoData.qrcode_efetivo != 0 && (
-                            <div className="qrcode-box">
+                        {qrCodes.map((qr, index) => (
+                            <div className="qrcode-box" key={index}>
                                 <QRCode
                                     size={50}
                                     style={{ height: "100px", maxWidth: "100px", width: "100px" }}
-                                    value={`1,${efetivoData.qrcode_efetivo}`}
+                                    value={`1,${qr.value}`}
                                     viewBox={`0 0 50 50`}
                                 />
-                                <p>{efetivoData.id_graduacao} {efetivoData.nome_guerra} <br />{efetivoData.id_unidade}</p>
+                                <p dangerouslySetInnerHTML={{ __html: qr.label }} />
                             </div>
-                        )}
-                        {veiculosData && (
-                            veiculosData.map((veiculo, i) => (
-                                <div className="qrcode-box" key={i}>
-                                    <QRCode
-                                        size={50}
-                                        style={{ height: "100px", maxWidth: "100px", width: "100px" }}
-                                        value={`2,${veiculo.qrcode}`}
-                                        viewBox={`0 0 50 50`}
-                                    />
-                                    <p>{veiculo.tipo} {veiculo.modelo} <br />Placa: {veiculosData[i].placa}</p>
-                                </div>
-                            ))
-                        )}
+                        ))}
                     </div>
                 </div>
             )}

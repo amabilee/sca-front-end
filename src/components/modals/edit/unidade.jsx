@@ -5,7 +5,7 @@ import "./style.css";
 import PropTypes from 'prop-types';
 import { server } from '../../../services/server';
 
-export default function EditUnidadeModal({ currentData, closeModal, renderTable }) {
+function EditUnidadeModal({ currentData, closeModal, renderTable }) {
     const [receivedData, setReceivedData] = useState(currentData || {});
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -99,3 +99,15 @@ export default function EditUnidadeModal({ currentData, closeModal, renderTable 
         </>
     );
 }
+
+EditUnidadeModal.propTypes = {
+    currentData: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        nome: PropTypes.string.isRequired,
+        nivel_acesso: PropTypes.number.isRequired,
+    }).isRequired,
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};
+
+export default EditUnidadeModal

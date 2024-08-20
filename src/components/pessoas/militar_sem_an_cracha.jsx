@@ -366,6 +366,13 @@ function MilitarSemANCrachaComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      veiculo_placa: formData.veiculo_placa.toUpperCase(),
+    }));
+
+
     if (formData.entrada == 'militar') {
       if (String(formData.numero_ordem).length != 7) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
@@ -395,7 +402,7 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um destino válido.");
         setAlertSeverity("error");
-      } else if (!validarPlaca(formData.veiculo_placa)) {
+      } else if (!validarPlaca(formData.veiculo_placa.toUpperCase())) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira uma placa válida.");
         setAlertSeverity("error");
@@ -443,7 +450,7 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um destino válido.");
         setAlertSeverity("error");
-      } else if (!validarPlaca(formData.veiculo_placa)) {
+      } else if (!validarPlaca(formData.veiculo_placa.toUpperCase())) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira uma placa válida.");
         setAlertSeverity("error");

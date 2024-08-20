@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import AlertasTable from '../../components/tables/alertas';
 import DeleteAlertaModal from '../../components/modals/delete/alerta';
@@ -25,7 +25,7 @@ function Alertas() {
     const [createModal, setOpenCreateModal] = useState(false);
     const [sendingData, setSendingData] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
-
+    const [registros, setRegistros] = useState([]);
     const [loading, setLoading] = useState(true)
 
     //Paginator conifg
@@ -50,12 +50,7 @@ function Alertas() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getAlertas('', 1);
-    }, []);
-
-    const getAlertas = async (filter, page) => {
+    const getAlertas = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
@@ -77,9 +72,11 @@ function Alertas() {
             setMessage("Erro ao buscar dados");
             setStatusAlert("error");
         }
-    };
+    }, [state, setRegistros, setPaginationData, setState, setMessage, setStatusAlert]);
 
-    const [registros, setRegistros] = useState([]);
+    useEffect(() => {
+        getAlertas('', 1);
+    }, [getAlertas]);
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import "./style.css";
@@ -6,6 +6,7 @@ import { server } from '../../../services/server';
 import { IMaskInput } from "react-imask";
 import Remove from '../../../assets/remove_icon.svg'
 import uploadIcon from '../../../assets/upload.svg'
+
 import PropTypes from 'prop-types';
 
 export default function EditEfetivoModal({ currentData, closeModal, renderTable }) {
@@ -56,12 +57,9 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         } else {
             if (String(receivedData.val_cnh).length != 0) {
                 if (!validarData(receivedData.val_cnh)) {
-                    console.log(receivedData.val_cnh)
                     setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                     setMessage("Insira uma data válida.");
-                    console.log(1)
                 } else {
-                    console.log(2)
                     sendRequest();
                 }
             } else {
@@ -120,7 +118,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         }
     };
 
-    const getSelectOptions = async () => {
+    const getSelectOptions = useCallback(async () => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -162,7 +160,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Erro ao buscar situações.");
         }
-    };
+    }, [state, setGraduacaoOptions, setUnidadeOptions, setSituacaoOptions, setState, setMessage]);
 
     // Image Functions
 
@@ -171,7 +169,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         return window.btoa(binary);
     };
 
-    const convertImage = () => {
+    const convertImage = useCallback(() => {
         if (receivedData.foto && receivedData.foto.type !== 'File') {
             const base64String = bufferToBase64(receivedData.foto.data);
             const fileURL = `data:image/png;base64,${base64String}`;
@@ -185,7 +183,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
             const fileURL = URL.createObjectURL(receivedData.foto);
             setEfetivoFoto(fileURL);
         }
-    };
+    }, [receivedData, setReceivedData, setEfetivoFoto]);
 
     const removeFoto = () => {
         setEfetivoFoto('');
@@ -230,7 +228,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                 val_cnh: formattedDate,
             }));
         }
-    }, []);
+    }, [getSelectOptions, convertImage, receivedData]);
 
 
 
@@ -403,3 +401,9 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         </>
     );
 }
+
+EditEfetivoModal.propTypes = {
+    currentData: PropTypes.object.isRequired, 
+    closeModal: PropTypes.func.isRequired,    
+    renderTable: PropTypes.func.isRequired,   
+};

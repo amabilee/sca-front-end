@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
+import PropTypes from 'prop-types';
 
-export default function CreatePostoModal({ closeModal, renderTable }) {
+function CreatePostoModal({ closeModal, renderTable }) {
     const [dataFromPosto, setDataFromPosto] = useState({ nome: "", nivel_acesso: 0, ativo_posto: true })
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -108,3 +109,10 @@ export default function CreatePostoModal({ closeModal, renderTable }) {
         </>
     );
 }
+
+CreatePostoModal.propTypes = {
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};
+
+export default  CreatePostoModal

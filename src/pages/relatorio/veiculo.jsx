@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Header from '../../components/sidebar/sidebar'
 import RelatoriosVeiculosTable from '../../components/tables/relatorio-veiculo'
 import './style.css'
@@ -51,10 +51,8 @@ function RelatorioVeiculo() {
 
     });
 
-    const sendFilteringConditions = () => {
-        
+    const sendFilteringConditions = () => { 
         let filter = '';
-    
         if (filteringConditions.tipo !== 'Nenhum') {
             filter += `&tipo=${filteringConditions.tipo}`;
         }
@@ -89,13 +87,7 @@ function RelatorioVeiculo() {
         return `${year}-${month}-${day}%20${hours}:${minutes}:${seconds}`;
     };
 
-
-    // Data from the DB
-    useEffect(() => {
-        getRegistros('', 1);
-    }, []);
-
-    const getRegistros = async (filter, page) => {
+    const getRegistros = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -118,7 +110,11 @@ function RelatorioVeiculo() {
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
         }
-    };
+    }, [state, setRegistros, setPaginationData, setLoading, setState, setMessage, setStatusAlert]);
+
+    useEffect(() => {
+        getRegistros('', 1);
+    }, [getRegistros]);
 
 
     return (

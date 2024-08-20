@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import UsuariosTable from '../../components/tables/usuarios';
 import { server } from '../../services/server';
@@ -16,7 +16,7 @@ import '../style.css'
 
 function Usuarios() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
-
+    const [registros, setRegistros] = useState([]);
     const [loading, setLoading] = useState(true)
 
     //Paginator conifg
@@ -41,15 +41,10 @@ function Usuarios() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getUsuarios('', 1);
-    }, []);
-
-    const getUsuarios = async (filter, page) => {
+    const getUsuarios = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
-        let token = localStorage.getItem("user_token")
+        let token = localStorage.getItem("user_token");
         try {
             const response = await server.get(`/usuario?page=${page}${filter}`, {
                 headers: {
@@ -58,18 +53,22 @@ function Usuarios() {
                 }
             });
             setRegistros(response.data.entities);
-            setPaginationData(prevState => {
-                return { ...prevState, totalPages: response.data.pagination.totalPages }
-            });
-            setLoading(false)
+            setPaginationData(prevState => ({
+                ...prevState,
+                totalPages: response.data.pagination.totalPages
+            }));
+            setLoading(false);
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
         }
-    };
+    }, [state, setRegistros, setPaginationData, setLoading, setState, setMessage, setStatusAlert]);
 
-    const [registros, setRegistros] = useState([]);
+
+    useEffect(() => {
+        getUsuarios('', 1);
+    }, [getUsuarios]);
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import { server } from '../../services/server';
 
@@ -31,12 +31,7 @@ function Pessoas() {
         setState({ ...state, open: false });
     };
 
-    // Data from the DB
-    useEffect(() => {
-        getPostos('', 1);
-    }, []);
-
-    const getPostos = async (filter, page) => {
+    const getPostos = useCallback(async (filter, page) => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -55,7 +50,11 @@ function Pessoas() {
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
         }
-    };
+    }, [state, setPaginationData, setState, setMessage, setStatusAlert]);
+
+    useEffect(() => {
+        getPostos('', 1);
+    }, [getPostos]);
 
     const operationSuccess = (type) => {
         switch (type) {

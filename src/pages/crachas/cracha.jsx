@@ -398,8 +398,8 @@ function Crachas() {
             });
             const img = document.createElement('img');
             img.src = dataUrl;
-            img.style.width = '188px';
-            img.style.height = '267px';
+            img.style.width = '215px';
+            img.style.height = '305px';
             const printWindow = window.open('', '', 'height=569,width=400');
             printWindow.document.open();
             printWindow.document.write(`

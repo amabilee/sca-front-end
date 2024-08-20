@@ -504,6 +504,11 @@ function VisitanteComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      veiculo_placa: formData.veiculo_placa.toUpperCase(),
+    }));
 
     if (formData.cpf.length != 14) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
@@ -535,7 +540,7 @@ function VisitanteComponent() {
     } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && formData.veiculo_cracha == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o veículo válido.");
-    } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa)) {
+    } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa.toUpperCase())) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma placa válida.");
     } else if (formData.conduzindo === 'Sim' && formData.veiculo_tipo == 'Selecione') {

@@ -82,7 +82,7 @@ const EfetivosTable = ({ data, openModal, levelAcesso, type }) => (
 
 EfetivosTable.propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({
-      qrcode_efetivo: PropTypes.string.isRequired,
+      qrcode_efetivo: PropTypes.number.isRequired,
       graduacao: PropTypes.string.isRequired,
       nome_guerra: PropTypes.string.isRequired,
       nome_completo: PropTypes.string.isRequired,

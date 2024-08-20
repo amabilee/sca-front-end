@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server';
 
+import PropTypes from 'prop-types';
+
 export default function DeletePostoModal({ currentPosto, closeModal, renderTable }) {
     const [removeOption, setRemoveOption] = useState(0);
-    const [dataFromPosto, setDataFromPosto] = useState(currentPosto || {});
+    const [dataFromPosto] = useState(currentPosto || {});
     
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -94,4 +96,14 @@ export default function DeletePostoModal({ currentPosto, closeModal, renderTable
             </div>
         </>
     );
+    
 }
+
+DeletePostoModal.propTypes = {
+    currentPosto: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        nome: PropTypes.string.isRequired,
+    }).isRequired,
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

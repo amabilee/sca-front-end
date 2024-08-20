@@ -45,7 +45,7 @@ ConsultarTable.propTypes = {
         cor_veiculo: PropTypes.string.isRequired,
         marca: PropTypes.string.isRequired,
         modelo: PropTypes.string.isRequired,
-        qrcode: PropTypes.string.isRequired
+        qrcode: PropTypes.number.isRequired
     })).isRequired
 };
 

@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
 import { IMaskInput } from "react-imask";
 import Remove from '../../../assets/remove_icon.svg'
 import uploadIcon from '../../../assets/upload.svg'
+
+import PropTypes from 'prop-types';
 
 export default function CreateEfetivoModal({ closeModal, renderTable }) {
     const [graduacaoOptions, setGraduacaoOptions] = useState([])
@@ -107,7 +109,6 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         return /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/.test(data);
     }
 
-
     const sendRequest = async () => {
         const formData = new FormData();
         let qrcodeData
@@ -159,8 +160,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         }
     };
 
-
-    const getSelectOptions = async () => {
+    const getSelectOptions = useCallback(async () => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
@@ -202,11 +202,11 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Erro ao buscar situações.");
         }
-    }
+    }, [state, setGraduacaoOptions, setUnidadeOptions, setSituacaoOptions, setState, setMessage])
 
     useEffect(() => {
         getSelectOptions()
-    }, [])
+    }, [getSelectOptions])
 
     const fileInputRef = useRef(null);
 
@@ -396,3 +396,8 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         </>
     );
 }
+
+CreateEfetivoModal.propTypes = {
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

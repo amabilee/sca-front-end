@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { server } from '../../../services/server'
-import { UseAuth } from '../../../hooks';
+
+import PropTypes from 'prop-types';
 
 export default function CreateUnidadeModal({ closeModal, renderTable }) {
     const [receivedData, setReceivedData] = useState({ nome: "", ativo_unidade: true })
-    const { signOut } = UseAuth();
     // SnackBar config
     const [message, setMessage] = useState("");
     const [state, setState] = useState({
@@ -98,3 +98,8 @@ export default function CreateUnidadeModal({ closeModal, renderTable }) {
         </>
     );
 }
+
+CreateUnidadeModal.propTypes = {
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};

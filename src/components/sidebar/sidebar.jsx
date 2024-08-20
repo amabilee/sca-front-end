@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Logo from '../../assets/sidebar/air-force-logo.svg';
 import Sair from '../../assets/sidebar/sair-icon.svg';
 import './style-sidebar.css';
@@ -11,7 +11,7 @@ function Sidebar() {
     const [userModules, setUserModules] = useState([]);
     const navigate = useNavigate();
 
-    const getUserModulos = async () => {
+    const getUserModulos = useCallback(async () => {
         let userData = localStorage.getItem('user');
         let userDataParsed = JSON.parse(userData)
         let token = localStorage.getItem("user_token")
@@ -32,11 +32,11 @@ function Sidebar() {
                 console.log(e)
             }
         }
-    }
+    }, [setUserModules, navigate, signOut])
 
     useEffect(() => {
         getUserModulos()
-    }, []);
+    }, [getUserModulos]);
 
     const navigationButtons = () => {
         return (

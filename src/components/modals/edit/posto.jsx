@@ -107,3 +107,13 @@ export default function EditPostoModal({ currentPosto, closeModal, renderTable }
         </>
     );
 }
+
+EditPostoModal.propTypes = {
+    currentPosto: PropTypes.shape({
+        id: PropTypes.number,
+        nome: PropTypes.string,
+        nivel_acesso: PropTypes.number,
+    }).isRequired,
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired,
+};
