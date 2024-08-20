@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { server } from '../../../services/server';
 import VeiculosTable from '../../tables/veiculos';
 import Snackbar from '@mui/material/Snackbar';
@@ -8,10 +8,10 @@ import Stack from '@mui/material/Stack';
 
 import Loader from '../../loader/index';
 
+import PropTypes from 'prop-types';
 
 export default function Veiculos({ closeModal }) {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
-    const [sendingData, setSendingData] = useState({});
     const [nivelAcesso, setNivelAcesso] = useState(1)
     const [loading, setLoading] = useState(true)
 
@@ -233,9 +233,11 @@ export default function Veiculos({ closeModal }) {
                     <div className="input-container">
                         <p>Placa</p>
                         <input
+                            type='text'
+                            maxLength={7}
                             className='filtering-input'
                             value={filteringConditions.placa}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })}
                         />
                     </div>
                     <div className="input-container">
@@ -257,17 +259,21 @@ export default function Veiculos({ closeModal }) {
                     <div className="input-container">
                         <p>RENAVAM</p>
                         <input
+                            type='text'
+                            maxLength={11}
                             className='filtering-input'
                             value={filteringConditions.renavam}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, renavam: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, renavam: e.target.value.replace(/[^0-9]/g, "") })}
                         />
                     </div>
                     <div className="input-container">
                         <p>Selo / AN</p>
                         <input
+                            type='text'
+                            maxLength={5}
                             className='filtering-input'
                             value={filteringConditions.qrcode}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode: e.target.value.replace(/[^0-9]/g, "") })}
                         />
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>
@@ -300,3 +306,7 @@ export default function Veiculos({ closeModal }) {
         </>
     );
 }
+
+Veiculos.propTypes = {
+    closeModal: PropTypes.func.isRequired,
+};

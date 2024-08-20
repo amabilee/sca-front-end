@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { server } from '../../services/server'
 import './style.css'
-import { IMaskInput } from "react-imask";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import uploadIcon from '../../assets/upload.svg'
@@ -454,7 +453,7 @@ function MilitarSemCadastroComponent() {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um email válido.");
       setAlertSeverity("error");
-    } else if (formData.entrada === 'Sim' && formData.cracha == '') {
+    } else if (formData.entrada === 'Sim' && String(formData.cracha).length != 5) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o militar válido.");
       setAlertSeverity("error");
@@ -462,11 +461,11 @@ function MilitarSemCadastroComponent() {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um destino válido.");
       setAlertSeverity("error");
-    } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && formData.veiculo_cracha == '') {
+    } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && String(formData.veiculo_cracha).length != 5) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o veículo válido.");
       setAlertSeverity("error");
-    } else if (formData.conduzindo === 'Sim' && formData.veiculo_placa.length != 7) {
+    } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa)) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma placa válida.");
       setAlertSeverity("error");
@@ -493,6 +492,10 @@ function MilitarSemCadastroComponent() {
     } else {
       formatSendRequest();
     }
+  };
+
+  const validarPlaca = (placa) => {
+    return /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
   };
 
   //Types of requests
@@ -883,7 +886,7 @@ function MilitarSemCadastroComponent() {
       </div>
       <div className="pessoas-section-input  session-input-autorizador-simple">
         <div className="input-container">
-          <p>Inserir entrada deste dependente no sistema? </p>
+          <p>Inserir entrada deste militar no sistema? </p>
           <select
             className='filtering-input'
             value={formData.entrada}

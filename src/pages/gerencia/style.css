@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     height: 80%;
     width: 100%;
 }
@@ -20,7 +20,7 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;  
 }
 
@@ -53,18 +53,28 @@
     background-color: #1B599B;
 }
 
+.gerencia-box-cards .gerencia-box-line:nth-child(1) .gerencia-card:nth-child(1),
+.gerencia-box-cards .gerencia-box-line:nth-child(2) .gerencia-card:nth-child(1){
+    margin: 0 50px 0 0;
+}
+
 .gerencia-card span{
     height: 4px;
     width: 40px;
     border-radius: 10px;
 }
 
-.gerencia-box{
+.gerencia-box {
     border-radius: 17px;
-    width: 500px;
-    height: 330px;
+    width: 80vw;
+    max-width: 500px;
+    height: 50vh;
+    max-height: 330px;
+    margin: 0 50px 0 0;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+
+
 
 .gerencia-card p:nth-child(3),
 .gerencia-box .gerencia-box-line p:nth-child(1){
@@ -143,4 +153,16 @@
     border-radius: 10px;
     background-color: #58AFCB;
     margin: 0 10px 0 20px;
+}
+
+.gerencia-box .gerencia-box-line{
+    justify-content: space-between;
+}
+
+.gerencia-box-cards{
+    margin: 0 50px 0 0;
+}
+
+.margin50{
+    margin: 0 0px 50px 0;
 }

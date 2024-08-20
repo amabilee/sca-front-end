@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import PostosTable from '../../components/tables/postos';
 import '../relatorio/style.css';
@@ -111,6 +111,7 @@ function PostoServico() {
             case 'delete':
                 setOpenDeleteModal(true)
                 setSendingPosto(data);
+                break;
             default:
                 break;
         }
@@ -126,6 +127,7 @@ function PostoServico() {
                 break;
             case 'delete':
                 setOpenDeleteModal(false)
+                break;
             default:
                 break;
         }
@@ -147,6 +149,7 @@ function PostoServico() {
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Posto de Serviço deletado com sucesso.");
                 setStatusAlert("success");
+                break;
             default:
                 break;
         }

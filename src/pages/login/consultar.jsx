@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Logo from '../../assets/sidebar/air-force-logo.svg'
 import LeaveIcon from '../../assets/sidebar/sair-icon.svg'
 import ConsultarTable from '../../components/tables/consultar.jsx'
@@ -54,7 +54,7 @@ function ConsultarEfetivo() {
             const response = await server.get(`/efetivo/consulta/${numero}`);
 
             if (response.data[0]) {
-                const { nome_completo, nome_guerra, foto, Unidade, email, Graduacao, Fotos, qrcode_efetivo } = response.data[0];
+                const { nome_completo, nome_guerra, Unidade, email, Graduacao, Fotos, qrcode_efetivo } = response.data[0];
                 let fotoBase64 = '';
                 if (Fotos && Fotos.length > 0) {
                     try {

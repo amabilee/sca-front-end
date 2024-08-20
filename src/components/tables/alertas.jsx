@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import Delete from '../../assets/table/delete-icon.svg';
 import Edit from '../../assets/table/edit-icon.svg'
 import '../../pages/posto/style.css';
@@ -38,5 +38,15 @@ const AlertasTable = ({ data, openModal, levelAcesso }) => {
         </div>
     );
 };
+
+AlertasTable.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.shape({
+        nome_alerta: PropTypes.string.isRequired,
+        cor: PropTypes.string.isRequired
+    })).isRequired,
+    openModal: PropTypes.func.isRequired,
+    levelAcesso: PropTypes.number
+};
+
 
 export default AlertasTable;

@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import Edit from '../../assets/table/edit-icon.svg'
 import Delete from '../../assets/table/delete-icon.svg'
 import '../../pages/posto/style.css'
@@ -34,5 +34,14 @@ const PostosTable = ({ data, openModal, levelAcesso }) => (
   </div>
 
 );
+
+PostosTable.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    nome: PropTypes.string.isRequired,
+    nivel_acesso: PropTypes.number.isRequired
+  })).isRequired,
+  openModal: PropTypes.func.isRequired,
+  levelAcesso: PropTypes.number
+};
 
 export default PostosTable;

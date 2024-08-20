@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import UsuariosTable from '../../components/tables/usuarios';
 import { server } from '../../services/server';

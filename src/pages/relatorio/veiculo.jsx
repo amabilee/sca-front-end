@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../../components/sidebar/sidebar'
 import RelatoriosVeiculosTable from '../../components/tables/relatorio-veiculo'
 import './style.css'
@@ -26,7 +26,7 @@ function RelatorioVeiculo() {
         setPaginationData(prevState => {
             return { ...prevState, currentPage: value }
         });
-        getAlertas(paginationData.filtering, value)
+        getRegistros(paginationData.filtering, value)
     };
 
     // SnackBar config
@@ -149,7 +149,7 @@ function RelatorioVeiculo() {
                             type='text'
                             maxLength={7}
                             value={filteringConditions.placa}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })}
                         />
                     </div>
                     <div className="input-container">

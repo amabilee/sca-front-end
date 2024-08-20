@@ -1,6 +1,4 @@
-import React from 'react';
-import Edit from '../../assets/table/edit-icon.svg';
-import Delete from '../../assets/table/delete-icon.svg';
+import PropTypes from 'prop-types';
 import './style.css';
 
 const UsuariosTable = ({ data }) => (
@@ -33,5 +31,20 @@ const UsuariosTable = ({ data }) => (
         </table>
     </div>
 );
+
+UsuariosTable.propTypes = {
+    data: PropTypes.arrayOf(
+        PropTypes.shape({
+            graduacao: PropTypes.string.isRequired,
+            nome_guerra: PropTypes.string.isRequired,
+            Modulos: PropTypes.arrayOf(
+                PropTypes.shape({
+                    descricao: PropTypes.string.isRequired,
+                })
+            ).isRequired,
+            nivel_acesso: PropTypes.number.isRequired,
+        })
+    ).isRequired,
+};
 
 export default UsuariosTable;

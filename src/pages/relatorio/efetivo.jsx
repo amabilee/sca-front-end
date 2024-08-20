@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../../components/sidebar/sidebar'
 import RelatoriosEfetivosTable from '../../components/tables/relatorio-efetivo'
 import './style.css'

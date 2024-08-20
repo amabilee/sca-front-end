@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import './style.css';
 
 const RelatorioVeiculoTable = ({ data }) => {
@@ -45,5 +45,29 @@ const RelatorioVeiculoTable = ({ data }) => {
     </div>
   );
 }
+
+RelatorioVeiculoTable.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    tipo: PropTypes.string.isRequired,
+    data: PropTypes.string.isRequired,
+    hora: PropTypes.string.isRequired,
+    cracha_veiculo: PropTypes.number,
+    Veiculo: PropTypes.shape({
+      qrcode: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    }),
+    VeiculoSemAn: PropTypes.shape({
+      placa: PropTypes.string,
+    }),
+    SentinelaQrcode: PropTypes.shape({
+      Efetivo: PropTypes.shape({
+        Graduacao: PropTypes.shape({
+          sigla: PropTypes.string.isRequired,
+        }),
+        nome_guerra: PropTypes.string.isRequired,
+      })
+    }),
+    autorizador: PropTypes.string
+  })).isRequired,
+};
 
 export default RelatorioVeiculoTable;

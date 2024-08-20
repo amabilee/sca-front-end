@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import { server } from '../../services/server';
 import { IMaskInput } from "react-imask";
@@ -43,7 +43,7 @@ function Crachas() {
         unidade: '',
         foto: '',
 
-        cargo: '',
+        cargo: 'Selecione',
         setor: '',
     })
 
@@ -75,7 +75,7 @@ function Crachas() {
             unidade: '',
             foto: '',
 
-            cargo: '',
+            cargo: 'Selecione',
             setor: '',
         }))
         setStatusFormData((prevFormData) => ({
@@ -384,7 +384,7 @@ function Crachas() {
     const validarData = (data) => {
         return /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/.test(data);
     }
-      
+
 
     //Handle imprimir
 
@@ -398,8 +398,8 @@ function Crachas() {
             });
             const img = document.createElement('img');
             img.src = dataUrl;
-            img.style.width = '260px';
-            img.style.height = '370px';
+            img.style.width = '188px';
+            img.style.height = '267px';
             const printWindow = window.open('', '', 'height=569,width=400');
             printWindow.document.open();
             printWindow.document.write(`
@@ -493,13 +493,24 @@ function Crachas() {
                                     </div>
                                     <div className="input-container">
                                         <p>Validade</p>
-                                        <IMaskInput
+                                        <input
                                             type='text'
-                                            mask='00/00/0000'
                                             value={formData.validade}
                                             disabled={statusFormData.validade}
                                             className='filtering-input'
-                                            onChange={(e) => setFormData({ ...formData, validade: e.target.value })}
+                                            placeholder="DD/MM/AAAA"
+                                            maxLength={10}
+                                            onChange={(e) => {
+                                                let value = e.target.value;
+                                                value = value.replace(/[^0-9]/g, '');
+                                                if (value.length > 2) {
+                                                    value = value.slice(0, 2) + '/' + value.slice(2);
+                                                }
+                                                if (value.length > 5) {
+                                                    value = value.slice(0, 5) + '/' + value.slice(5, 9);
+                                                }
+                                                setFormData({ ...formData, validade: value })
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -535,13 +546,17 @@ function Crachas() {
                                     <div className="cracha-form-section-line">
                                         <div className="input-container">
                                             <p>Cargo/Função</p>
-                                            <input
-                                                type='text'
+                                            <select
                                                 value={formData.cargo}
                                                 disabled={statusFormData.cargo}
                                                 className='filtering-input'
                                                 onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
-                                            />
+                                            >
+                                                <option value={'Selecione'}>Selecione</option>
+                                                <option value={'CHEFE'}>CHEFE</option>
+                                                <option value={'AUXILIAR'}>AUXILIAR</option>
+                                                <option value={'ADJUNTO'}>ADJUNTO</option>
+                                            </select>
                                         </div>
                                         <div className="input-container">
                                             <p>Militar</p>

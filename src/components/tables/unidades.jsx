@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import Edit from '../../assets/table/edit-icon.svg'
 import Delete from '../../assets/table/delete-icon.svg'
 import './style.css'
@@ -31,5 +31,15 @@ const UnidadesTable = ({ data, openModal, levelAcesso }) => (
         </table>
     </div>
 );
+
+UnidadesTable.propTypes = {
+    data: PropTypes.arrayOf(
+        PropTypes.shape({
+            nome: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    openModal: PropTypes.func.isRequired,
+    levelAcesso: PropTypes.number.isRequired,
+};
 
 export default UnidadesTable;

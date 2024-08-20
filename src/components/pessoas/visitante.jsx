@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { server } from '../../services/server'
 import './style.css'
 import { IMaskInput } from "react-imask";
@@ -134,7 +134,6 @@ function VisitanteComponent() {
       bairro: true,
       estado: true,
       complemento: true,
-      estado: true,
       cracha: true,
       autorizador_numero: true,
       autorizador: true,
@@ -560,7 +559,7 @@ function VisitanteComponent() {
   };
 
   const validarPlaca = (placa) => {
-    return /^[A-Z]{3}\d{3}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
+    return /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
   };
   
 
@@ -637,7 +636,6 @@ function VisitanteComponent() {
           bairro: true,
           estado: true,
           complemento: true,
-          estado: true,
         }));
       } else if (typeRequest === 'visitante+veiculo') {
         sendRequestVeiculo(token, userDataParsed, typeRequest)
@@ -727,7 +725,6 @@ function VisitanteComponent() {
           bairro: true,
           estado: true,
           complemento: true,
-          estado: true,
           veiculo_placa: true,
 
           veiculo_tipo: true,
@@ -1146,6 +1143,7 @@ function VisitanteComponent() {
                 <p>RENAVAM</p>
                 <input
                   type="text"
+                  maxLength={11}
                   className='filtering-input'
                   disabled={disabledInputs.veiculo_renavam}
                   value={formData.veiculo_renavam}

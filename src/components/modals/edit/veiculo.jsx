@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import PropTypes from 'prop-types';
 import "./style.css";
 import { server } from '../../../services/server';
 
-export default function EditVeiculoModal({ currentData, closeModal, renderTable }) {
+function EditVeiculoModal({ currentData, closeModal, renderTable }) {
     const [receivedData, setReceivedData] = useState(currentData || {});
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -42,7 +43,7 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
     )
 
     const confirmEditing = () => {
-        const placaPattern = /^[a-zA-Z]{3}[0-9][A-Za-z0-9][0-9]{2}$/;
+        
         if (String(efetivoData.qrcode_efetivo).length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
@@ -52,7 +53,7 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
         } else if (receivedData.cor_veiculo == 'Nenhum') {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma cor válida.");
-        } else if (!placaPattern.test(receivedData.placa)) {
+        } else if (!validarPlaca(receivedData.placa)) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma placa válida.");
         } else if (receivedData.marca.length == 0) {
@@ -71,6 +72,10 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
             sendRequest();
         }
     };
+
+    const validarPlaca = (placa) => {
+        return /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
+      };
 
     const sendRequest = async () => {
         let userData = localStorage.getItem('user');
@@ -99,6 +104,7 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
             let userDataParsed = JSON.parse(userData);
             let token = localStorage.getItem("user_token")
             try {
+                console.log(receivedData)
                 if (String(receivedData.id_efetivo).length == 4) {
                     const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, {
                         headers: {
@@ -106,20 +112,22 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                             'access-level': userDataParsed.nivel_acesso
                         }
                     });
-                    setEfetivoData({ qrcode_efetivo: response.data.qrcode_efetivo, nome_guerra: response.data.nome_guerra, graduacao: response.data.Graduacao.sigla })
+                    console.log(response.data)
+                    setEfetivoData({ qrcode_efetivo: response.data.qrcode_efetivo, nome_guerra: response.data.nome_guerra, graduacao: response.data.graduacao })
                     setReceivedData({ ...receivedData, id_efetivo: response.data.id })
                 } else {
-                    const response = await server.get(`/efetivo/consulta/${e}`, receivedData, {
+                    const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, {
                         headers: {
                             'Authentication': token,
                             'access-level': userDataParsed.nivel_acesso
                         }
                     });
-                    setEfetivoData({ qrcode_efetivo: e, nome_guerra: response.data.nome_guerra, graduacao: response.data.Graduacao.sigla })
+                    setEfetivoData({ qrcode_efetivo: e, nome_guerra: response.data.nome_guerra, graduacao: response.data.graduacao })
                     setReceivedData({ ...receivedData, id_efetivo: response.data.id })
                 }
             } catch (e) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                console.log(e)
                 setMessage("Não foi encontrado um efetivo com este número de ordem");
             }
         } else {
@@ -129,7 +137,6 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                     graduacao: ''
                 }
             )
-            // setReceivedData({ ...receivedData, id_efetivo: '' })
         }
     }
 
@@ -205,7 +212,12 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                         </div>
                         <div className="input-container">
                             <p>Placa</p>
-                            <input className='filtering-input' value={receivedData.placa} onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value })} />
+                            <input
+                            type="text"
+                            maxLength={5}
+                            className='filtering-input'
+                            value={receivedData.placa}
+                            onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })} />
                         </div>
                         <div className="input-container">
                             <p>Marca</p>
@@ -218,17 +230,20 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
                         <div className="input-container">
                             <p>RENAVAM</p>
                             <input
-                                type="number"
+                                type="text"
+                                maxLength={11}
                                 className='filtering-input'
                                 value={receivedData.renavam}
-                                onChange={(e) => setReceivedData({ ...receivedData, renavam: e.target.value })} />
+                                onChange={(e) => setReceivedData({ ...receivedData, renavam: e.target.value.replace(/[^0-9]/g, "") })} />
                         </div>
                         <div className="input-container">
                             <p>Selo / AN</p>
                             <input
+                                type="text"
+                                maxLength={5}
                                 className='filtering-input'
                                 value={receivedData.qrcode}
-                                onChange={(e) => setReceivedData({ ...receivedData, qrcode: e.target.value })}
+                                onChange={(e) => setReceivedData({ ...receivedData, qrcode: e.target.value.replace(/[^0-9]/g, "") })}
                             />
 
                         </div>
@@ -265,3 +280,21 @@ export default function EditVeiculoModal({ currentData, closeModal, renderTable 
         </>
     );
 }
+
+EditVeiculoModal.propTypes = {
+    currentData: PropTypes.shape({
+        id: PropTypes.number,
+        tipo: PropTypes.string,
+        cor_veiculo: PropTypes.string,
+        placa: PropTypes.string,
+        marca: PropTypes.string,
+        modelo: PropTypes.string,
+        renavam: PropTypes.number,
+        qrcode: PropTypes.number,
+        id_efetivo: PropTypes.number
+    }),
+    closeModal: PropTypes.func.isRequired,
+    renderTable: PropTypes.func.isRequired
+};
+
+export default EditVeiculoModal

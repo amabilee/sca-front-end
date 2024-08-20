@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import "./style.css";
+import PropTypes from 'prop-types';
 import { server } from '../../../services/server';
 
 export default function EditUnidadeModal({ currentData, closeModal, renderTable }) {

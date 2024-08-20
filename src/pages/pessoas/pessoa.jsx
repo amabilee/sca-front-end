@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import { server } from '../../services/server';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-
-import Loader from '../../components/loader/index';
 
 import DependenteComponent from '../../components/pessoas/dependente.jsx'
 import VisitanteComponent from '../../components/pessoas/visitante.jsx'
@@ -17,18 +15,7 @@ import './style.css'
 
 function Pessoas() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
-    const [sendingPosto, setSendingPosto] = useState({});
     const [pessoasComponent, setPessoasComponent] = useState({ dependente: true, visitante: false, militar1: false, militar2: false })
-
-    const [loading, setLoading] = useState(true)
-
-    //Paginator conifg
-    const handleChange = (event, value) => {
-        setPaginationData(prevState => {
-            return { ...prevState, currentPage: value }
-        });
-        getPostos(paginationData.filtering, value)
-    };
 
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -60,70 +47,13 @@ function Pessoas() {
                     'access-level': userDataParsed.nivel_acesso
                 }
             });
-            setRegistros(response.data.entities);
             setPaginationData(prevState => {
                 return { ...prevState, totalPages: response.data.pagination.totalPages }
             });
-            setLoading(false)
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
             setMessage("Erro ao buscar dados:");
             setStatusAlert("error");
-        }
-    };
-
-    const [registros, setRegistros] = useState([]);
-
-    // Filtering arguments
-    const [filteringConditions, setFilteringConditions] = useState({
-        nome: '',
-        nivel_acesso: 0,
-    });
-
-    const sendFilteringConditions = () => {
-        let filter = ''
-        if (filteringConditions.nome != '') {
-            filter += `&nome=${filteringConditions.nome}`
-        }
-        if (filteringConditions.nivel_acesso != 0) {
-            filter += `&nivel_acesso=${filteringConditions.nivel_acesso}`
-        }
-        getPostos(filter, 1)
-        setPaginationData(prevState => {
-            return { ...prevState, filtering: filter, currentPage: 1 }
-        });
-    };
-
-    // Open and Close Modals
-    const openModal = (type, data) => {
-        switch (type) {
-            case 'edit':
-                setOpenEditModal(true);
-                setSendingPosto(data);
-                break;
-            case 'create':
-                setOpenCreateModal(true);
-                break;
-            case 'delete':
-                setOpenDeleteModal(true)
-                setSendingPosto(data);
-            default:
-                break;
-        }
-    };
-
-    const closeModal = (type) => {
-        switch (type) {
-            case 'edit':
-                setOpenEditModal(false);
-                break;
-            case 'create':
-                setOpenCreateModal(false);
-                break;
-            case 'delete':
-                setOpenDeleteModal(false)
-            default:
-                break;
         }
     };
 
@@ -143,6 +73,7 @@ function Pessoas() {
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Posto de Serviço deletado com sucesso.");
                 setStatusAlert("success");
+                break;
             default:
                 break;
         }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import VeiculosTable from '../../components/tables/veiculos';
 import EditVeiculoModal from '../../components/modals/edit/veiculo';
@@ -11,6 +11,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+
+import { UseAuth } from '../../hooks';
 
 import Loader from '../../components/loader/index';
 import CarIcon from '../../assets/car_icon.svg'
@@ -28,6 +30,7 @@ function Veiculos() {
     const [nivelAcesso, setNivelAcesso] = useState(1)
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
+    const { signOut } = UseAuth();
 
     //Paginator conifg
     const handleChange = (event, value) => {
@@ -168,6 +171,7 @@ function Veiculos() {
             case 'inactive':
                 setOpenInactiveModal(false)
                 operationSuccess()
+                break;
             default:
                 break;
         }
@@ -189,6 +193,7 @@ function Veiculos() {
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Veículo deletado com sucesso.");
                 setStatusAlert("success");
+                break;
             default:
                 break;
         }
@@ -246,31 +251,33 @@ function Veiculos() {
                             value={filteringConditions.cor_veiculo}
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, cor_veiculo: e.target.value })}
                         >
-                        <option value={'Nenhum'}>Nenhum</option>
-                        <option value={'Amarelo'}>Amarelo</option>
-                        <option value={'Azul'}>Azul</option>
-                        <option value={'Bege'}>Bege</option>
-                        <option value={'Branca'}>Branca</option>
-                        <option value={'Cinza'}>Cinza</option>
-                        <option value={'Dourada'}>Dourada</option>
-                        <option value={'Grená'}>Grená</option>
-                        <option value={'Laranja'}>Laranja</option>
-                        <option value={'Marrom'}>Marrom</option>
-                        <option value={'Prata'}>Prata</option>
-                        <option value={'Preta'}>Preta</option>
-                        <option value={'Rosa'}>Rosa</option>
-                        <option value={'Roxa'}>Roxa</option>
-                        <option value={'Verde'}>Verde</option>
-                        <option value={'Vermelha'}>Vermelha</option>
-                        <option value={'Fantasia'}>Fantasia</option>
+                            <option value={'Nenhum'}>Nenhum</option>
+                            <option value={'Amarelo'}>Amarelo</option>
+                            <option value={'Azul'}>Azul</option>
+                            <option value={'Bege'}>Bege</option>
+                            <option value={'Branca'}>Branca</option>
+                            <option value={'Cinza'}>Cinza</option>
+                            <option value={'Dourada'}>Dourada</option>
+                            <option value={'Grená'}>Grená</option>
+                            <option value={'Laranja'}>Laranja</option>
+                            <option value={'Marrom'}>Marrom</option>
+                            <option value={'Prata'}>Prata</option>
+                            <option value={'Preta'}>Preta</option>
+                            <option value={'Rosa'}>Rosa</option>
+                            <option value={'Roxa'}>Roxa</option>
+                            <option value={'Verde'}>Verde</option>
+                            <option value={'Vermelha'}>Vermelha</option>
+                            <option value={'Fantasia'}>Fantasia</option>
                         </select>
                     </div>
                     <div className="input-container">
                         <p>Placa</p>
                         <input
+                            type='text'
+                            maxLength={7}
                             className='filtering-input'
                             value={filteringConditions.placa}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })}
                         />
                     </div>
                     <div className="input-container">
@@ -292,17 +299,21 @@ function Veiculos() {
                     <div className="input-container">
                         <p>RENAVAM</p>
                         <input
+                            type='text'
+                            maxLength={11}
                             className='filtering-input'
                             value={filteringConditions.renavam}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, renavam: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, renavam: e.target.value.replace(/[^0-9]/g, "") })}
                         />
                     </div>
                     <div className="input-container">
                         <p>Selo / AN</p>
                         <input
+                            type='text'
+                            maxLength={5}
                             className='filtering-input'
                             value={filteringConditions.qrcode}
-                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode: e.target.value })}
+                            onChange={(e) => setFilteringConditions({ ...filteringConditions, qrcode: e.target.value.replace(/[^0-9]/g, "") })}
                         />
                     </div>
                     <button className="searchButton" onClick={sendFilteringConditions}>Pesquisar</button>

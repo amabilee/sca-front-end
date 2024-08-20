@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import './style.css'
 
 const RelatorioEfetivoTable = ({ data }) => {
@@ -47,6 +47,43 @@ const RelatorioEfetivoTable = ({ data }) => {
       </table>
     </div>
   );
+};
+
+RelatorioEfetivoTable.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    tipo: PropTypes.string.isRequired,
+    data: PropTypes.string.isRequired,
+    hora: PropTypes.string.isRequired,
+    Posto: PropTypes.shape({
+      nome: PropTypes.string
+    }),
+    EfetivoQrcode: PropTypes.shape({
+      Efetivo: PropTypes.shape({
+        Graduacao: PropTypes.shape({
+          sigla: PropTypes.string.isRequired
+        }).isRequired,
+        nome_guerra: PropTypes.string.isRequired
+      }).isRequired
+    }),
+    Dependente: PropTypes.shape({
+      nome: PropTypes.string,
+      cpf: PropTypes.number
+    }),
+    Visitante: PropTypes.shape({
+      nome: PropTypes.string,
+      cpf: PropTypes.number
+    }),
+    SentinelaQrcode: PropTypes.shape({
+      Efetivo: PropTypes.shape({
+        Graduacao: PropTypes.shape({
+          sigla: PropTypes.string.isRequired
+        }).isRequired,
+        nome_guerra: PropTypes.string.isRequired
+      }).isRequired
+    }),
+    autorizador: PropTypes.string,
+    detalhe: PropTypes.string
+  })).isRequired,
 };
 
 

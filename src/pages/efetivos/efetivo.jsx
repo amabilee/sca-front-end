@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import EfetivosTable from '../../components/tables/efetivos';
 import EditEfetivoModal from '../../components/modals/edit/efetivo';
@@ -118,10 +118,10 @@ function Efetivos() {
 
     const openModal = async (type, data) => {
         switch (type) {
-            case 'edit':
-                let userData = localStorage.getItem('user');
-                let userDataParsed = JSON.parse(userData);
-                let token = localStorage.getItem("user_token");
+            case 'edit':{
+                const userData = localStorage.getItem('user');
+                const userDataParsed = JSON.parse(userData);
+                const token = localStorage.getItem("user_token");
 
                 let sendData 
                 try {
@@ -139,6 +139,7 @@ function Efetivos() {
                 }
                 setSendingData(sendData);
                 setOpenEditModal(true);
+            }
                 break;
             case 'create':
                 setOpenCreateModal(true);
@@ -162,6 +163,7 @@ function Efetivos() {
                 break;
             case 'delete':
                 setOpenDeleteModal(false)
+                break;
             default:
                 break;
         }
@@ -183,6 +185,7 @@ function Efetivos() {
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Efetivo deletado com sucesso.");
                 setStatusAlert("success");
+                break;
             default:
                 break;
         }

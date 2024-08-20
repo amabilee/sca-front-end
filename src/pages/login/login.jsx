@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Logo from '../../assets/sidebar/air-force-logo.svg';
 import "./style.css";
 import { UseAuth } from '../../hooks';

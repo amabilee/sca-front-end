@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import './style.css';
 
 const ConsultarTable = ({ data }) => {
@@ -36,6 +36,17 @@ const ConsultarTable = ({ data }) => {
             </table>
         </div>
     );
+};
+
+ConsultarTable.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.shape({
+        tipo: PropTypes.string.isRequired,
+        placa: PropTypes.string.isRequired,
+        cor_veiculo: PropTypes.string.isRequired,
+        marca: PropTypes.string.isRequired,
+        modelo: PropTypes.string.isRequired,
+        qrcode: PropTypes.string.isRequired
+    })).isRequired
 };
 
 export default ConsultarTable;

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import "./style.css";
 import { server } from '../../../services/server';
+import PropTypes from 'prop-types';
 
 export default function EditPostoModal({ currentPosto, closeModal, renderTable }) {
     const [dataFromPosto, setDataFromPosto] = useState(currentPosto || {});

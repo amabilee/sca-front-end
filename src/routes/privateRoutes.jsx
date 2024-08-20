@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { server } from '../services/server';
 import Loader from '../components/loader/index.jsx';
 import { UseAuth } from '../hooks';
+import PropTypes from 'prop-types';
 
 import RelatorioEfetivoPage from '../pages/relatorio/efetivo.jsx';
 import RelatorioVeiculoPage from '../pages/relatorio/veiculo.jsx';
@@ -18,8 +19,6 @@ import GerenciaPage from '../pages/gerencia/gerencia.jsx';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const { signOut } = UseAuth();
-  const [userModules, setUserModules] = useState([]);
-  const [hasAccess, setHasAccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [redirect, setRedirect] = useState(false);
 
@@ -44,13 +43,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
           });
 
           const modules = response?.data?.entity?.Modulos || [];
-          setUserModules(modules);
 
           const moduleLink = currentPath || '';
 
           const access = modules.some((module) => module.link === moduleLink);
-
-          setHasAccess(access);
 
           if (!access) {
             setRedirect(true);
@@ -99,6 +95,9 @@ const Crachas = (props) => <PrivateRoute component={CrachasPage} {...props} />;
 const Pessoas = (props) => <PrivateRoute component={PessoasPage} {...props} />;
 const Gerencia = (props) => <PrivateRoute component={GerenciaPage} {...props} />;
 
+PrivateRoute.propTypes = {
+  component: PropTypes.elementType.isRequired,
+};
 
 export {
   Usuarios,

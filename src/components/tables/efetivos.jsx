@@ -1,11 +1,11 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import Edit from '../../assets/table/edit-icon.svg'
 import Delete from '../../assets/table/delete-icon.svg'
 import Qrcode from '../../assets/table/qrcode_icon.svg'
 import NoQrcode from '../../assets/table/no_qrcode_icon.svg'
 import '../../pages/posto/style.css'
 
-const UnidadesTable = ({ data, openModal, levelAcesso, type }) => (
+const EfetivosTable = ({ data, openModal, levelAcesso, type }) => (
     <div className='table-wrapper'>
         {type != 'cracha' ? (
             <table className='table table-actions'>
@@ -80,4 +80,17 @@ const UnidadesTable = ({ data, openModal, levelAcesso, type }) => (
     </div>
 );
 
-export default UnidadesTable;
+EfetivosTable.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.shape({
+      qrcode_efetivo: PropTypes.string.isRequired,
+      graduacao: PropTypes.string.isRequired,
+      nome_guerra: PropTypes.string.isRequired,
+      nome_completo: PropTypes.string.isRequired,
+      unidade: PropTypes.string.isRequired
+    })).isRequired,
+    openModal: PropTypes.func.isRequired,
+    levelAcesso: PropTypes.number,
+    type: PropTypes.string
+  };
+
+export default EfetivosTable;

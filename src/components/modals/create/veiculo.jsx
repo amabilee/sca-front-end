@@ -55,7 +55,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
     };
 
     const confirmCreating = () => {
-        const placaPattern = /^[a-zA-Z]{3}[0-9][A-Za-z0-9][0-9]{2}$/;
+
         if (String(efetivoData.nome_guerra).length == 0 || String(efetivoData.graduacao).length == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
@@ -65,7 +65,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
         } else if (receivedData.cor_veiculo == 'Nenhum') {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma cor válida.");
-        } else if (!placaPattern.test(receivedData.placa)) {
+        } else if (!validarPlaca(receivedData.placa)) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma placa válida.");
         } else if (receivedData.marca.length == 0) {
@@ -83,6 +83,10 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
         } else {
             sendRequest();
         }
+    };
+
+    const validarPlaca = (placa) => {
+        return /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
     };
 
     const sendRequest = async () => {
@@ -227,7 +231,12 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Placa</p>
-                            <input className='filtering-input' value={receivedData.placa} onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value })} />
+                            <input
+                                type="text"
+                                maxLength={5}
+                                className='filtering-input'
+                                value={receivedData.placa}
+                                onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })} />
                         </div>
                         <div className="input-container">
                             <p>Marca</p>
@@ -239,21 +248,21 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>RENAVAM</p>
-                            <IMaskInput
+                            <input
                                 type="text"
-                                mask="00000000000"
+                                maxLength={11}
                                 className='filtering-input'
                                 value={receivedData.renavam}
-                                onChange={(e) => setReceivedData({ ...receivedData, renavam: e.target.value })} />
+                                onChange={(e) => setReceivedData({ ...receivedData, renavam: e.target.value.replace(/[^0-9]/g, "") })} />
                         </div>
                         <div className="input-container">
                             <p>Selo / AN</p>
-                            <IMaskInput
+                            <input
                                 type="text"
-                                mask="00000"
+                                maxLength={5}
                                 className='filtering-input'
                                 value={receivedData.qrcode}
-                                onChange={(e) => setReceivedData({ ...receivedData, qrcode: e.target.value })}
+                                onChange={(e) => setReceivedData({ ...receivedData, qrcode: e.target.value.replace(/[^0-9]/g, "") })}
                             />
 
                         </div>

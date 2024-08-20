@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 
 import { server } from '../../services/server';
@@ -9,13 +9,14 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 
 import Loader from '../../components/loader/index';
-
+import { UseAuth } from '../../hooks';
 import './style.css'
 
 
 function Veiculos() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
+    const { signOut } = UseAuth();
 
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -181,7 +182,7 @@ function Veiculos() {
                         </div>
                     ) : (
                         <>
-                            <div className="gerencia-box-line">
+                            <div className="gerencia-box-line margin50">
                                 <div className="gerencia-box-cards">
                                     <div className="gerencia-box-line">
                                         <div className="gerencia-card">
@@ -285,7 +286,7 @@ function Veiculos() {
 
                                 </div>
                             </div>
-                            <div className="gerencia-box-line">
+                            <div className="gerencia-box-line margin50">
                                 <div className="gerencia-box">
                                     <div className="gerencia-box-line">
                                         <div className="gerencia-box-column">

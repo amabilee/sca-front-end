@@ -1,8 +1,8 @@
-import React from 'react';
 import Edit from '../../assets/table/edit-icon.svg'
 import Delete from '../../assets/table/delete-icon.svg'
 import Activate from '../../assets/table/active-icon.svg'
 import './style.css'
+import PropTypes from 'prop-types';
 
 const UnidadesTable = ({ data, openModal, levelAcesso, archived }) => (
     <div className='table-wrapper'>
@@ -51,5 +51,28 @@ const UnidadesTable = ({ data, openModal, levelAcesso, archived }) => (
         </table>
     </div>
 );
+
+UnidadesTable.propTypes = {
+    data: PropTypes.arrayOf(
+        PropTypes.shape({
+            graduacao: PropTypes.string.isRequired,
+            nome_guerra: PropTypes.string.isRequired,
+            tipo: PropTypes.string.isRequired,
+            cor_veiculo: PropTypes.string.isRequired,
+            placa: PropTypes.string.isRequired,
+            marca: PropTypes.string.isRequired,
+            modelo: PropTypes.string.isRequired,
+            renavam: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            qrcode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        })
+    ).isRequired,
+    openModal: PropTypes.func.isRequired,
+    levelAcesso: PropTypes.number.isRequired,
+    archived: PropTypes.bool,
+};
+
+UnidadesTable.defaultProps = {
+    archived: false,
+};
 
 export default UnidadesTable;

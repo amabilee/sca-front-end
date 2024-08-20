@@ -14,17 +14,16 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
     const [graduacaoSelected, setGraduacaoSelected] = useState("")
     const [receivedData, setReceivedData] = useState(
         {
-            qrcode_efetivo: '',
-            nome_guerra: '',
-            nome_completo: '',
+            qrcode_efetivo: "",
+            nome_guerra: "",
+            nome_completo: "",
             id_unidade: 0,
             id_graduacao: 0,
-            email: '',
+            email: "",
             id_alerta: 0,
-            email: '',
-            cnh: '',
-            val_cnh: '',
-            foto: '',
+            cnh: "",
+            val_cnh: "",
+            foto: "",
             ativo_efetivo: true
         })
 
@@ -42,21 +41,20 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
     };
 
     const cleanInputs = () => {
+        removeFoto();
         setReceivedData({
-            ...receivedData,
-            qrcode_efetivo: '',
-            nome_guerra: '',
-            nome_completo: '',
+            qrcode_efetivo: "",
+            nome_guerra: "",
+            nome_completo: "",
             id_unidade: 0,
             id_graduacao: 0,
-            email: '',
+            email: "",
             id_alerta: 0,
-            email: '',
-            cnh: '',
-            val_cnh: '',
-            foto: '',
+            cnh: "",
+            val_cnh: "",
+            foto: "",
+            ativo_efetivo: true,
         });
-        removeFoto()
     };
 
     const confirmCreating = () => {
@@ -87,19 +85,37 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
         } else {
-            if (receivedData.val_cnh != null) {
-                const [day, month, year] = receivedData.val_cnh.split('/');
-                const formattedValCnh = `${year}/${month}/${day}`;
-                receivedData.val_cnh = formattedValCnh;
+            if (String(receivedData.val_cnh).length != 0) {
+                if (!validarData(receivedData.val_cnh)) {
+                    setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                    setMessage("Insira uma data válida.");
+                    console.log(1)
+                } else {
+                    const [day, month, year] = receivedData.val_cnh.split('/');
+                    const formattedValCnh = `${year}/${month}/${day}`;
+                    receivedData.val_cnh = formattedValCnh;
+                    console.log(2)
+                    sendRequest();
+                }
+            } else {
+                sendRequest();
             }
-            sendRequest();
         }
     };
+
+    const validarData = (data) => {
+        return /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/.test(data);
+    }
 
 
     const sendRequest = async () => {
         const formData = new FormData();
-        let qrcodeData = String(receivedData.qrcode_efetivo).slice(0, -1)
+        let qrcodeData
+        if (String(formData.qrcode_efetivo).length == 11){
+            String(receivedData.qrcode_efetivo).slice(0, -1)
+        } else {
+            qrcodeData = String(receivedData.qrcode_efetivo)
+        }
 
         formData.append('qrcode_efetivo', Number(qrcodeData));
         formData.append('nome_guerra', receivedData.nome_guerra);
@@ -135,8 +151,11 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             closeModal('create');
         } catch (e) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Erro ao enviar dados.");
-            console.log(e.response.data.message)
+            if (e.response){
+                setMessage(e.response.data.message);
+            } else {
+                setMessage("Erro ao enviar dados.");
+            }
         }
     };
 
@@ -230,7 +249,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                                 maxLength={11}
                                 className='filtering-input'
                                 value={receivedData.qrcode_efetivo}
-                                onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value.replace(/[^0-9]/g, "")})}
+                                onChange={(e) => setReceivedData({ ...receivedData, qrcode_efetivo: e.target.value.replace(/[^0-9]/g, "") })}
                             />
                         </div>
                         <div className="input-container">
@@ -307,12 +326,22 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Validade da CNH</p>
-                            <IMaskInput
+                            <input
                                 type="text"
-                                mask="00/00/0000"
                                 value={receivedData.val_cnh}
-                                onChange={(e) => setReceivedData({ ...receivedData, val_cnh: e.target.value })}
                                 className="filtering-input"
+                                maxLength={10}
+                                onChange={(e) => {
+                                    let value = e.target.value;
+                                    value = value.replace(/[^0-9]/g, '');
+                                    if (value.length > 2) {
+                                        value = value.slice(0, 2) + '/' + value.slice(2);
+                                    }
+                                    if (value.length > 5) {
+                                        value = value.slice(0, 5) + '/' + value.slice(5, 9);
+                                    }
+                                    setReceivedData({ ...receivedData, val_cnh: value });
+                                }}
                             />
                         </div>
                         <div className="input-container">
@@ -342,7 +371,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             </button>
                         </div>
                         <div className="form-buttons">
-                            <button onClick={() => cleanInputs()}>
+                            <button onClick={cleanInputs}>
                                 Limpar campos
                             </button>
                             <button onClick={confirmCreating}>
@@ -353,7 +382,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             ContentProps={{ sx: { borderRadius: '8px' } }}
                             anchorOrigin={{ vertical, horizontal }}
                             open={open}
-                            autoHideDuration={2000}
+                            autoHideDuration={3000}
                             onClose={handleClose}
                             key={vertical + horizontal}
                         >

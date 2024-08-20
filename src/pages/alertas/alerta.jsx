@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import AlertasTable from '../../components/tables/alertas';
 import DeleteAlertaModal from '../../components/modals/delete/alerta';
@@ -113,6 +113,7 @@ function Alertas() {
             case 'delete':
                 setOpenDeleteModal(true)
                 setSendingData(data);
+                break;
             default:
                 break;
         }
@@ -128,6 +129,7 @@ function Alertas() {
                 break;
             case 'delete':
                 setOpenDeleteModal(false)
+                break;
             default:
                 break;
         }
@@ -149,6 +151,7 @@ function Alertas() {
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Alerta deletado com sucesso.");
                 setStatusAlert("success");
+                break;
             default:
                 break;
         }

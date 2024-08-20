@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/sidebar/sidebar';
 import UnidadesTable from '../../components/tables/unidades';
 import EditUnidadeModal from '../../components/modals/edit/unidade';
@@ -111,6 +111,7 @@ function Unidades() {
             case 'delete':
                 setOpenDeleteModal(true)
                 setSendingData(data);
+                break;
             default:
                 break;
         }
@@ -126,6 +127,7 @@ function Unidades() {
                 break;
             case 'delete':
                 setOpenDeleteModal(false)
+                break;
             default:
                 break;
         }
@@ -147,6 +149,7 @@ function Unidades() {
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
                 setMessage("Unidade deletada com sucesso.");
                 setStatusAlert("success");
+                break;
             default:
                 break;
         }

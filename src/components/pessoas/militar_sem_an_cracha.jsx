@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { server } from '../../services/server'
 import './style.css'
-import { IMaskInput } from "react-imask";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import UserPhoto from '../../assets/login/user-photo.svg'
@@ -396,7 +395,7 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um destino válido.");
         setAlertSeverity("error");
-      } else if (formData.veiculo_placa.length != 7) {
+      } else if (!validarPlaca(formData.veiculo_placa)) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira uma placa válida.");
         setAlertSeverity("error");
@@ -444,7 +443,7 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um destino válido.");
         setAlertSeverity("error");
-      } else if (formData.veiculo_placa.length != 7) {
+      } else if (!validarPlaca(formData.veiculo_placa)) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira uma placa válida.");
         setAlertSeverity("error");
@@ -472,6 +471,10 @@ function MilitarSemANCrachaComponent() {
         formatSendRequest();
       }
     }
+  };
+
+  const validarPlaca = (placa) => {
+    return /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
   };
 
   //Types of requests

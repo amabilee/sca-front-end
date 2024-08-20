@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { server } from '../../services/server'
 import './style.css'
 import { IMaskInput } from "react-imask";
@@ -61,7 +61,6 @@ function DependenteComponent() {
     veiculo_placa: true,
     veiculo_tipo: true,
     veiculo_cor: true,
-    veiculo_placa: true,
     veiculo_renavam: true,
     veiculo_marca: true,
     veiculo_modelo: true,
@@ -82,7 +81,6 @@ function DependenteComponent() {
       veiculo_placa: '',
       veiculo_tipo: 'Selecione',
       veiculo_cor: 'Selecione',
-      veiculo_placa: '',
       veiculo_renavam: '',
       veiculo_marca: '',
       veiculo_modelo: '',
@@ -517,11 +515,11 @@ function DependenteComponent() {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um destino válido.");
       setAlertSeverity("error");
-    } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && formData.veiculo_cracha == '') {
+    } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && String(formData.veiculo_cracha).length != 5) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o veículo válido.");
       setAlertSeverity("error");
-    } else if (formData.conduzindo === 'Sim' && formData.veiculo_placa.length != 7) {
+    } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa)) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira uma placa válida.");
       setAlertSeverity("error");
@@ -548,6 +546,10 @@ function DependenteComponent() {
     } else {
       formatSendRequest();
     }
+  };
+
+  const validarPlaca = (placa) => {
+    return /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
   };
 
   //Types of requests
@@ -987,11 +989,12 @@ function DependenteComponent() {
               <div className="input-container">
                 <p>RENAVAM</p>
                 <input
-                  type="number"
+                  type="text"
+                  maxLength={11}
                   className='filtering-input'
                   disabled={disabledInputs.veiculo_renavam}
                   value={formData.veiculo_renavam}
-                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, veiculo_renavam: e.target.value.replace(/[^0-9]/g, "") })}
                 />
               </div>
               <div className="input-container">
