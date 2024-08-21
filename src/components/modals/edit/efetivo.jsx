@@ -88,8 +88,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         if (receivedData.val_cnh != null) {
             var [day, month, year] = receivedData.val_cnh.split('/');
             var formattedValCnh = `${year}-${month}-${day}`;
-            console.log(receivedData.val_cnh)
-            console.log(formattedValCnh)
             formData.append('val_cnh', formattedValCnh);
         }
         formData.append('ativo_efetivo', receivedData.ativo_efetivo);
@@ -109,8 +107,11 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
             renderTable('edit');
             closeModal('edit');
         } catch (e) {
+            const [year, month, day] = receivedData.val_cnh.split('/');
+            const formattedValCnh = `${day}/${month}/${year}`;
+            receivedData.val_cnh = formattedValCnh;
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            if (e.response.data.message){
+            if (e.response.data.message) {
                 setMessage(e.response.data.message);
             } else {
                 setMessage("Erro ao enviar dados.");
@@ -228,7 +229,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                 val_cnh: formattedDate,
             }));
         }
-    }, [getSelectOptions, convertImage, receivedData]);
+    }, [getSelectOptions]);
 
 
 
@@ -335,7 +336,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                             <input
                                 type="text"
                                 className='filtering-input'
-                                value={receivedData.val_cnh}
+                                value={receivedData.val_cnh != null ? receivedData.val_cnh : ''}
                                 placeholder="DD/MM/YYYY"
                                 maxLength={10}
                                 onChange={(e) => {
@@ -403,7 +404,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
 }
 
 EditEfetivoModal.propTypes = {
-    currentData: PropTypes.object.isRequired, 
-    closeModal: PropTypes.func.isRequired,    
-    renderTable: PropTypes.func.isRequired,   
+    currentData: PropTypes.object,
+    closeModal: PropTypes.func,
+    renderTable: PropTypes.func,
 };

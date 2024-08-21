@@ -47,8 +47,8 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
         setReceivedData((prevReceivedData) => ({
             ...prevReceivedData,
             placa: receivedData.placa.toUpperCase(),
-          }));
-        
+        }));
+
         if (String(efetivoData.qrcode_efetivo).length != 7) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um número de ordem válido.");
@@ -80,7 +80,7 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
 
     const validarPlaca = (placa) => {
         return /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/.test(placa);
-      };
+    };
 
     const sendRequest = async () => {
         let userData = localStorage.getItem('user');
@@ -102,49 +102,80 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
     };
 
 
+    const fillEfetivo = useCallback(async () => {
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
+        try {
+            const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, {
+                headers: {
+                    'Authentication': token,
+                    'access-level': userDataParsed.nivel_acesso
+                }
+            });
+            if (response.data) {
+                setEfetivoData((prevEfetivoData) => ({
+                    ...prevEfetivoData,
+                    qrcode_efetivo: response.data.qrcode_efetivo,
+                    nome_guerra: response.data.nome_guerra,
+                    graduacao: response.data.graduacao
+                }
+                ))
+                setReceivedData({ ...receivedData, id_efetivo: response.data.id })
+            } else {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Não foi encontrado um efetivo com este número de ordem");
+            }
+        } catch (e) {
+            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+            setMessage("Não foi encontrado um efetivo com este número de ordem");
+        }
+    }, [setEfetivoData])
+
+
     const searchEfetivo = useCallback(async (e) => {
         setEfetivoData({ ...efetivoData, qrcode_efetivo: e })
-        if (String(e).length == 7 || String(receivedData.id_efetivo).length == 4) {
-            let userData = localStorage.getItem('user');
-            let userDataParsed = JSON.parse(userData);
-            let token = localStorage.getItem("user_token")
+        let userData = localStorage.getItem('user');
+        let userDataParsed = JSON.parse(userData);
+        let token = localStorage.getItem("user_token")
+        if (String(e).length == 7) {
             try {
-                if (String(receivedData.id_efetivo).length == 4) {
-                    const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, {
-                        headers: {
-                            'Authentication': token,
-                            'access-level': userDataParsed.nivel_acesso
-                        }
-                    });
-                    setEfetivoData({ qrcode_efetivo: response.data.qrcode_efetivo, nome_guerra: response.data.nome_guerra, graduacao: response.data.graduacao })
-                    setReceivedData({ ...receivedData, id_efetivo: response.data.id })
+                const response = await server.get(`/efetivo/consulta/${e}`, {
+                    headers: {
+                        'Authentication': token,
+                        'access-level': userDataParsed.nivel_acesso
+                    }
+                });
+                if (response.data[0]) {
+                    setEfetivoData((prevEfetivoData) => ({
+                        ...prevEfetivoData,
+                        nome_guerra: response.data[0].nome_guerra,
+                        graduacao: response.data[0].Graduacao.sigla
+                    }))
+                    setReceivedData({ ...receivedData, id_efetivo: response.data[0].id })
                 } else {
-                    const response = await server.get(`/efetivo/${receivedData.id_efetivo}`, {
-                        headers: {
-                            'Authentication': token,
-                            'access-level': userDataParsed.nivel_acesso
-                        }
-                    });
-                    setEfetivoData({ qrcode_efetivo: e, nome_guerra: response.data.nome_guerra, graduacao: response.data.graduacao })
-                    setReceivedData({ ...receivedData, id_efetivo: response.data.id })
+                    setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                    setMessage("Não foi encontrado um efetivo com este número de ordem");
                 }
             } catch (e) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Não foi encontrado um efetivo com este número de ordem");
             }
         } else {
-            setEfetivoData(
+            setEfetivoData((prevEfetivoData) => (
                 {
+                    ...prevEfetivoData,
+                    qrcode_efetivo: e,
                     nome_guerra: '',
                     graduacao: ''
                 }
-            )
+            ))
         }
-    }, [efetivoData, receivedData, state, setEfetivoData, setReceivedData, setState, setMessage])
+    }, [state, setEfetivoData, setReceivedData, setState, setMessage])
 
     useEffect(() => {
-        searchEfetivo()
-    }, [searchEfetivo])
+        fillEfetivo()
+    }, [fillEfetivo])
 
 
     return (
@@ -160,7 +191,7 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
                             <p>Número de ordem</p>
                             <input
                                 type="text"
-                                maxLength={11}
+                                maxLength={7}
                                 className='filtering-input'
                                 value={efetivoData.qrcode_efetivo}
                                 onChange={(e) => searchEfetivo(e.target.value.replace(/[^0-9]/g, ""))}
@@ -168,7 +199,12 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Militar</p>
-                            <input disabled={true} className='filtering-input' value={`${efetivoData.graduacao} ${efetivoData.nome_guerra}`} />
+                            <input
+                                disabled={true}
+                                className='filtering-input'
+                                value={`${efetivoData.graduacao} ${efetivoData.nome_guerra}`}
+                                onChange={(e) => setReceivedData({ ...receivedData, graduacao: e.target.value.split(' ')[0], nome_guerra: e.target.value.split(' ')[1] })}
+                            />
                         </div>
                     </div>
                     <div className="veiculo-inputs-2">
@@ -215,11 +251,11 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
                         <div className="input-container">
                             <p>Placa</p>
                             <input
-                            type="text"
-                            maxLength={7}
-                            className='filtering-input'
-                            value={receivedData.placa}
-                            onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })} />
+                                type="text"
+                                maxLength={7}
+                                className='filtering-input'
+                                value={receivedData.placa}
+                                onChange={(e) => setReceivedData({ ...receivedData, placa: e.target.value.replace(/[^a-zA-Z0-9]/g, "") })} />
                         </div>
                         <div className="input-container">
                             <p>Marca</p>

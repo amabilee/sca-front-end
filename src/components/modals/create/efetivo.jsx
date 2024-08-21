@@ -112,7 +112,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
     const sendRequest = async () => {
         const formData = new FormData();
         let qrcodeData
-        if (String(formData.qrcode_efetivo).length == 11){
+        if (String(formData.qrcode_efetivo).length == 11) {
             String(receivedData.qrcode_efetivo).slice(0, -1)
         } else {
             qrcodeData = String(receivedData.qrcode_efetivo)
@@ -151,8 +151,11 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             renderTable('create');
             closeModal('create');
         } catch (e) {
+            const [year, month, day] = receivedData.val_cnh.split('/');
+            const formattedValCnh = `${day}/${month}/${year}`;
+            receivedData.val_cnh = formattedValCnh;
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            if (e.response){
+            if (e.response) {
                 setMessage(e.response.data.message);
             } else {
                 setMessage("Erro ao enviar dados.");

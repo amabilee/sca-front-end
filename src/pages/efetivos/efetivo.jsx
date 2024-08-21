@@ -74,11 +74,6 @@ function Efetivos() {
         }
     }, [state, setRegistros, setPaginationData, setLoading, setState, setMessage, setStatusAlert]);
 
-    useEffect(() => {
-        getEfetivos('', 1);
-        getSelectOptions();
-    }, [getEfetivos, getSelectOptions]);
-
 
     // Filtering arguments
     const [filteringConditions, setFilteringConditions] = useState({
@@ -224,6 +219,11 @@ function Efetivos() {
             setStatusAlert("error");
         }
     }, [state, setGraduacaoOptions, setState, setMessage, setStatusAlert, setUnidadeOptions]);
+
+    useEffect(() => {
+        getEfetivos('', 1);
+        getSelectOptions();
+    }, [getEfetivos, getSelectOptions]);
 
     return (
         <div className="body">

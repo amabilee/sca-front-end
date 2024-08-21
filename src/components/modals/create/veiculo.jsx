@@ -58,7 +58,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
         setReceivedData((prevReceivedData) => ({
             ...prevReceivedData,
             placa: receivedData.placa.toUpperCase(),
-          }));
+        }));
 
         if (String(efetivoData.nome_guerra).length == 0 || String(efetivoData.graduacao).length == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
@@ -189,7 +189,12 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
                         </div>
                         <div className="input-container">
                             <p>Militar</p>
-                            <input disabled={true} className='filtering-input' value={`${efetivoData.graduacao} ${efetivoData.nome_guerra}`} />
+                            <input
+                                disabled={true}
+                                className='filtering-input'
+                                value={`${efetivoData.graduacao} ${efetivoData.nome_guerra}`}
+                            onChange={(e) => setReceivedData({ ...receivedData, graduacao: e.target.value.split(' ')[0], nome_guerra: e.target.value.split(' ')[1] })}
+                            />
                         </div>
                     </div>
                     <div className="veiculo-inputs-2">
