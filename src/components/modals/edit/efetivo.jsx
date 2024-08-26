@@ -7,7 +7,7 @@ import { IMaskInput } from "react-imask";
 import Remove from '../../../assets/remove_icon.svg'
 import uploadIcon from '../../../assets/upload.svg'
 
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 
 export default function EditEfetivoModal({ currentData, closeModal, renderTable }) {
     const [graduacaoOptions, setGraduacaoOptions] = useState([]);
@@ -30,12 +30,22 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
 
     const confirmEditing = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (graduacaoSelected != 'CIVIL' && String(receivedData.qrcode_efetivo).length != 7) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira um número de ordem válido.");
-        } else if (graduacaoSelected == 'CIVIL' && String(receivedData.qrcode_efetivo).length != 11) {
-            setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira um CPF válido.");
+        if (graduacaoSelected == null) {
+            if (receivedData.graduacao == 'CIVIL' && String(receivedData.qrcode_efetivo).length <= 9) {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira um CPF válido.");
+            } else if (receivedData.graduacao != 'CIVIL' && String(receivedData.qrcode_efetivo).length != 7) {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira um número de ordem válido.");
+            }
+        } else if (graduacaoSelected != null && String(receivedData.qrcode_efetivo).length <= 9) {
+            if (graduacaoSelected == 'CIVIL') {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira um CPF válido.");
+            } else if (graduacaoSelected != 'CIVIL' && String(receivedData.qrcode_efetivo).length != 7) {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira um número de ordem válido.");
+            }
         } else if (!receivedData.nome_completo) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
@@ -54,8 +64,27 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         } else if (receivedData.id_alerta === 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
+        } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
+            if (String(receivedData.cnh).length != 9) {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira uma CNH válida.");
+            } else if (String(receivedData.val_cnh).length != 10) {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira uma validade da CNH válida.");
+            } else {
+                if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
+                    if (!validarData(receivedData.val_cnh)) {
+                        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                        setMessage("Insira uma data válida.");
+                    } else {
+                        sendRequest();
+                    }
+                } else {
+                    sendRequest();
+                }
+            }
         } else {
-            if (String(receivedData.val_cnh).length != 0) {
+            if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
                 if (!validarData(receivedData.val_cnh)) {
                     setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                     setMessage("Insira uma data válida.");
@@ -64,7 +93,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                 }
             } else {
                 sendRequest();
-                console.log(3)
             }
         }
     };
@@ -74,6 +102,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
     }
 
     const sendRequest = async () => {
+        console.log(receivedData.cnh)
         const formData = new FormData();
         formData.append('qrcode_efetivo', receivedData.qrcode_efetivo);
         formData.append('nome_guerra', receivedData.nome_guerra);
@@ -82,10 +111,11 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         formData.append('id_graduacao', receivedData.id_graduacao);
         formData.append('email', receivedData.email);
         formData.append('id_alerta', receivedData.id_alerta);
-        if (receivedData.cnh != null) {
+        if (String(receivedData.cnh).length >= 5) {
             formData.append('cnh', receivedData.cnh);
         }
-        if (receivedData.val_cnh != null) {
+        if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
+
             var [day, month, year] = receivedData.val_cnh.split('/');
             var formattedValCnh = `${year}-${month}-${day}`;
             formData.append('val_cnh', formattedValCnh);
@@ -107,9 +137,11 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
             renderTable('edit');
             closeModal('edit');
         } catch (e) {
-            const [year, month, day] = receivedData.val_cnh.split('/');
-            const formattedValCnh = `${day}/${month}/${year}`;
-            receivedData.val_cnh = formattedValCnh;
+            if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
+                const [year, month, day] = receivedData.val_cnh.split('/');
+                const formattedValCnh = `${day}/${month}/${year}`;
+                receivedData.val_cnh = formattedValCnh;
+            }
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             if (e.response.data.message) {
                 setMessage(e.response.data.message);
@@ -210,24 +242,23 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         }
     };
 
-    // Convert Received Data
-
-    const convertDateToDDMMYYYY = (dateString) => {
-        console.log(dateString)
-        const [year, month, day] = dateString.split('-');
-        return `${day}/${month}/${year}`;
-    };
-
     useEffect(() => {
         getSelectOptions();
         convertImage();
-
         if (receivedData && receivedData.val_cnh) {
-            const formattedDate = convertDateToDDMMYYYY(receivedData.val_cnh);
-            setReceivedData((prevFormData) => ({
-                ...prevFormData,
-                val_cnh: formattedDate,
-            }));
+            const [year, month, day] = receivedData.val_cnh.split('-');
+            if (String(year).length == 4) {
+                setReceivedData((prevFormData) => ({
+                    ...prevFormData,
+                    val_cnh: `${day}/${month}/${year}`,
+                }));
+                console.log('length 4')
+            } else {
+                setReceivedData((prevFormData) => ({
+                    ...prevFormData,
+                    val_cnh: receivedData.val_cnh,
+                }));
+            }
         }
     }, [getSelectOptions]);
 
@@ -306,7 +337,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                             <input
                                 className='filtering-input'
                                 value={receivedData.email}
-                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value })}
+                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '' ) })}
                             />
                         </div>
                         <div className="input-container">
@@ -323,12 +354,12 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                         </div>
                         <div className="input-container">
                             <p>Número da CNH</p>
-                            <IMaskInput
+                            <input
                                 type="text"
-                                mask="00000000000"
+                                maxLength={9}
                                 className='filtering-input'
-                                value={String(receivedData.cnh)}
-                                onChange={(e) => setReceivedData({ ...receivedData, cnh: e.target.value })}
+                                value={receivedData.cnh != null ? receivedData.cnh : ""}
+                                onChange={(e) => setReceivedData({ ...receivedData, cnh: e.target.value.replace(/[^0-9]/g, "") })}
                             />
                         </div>
                         <div className="input-container">

@@ -394,7 +394,11 @@ function MilitarSemANCrachaComponent() {
         formatSendRequest();
       }
     } else if (formData.entrada == 'veiculo') {
-      if (formData.veiculo_cracha == '') {
+      if (formData.numero_ordem.length != 7) {
+        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+        setMessage("Insira um número de ordem válido.");
+        setAlertSeverity("error");
+      } else if (formData.veiculo_cracha == '') {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um crachá para o veículo válido.");
         setAlertSeverity("error");
@@ -546,7 +550,8 @@ function MilitarSemANCrachaComponent() {
         posto: 2, //nivel_acesso posto principal
         cracha_pessoa_numero: formData.cracha,
         qrcode: formData.numero_ordem,
-        qrcode_autorizador: userDataParsed.usuario,
+        qrcode_autorizador: formData.numero_ordem,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       }
     } else if (typeRequest == 'veiculo') {
@@ -557,7 +562,8 @@ function MilitarSemANCrachaComponent() {
         posto: 2,  //nivel_acesso posto principal
         cracha_veiculo_numero: formData.veiculo_cracha,
         placa_veiculo_sem_an: formData.veiculo_placa,
-        qrcode_autorizador: userDataParsed.usuario,
+        qrcode_autorizador: formData.numero_ordem,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       }
     } else if (typeRequest == 'ambos') {
@@ -570,7 +576,8 @@ function MilitarSemANCrachaComponent() {
         cracha_veiculo_numero: formData.veiculo_cracha,
         qrcode: formData.numero_ordem,
         placa_veiculo_sem_an: formData.veiculo_placa,
-        qrcode_autorizador: userDataParsed.usuario,
+        qrcode_autorizador: formData.numero_ordem,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       };
     }
@@ -629,7 +636,7 @@ function MilitarSemANCrachaComponent() {
         <div className="session-input-militar-box-input">
           <div className="session-input-line1">
             <div className="input-container">
-              <p>Número de ordem</p>
+              <p>Número de ordem*</p>
               <input
                 type="text"
                 maxLength={7}
@@ -687,7 +694,7 @@ function MilitarSemANCrachaComponent() {
                 className='filtering-input'
                 disabled={disabledInputs.email}
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '' ) })}
               />
             </div>
           </div>

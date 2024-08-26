@@ -86,17 +86,31 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         } else if (receivedData.id_alerta == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
+        } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
+            if (String(receivedData.cnh).length != 9) {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira uma CNH válida.");
+            } else if (String(receivedData.val_cnh).length != 10) {
+                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                setMessage("Insira uma validade da CNH válida.");
+            } else {
+                if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
+                    if (!validarData(receivedData.val_cnh)) {
+                        setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+                        setMessage("Insira uma data válida.");
+                    } else {
+                        sendRequest();
+                    }
+                } else {
+                    sendRequest();
+                }
+            }
         } else {
-            if (String(receivedData.val_cnh).length != 0) {
+            if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
                 if (!validarData(receivedData.val_cnh)) {
                     setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                     setMessage("Insira uma data válida.");
-                    console.log(1)
                 } else {
-                    const [day, month, year] = receivedData.val_cnh.split('/');
-                    const formattedValCnh = `${year}/${month}/${day}`;
-                    receivedData.val_cnh = formattedValCnh;
-                    console.log(2)
                     sendRequest();
                 }
             } else {
@@ -302,7 +316,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             <input
                                 className='filtering-input'
                                 value={receivedData.email}
-                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value })}
+                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '' )})}
                             />
                         </div>
                         <div className="input-container">

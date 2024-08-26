@@ -18,7 +18,8 @@ const RelatorioEfetivoTable = ({ data }) => {
             <th scope="col">Hora</th>
             <th scope="col">Posto de serviço</th>
             <th scope="col">Pessoa/Militar</th>
-            <th scope="col">Sentinela/Autorizador</th>
+            <th scope="col">Sentinela</th>
+            <th scope="col">Autorizador</th>
             <th scope="col">Observação</th>
           </tr>
         </thead>
@@ -39,7 +40,8 @@ const RelatorioEfetivoTable = ({ data }) => {
                 registro.Dependente ? `${registro.Dependente.nome} (${registro.Dependente.cpf})` :
                 registro.Visitante ? `${registro.Visitante.nome} (${registro.Visitante.cpf})` : null
               }</td>
-              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: registro.autorizador}</td>
+              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: 'Dispositivo móvel'}</td>
+              <td>{registro.autorizador ? registro.autorizador : null}</td>
               <td>{registro.detalhe ? registro.detalhe : null}</td>
             </tr>
           ))}

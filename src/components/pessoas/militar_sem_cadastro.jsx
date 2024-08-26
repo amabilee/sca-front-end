@@ -696,7 +696,8 @@ function MilitarSemCadastroComponent() {
         posto: 2, //nivel_acesso posto principal
         cracha_pessoa_numero: formData.cracha,
         qrcode: formData.numero_ordem,
-        qrcode_autorizador: userDataParsed.usuario,
+        qrcode_autorizador: formData.numero_ordem,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       }
     } else if (typeRequest === 'efetivo+veiculo+registro') {
@@ -709,7 +710,8 @@ function MilitarSemCadastroComponent() {
         cracha_veiculo_numero: formData.veiculo_cracha,
         qrcode: formData.numero_ordem,
         placa_veiculo_sem_an: formData.veiculo_placa,
-        qrcode_autorizador: userDataParsed.usuario,
+        qrcode_autorizador: formData.numero_ordem,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       };
     }
@@ -850,7 +852,7 @@ function MilitarSemCadastroComponent() {
                 className='filtering-input'
                 disabled={disabledInputs.email}
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '' ) })}
               />
             </div>
           </div>

@@ -723,9 +723,9 @@ function DependenteComponent() {
   const sendRequestRegistro = async (token, userDataParsed, typeRequest) => {
     let formattedCPF = String(formData.cpf).replace(/\D/g, '')
     let registroFormattedData
-
+    
     const { formattedDate, formattedTime } = getFormattedDateTime();
-
+    console.log(formData)
     if (typeRequest === 'dependente+registro') {
       registroFormattedData = {
         data: formattedDate,
@@ -734,7 +734,8 @@ function DependenteComponent() {
         posto: 2, //nivel_acesso posto principal
         cracha_pessoa_numero: formData.cracha,
         cpf_dependente: formattedCPF,
-        qrcode_autorizador: userDataParsed.usuario,
+        qrcode_autorizador: formData.numero_ordem,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       }
     } else if (typeRequest === 'dependente+veiculo+registro') {
@@ -747,7 +748,8 @@ function DependenteComponent() {
         cracha_veiculo_numero: formData.veiculo_cracha,
         cpf_dependente: formattedCPF,
         placa_veiculo_sem_an: formData.veiculo_placa,
-        qrcode_autorizador: userDataParsed.usuario,
+        qrcode_autorizador: formData.numero_ordem,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       };
     }
@@ -856,7 +858,7 @@ function DependenteComponent() {
           </div>
           <p>ou</p>
           <div className="input-container">
-            <p>Militar*</p>
+            <p>Militar* ('Enter' para pesquisar)</p>
             <input
               type="text"
               disabled={disabledInputs.militar}

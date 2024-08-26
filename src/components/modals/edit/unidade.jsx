@@ -104,7 +104,7 @@ EditUnidadeModal.propTypes = {
     currentData: PropTypes.shape({
         id: PropTypes.number.isRequired,
         nome: PropTypes.string.isRequired,
-        nivel_acesso: PropTypes.number.isRequired,
+        nivel_acesso: PropTypes.number,
     }).isRequired,
     closeModal: PropTypes.func.isRequired,
     renderTable: PropTypes.func.isRequired,

@@ -18,7 +18,8 @@ const RelatorioVeiculoTable = ({ data }) => {
             <th scope="col">Hora</th>
             <th scope="col">Adesivo/Crachá</th>
             <th scope="col">Placa</th>
-            <th scope="col">Sentinela/Autorizador</th>
+            <th scope="col">Sentinela</th>
+            <th scope="col">Autorizador</th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +38,8 @@ const RelatorioVeiculoTable = ({ data }) => {
               <td>
                 {registro.VeiculoSemAn ? registro.VeiculoSemAn.placa : registro.Veiculo ? registro.Veiculo.placa : 'N/A'}
               </td>
-              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: registro.autorizador}</td>
+              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: 'Dispositivo móvel'}</td>
+              <td>{registro.autorizador ? registro.autorizador: null}</td>
             </tr>
           ))}
         </tbody>

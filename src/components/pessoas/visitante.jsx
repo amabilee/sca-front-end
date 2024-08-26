@@ -773,6 +773,7 @@ function VisitanteComponent() {
         cracha_pessoa_numero: formData.cracha,
         cpf_visitante: formattedCPF,
         autorizador: formData.autorizador,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       }
     } else if (typeRequest === 'visitante+veiculo+registro') {
@@ -786,6 +787,7 @@ function VisitanteComponent() {
         cpf_visitante: formattedCPF,
         placa_veiculo_sem_an: formData.veiculo_placa,
         autorizador: formData.autorizador,
+        sentinela: userDataParsed.usuario,
         detalhe: formData.destino
       };
     }
