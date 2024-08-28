@@ -20,7 +20,6 @@ function Login() {
             if (auth || response === true) {
                 const modules = await getUserModulos();
                 setTimeout(() => {
-                    console.log(modules)
                     if (modules.length > 0) {
                         navigate(`${modules[0].link}`);
                     } else {

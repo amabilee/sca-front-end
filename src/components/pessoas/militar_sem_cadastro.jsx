@@ -190,7 +190,6 @@ function MilitarSemCadastroComponent() {
           'access-level': userDataParsed.nivel_acesso
         }
       });
-      console.log(response.data.entities)
       setSituacaoOptions(response.data.entities)
     } catch (e) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });

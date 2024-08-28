@@ -215,8 +215,6 @@ function Crachas() {
     };
 
     const handleSubmit = () => {
-        console.log(crachaType)
-        console.log(formData)
         if (formData.nivel_acesso == 'Operacional') {
             switch (formData.categoria) {
                 case 'Normal':

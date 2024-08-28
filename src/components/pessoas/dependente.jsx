@@ -725,7 +725,6 @@ function DependenteComponent() {
     let registroFormattedData
     
     const { formattedDate, formattedTime } = getFormattedDateTime();
-    console.log(formData)
     if (typeRequest === 'dependente+registro') {
       registroFormattedData = {
         data: formattedDate,

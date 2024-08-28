@@ -102,7 +102,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
     }
 
     const sendRequest = async () => {
-        console.log(receivedData.cnh)
         const formData = new FormData();
         formData.append('qrcode_efetivo', receivedData.qrcode_efetivo);
         formData.append('nome_guerra', receivedData.nome_guerra);
@@ -254,7 +253,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                     ...prevFormData,
                     val_cnh: `${day}/${month}/${year}`,
                 }));
-                console.log('length 4')
             } else {
                 setReceivedData((prevFormData) => ({
                     ...prevFormData,

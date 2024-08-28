@@ -126,11 +126,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
     const sendRequest = async () => {
         const formData = new FormData();
         let qrcodeData
-        if (String(formData.qrcode_efetivo).length == 11) {
-            String(receivedData.qrcode_efetivo).slice(0, -1)
-        } else {
-            qrcodeData = String(receivedData.qrcode_efetivo)
-        }
+        qrcodeData = String(receivedData.qrcode_efetivo).slice(0, -1)
 
         formData.append('qrcode_efetivo', Number(qrcodeData));
         formData.append('nome_guerra', receivedData.nome_guerra);

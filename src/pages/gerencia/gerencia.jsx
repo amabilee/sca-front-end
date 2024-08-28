@@ -147,8 +147,6 @@ function Veiculos() {
                 [{ data: entradasPorDiaVeiculo }, { data: saidasPorDiaVeiculo },]
             )
 
-
-            console.log(response.data.formattedEntities)
             setLoading(false)
         } catch (e) {
             if (e.response.status == 401) {
