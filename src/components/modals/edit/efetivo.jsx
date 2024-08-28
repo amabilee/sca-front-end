@@ -65,7 +65,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
         } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
-            if (String(receivedData.cnh).length != 9) {
+            if (String(receivedData.cnh).length != 11) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Insira uma CNH válida.");
             } else if (String(receivedData.val_cnh).length != 10) {
@@ -139,8 +139,10 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         } catch (e) {
             if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
                 const [year, month, day] = receivedData.val_cnh.split('/');
-                const formattedValCnh = `${day}/${month}/${year}`;
-                receivedData.val_cnh = formattedValCnh;
+                if (String(year).length == 4) {
+                    const formattedValCnh = `${day}/${month}/${year}`;
+                    receivedData.val_cnh = formattedValCnh;
+                }
             }
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             if (e.response.data.message) {

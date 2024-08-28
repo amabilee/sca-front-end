@@ -87,7 +87,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
         } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
-            if (String(receivedData.cnh).length != 9) {
+            if (String(receivedData.cnh).length != 11) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Insira uma CNH válida.");
             } else if (String(receivedData.val_cnh).length != 10) {
@@ -165,9 +165,13 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             renderTable('create');
             closeModal('create');
         } catch (e) {
-            const [year, month, day] = receivedData.val_cnh.split('/');
-            const formattedValCnh = `${day}/${month}/${year}`;
-            receivedData.val_cnh = formattedValCnh;
+            if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
+                const [year, month, day] = receivedData.val_cnh.split('/');
+                if (String(year).length == 4) {
+                    const formattedValCnh = `${day}/${month}/${year}`;
+                    receivedData.val_cnh = formattedValCnh;
+                }
+            }
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             if (e.response) {
                 setMessage(e.response.data.message);
@@ -316,7 +320,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
                             <input
                                 className='filtering-input'
                                 value={receivedData.email}
-                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '' )})}
+                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '') })}
                             />
                         </div>
                         <div className="input-container">
