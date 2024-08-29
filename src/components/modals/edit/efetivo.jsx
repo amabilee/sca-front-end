@@ -30,23 +30,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
 
     const confirmEditing = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (graduacaoSelected == null) {
-            if (receivedData.graduacao == 'CIVIL' && String(receivedData.qrcode_efetivo).length <= 9) {
-                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-                setMessage("Insira um CPF válido.");
-            } else if (receivedData.graduacao != 'CIVIL' && String(receivedData.qrcode_efetivo).length != 7) {
-                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-                setMessage("Insira um número de ordem válido.");
-            }
-        } else if (graduacaoSelected != null && String(receivedData.qrcode_efetivo).length <= 9) {
-            if (graduacaoSelected == 'CIVIL') {
-                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-                setMessage("Insira um CPF válido.");
-            } else if (graduacaoSelected != 'CIVIL' && String(receivedData.qrcode_efetivo).length != 7) {
-                setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-                setMessage("Insira um número de ordem válido.");
-            }
-        } else if (!receivedData.nome_completo) {
+        if (!receivedData.nome_completo) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um nome válido.");
         } else if (!receivedData.nome_guerra) {
@@ -65,7 +49,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
         } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
-            if (String(receivedData.cnh).length != 11) {
+            if (String(receivedData.cnh).length != 9) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Insira uma CNH válida.");
             } else if (String(receivedData.val_cnh).length != 10) {
@@ -337,7 +321,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                             <input
                                 className='filtering-input'
                                 value={receivedData.email}
-                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '' ) })}
+                                onChange={(e) => setReceivedData({ ...receivedData, email: e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '') })}
                             />
                         </div>
                         <div className="input-container">

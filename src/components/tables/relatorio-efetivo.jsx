@@ -73,7 +73,7 @@ RelatorioEfetivoTable.propTypes = {
     }),
     Visitante: PropTypes.shape({
       nome: PropTypes.string,
-      cpf: PropTypes.number
+      cpf: PropTypes.string
     }),
     SentinelaQrcode: PropTypes.shape({
       Efetivo: PropTypes.shape({
