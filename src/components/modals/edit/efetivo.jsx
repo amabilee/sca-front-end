@@ -45,7 +45,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         } else if (!emailPattern.test(receivedData.email)) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um email válido.");
-        } else if (receivedData.id_alerta === 0) {
+        } else if (String(receivedData.id_alerta) == "0") {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
         } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
@@ -229,7 +229,9 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
 
     useEffect(() => {
         getSelectOptions();
-        convertImage();
+        if (receivedData.foto && receivedData.foto.type == "Buffer"){
+            convertImage();
+        }
         if (receivedData && receivedData.val_cnh) {
             const [year, month, day] = receivedData.val_cnh.split('-');
             if (String(year).length == 4) {
