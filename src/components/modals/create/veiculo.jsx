@@ -81,7 +81,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
         } else if (String(receivedData.renavam).length != 11) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um renavam válido.");
-        } else if (receivedData.qrcode.length == 0) {
+        } else if (receivedData.qrcode.length != 5) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um selo/AN válido.");
         } else {

@@ -528,7 +528,7 @@ function VisitanteComponent() {
     } else if (formData.estado === 'Selecione') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um estado.");
-    } else if (formData.entrada === 'Sim' && formData.cracha == '') {
+    } else if (formData.entrada === 'Sim' && String(formData.cracha).length != 5) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o visitante válido.");
     } else if (formData.entrada === 'Sim' && formData.destino == '') {
@@ -537,7 +537,7 @@ function VisitanteComponent() {
     } else if (formData.entrada === 'Sim' && formData.autorizador == '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um autorizador válido.");
-    } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && formData.veiculo_cracha == '') {
+    } else if (formData.conduzindo === 'Sim' && formData.entrada === 'Sim' && String(formData.veiculo_cracha).length != 5) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o veículo válido.");
     } else if (formData.conduzindo === 'Sim' && !validarPlaca(formData.veiculo_placa.toUpperCase())) {

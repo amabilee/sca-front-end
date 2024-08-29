@@ -49,7 +49,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
         } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
-            if (String(receivedData.cnh).length != 9) {
+            if (String(receivedData.cnh).length != 11) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Insira uma CNH válida.");
             } else if (String(receivedData.val_cnh).length != 10) {
@@ -342,7 +342,7 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
                             <p>Número da CNH</p>
                             <input
                                 type="text"
-                                maxLength={9}
+                                maxLength={11}
                                 className='filtering-input'
                                 value={receivedData.cnh != null ? receivedData.cnh : ""}
                                 onChange={(e) => setReceivedData({ ...receivedData, cnh: e.target.value.replace(/[^0-9]/g, "") })}

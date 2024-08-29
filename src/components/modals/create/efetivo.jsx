@@ -87,7 +87,7 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira uma situação válida.");
         } else if (String(receivedData.cnh).length != 0 || String(receivedData.val_cnh).length >= 5) {
-            if (String(receivedData.cnh).length != 9) {
+            if (String(receivedData.cnh).length != 11) {
                 setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                 setMessage("Insira uma CNH válida.");
             } else if (String(receivedData.val_cnh).length != 10) {

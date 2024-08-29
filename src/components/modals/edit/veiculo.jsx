@@ -49,9 +49,9 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
             placa: receivedData.placa.toUpperCase(),
         }));
 
-        if (String(efetivoData.qrcode_efetivo).length != 7) {
+        if (String(efetivoData.nome_guerra).length == 0) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-            setMessage("Insira um número de ordem válido.");
+            setMessage("Insira um militar válido.");
         } else if (receivedData.tipo == 'Nenhum') {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um tipo válido.");
@@ -70,7 +70,7 @@ function EditVeiculoModal({ currentData, closeModal, renderTable }) {
         } else if (String(receivedData.renavam).length != 11) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um renavam válido.");
-        } else if (receivedData.qrcode.length == 0) {
+        } else if (String(receivedData.qrcode).length != 5) {
             setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
             setMessage("Insira um selo/AN válido.");
         } else {

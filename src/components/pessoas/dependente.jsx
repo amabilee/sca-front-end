@@ -512,7 +512,7 @@ function DependenteComponent() {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um militar válido.");
       setAlertSeverity("error");
-    } else if (formData.entrada === 'Sim' && formData.cracha == '') {
+    } else if (formData.entrada === 'Sim' && String(formData.cracha).length != 5) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o dependente válido.");
       setAlertSeverity("error");

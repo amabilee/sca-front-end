@@ -40,8 +40,8 @@ const RelatorioEfetivoTable = ({ data }) => {
                 registro.Dependente ? `${registro.Dependente.nome} (${registro.Dependente.cpf})` :
                 registro.Visitante ? `${registro.Visitante.nome} (${registro.Visitante.cpf})` : null
               }</td>
-              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: 'Dispositivo móvel'}</td>
-              <td>{registro.autorizador ? registro.autorizador : null}</td>
+              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: null}</td>
+              <td>{registro.autorizador ? registro.autorizador : 'Dispositivo móvel'}</td>
               <td>{registro.detalhe ? registro.detalhe : null}</td>
             </tr>
           ))}

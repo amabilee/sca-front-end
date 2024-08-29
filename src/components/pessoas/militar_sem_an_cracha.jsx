@@ -382,7 +382,7 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um militar válido.");
         setAlertSeverity("error");
-      } else if (formData.cracha == '') {
+      } else if (String(formData.cracha).length != 5) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um crachá para o militar válido.");
         setAlertSeverity("error");
@@ -398,7 +398,7 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um número de ordem válido.");
         setAlertSeverity("error");
-      } else if (formData.veiculo_cracha == '') {
+      } else if (String(formData.veiculo_cracha).length != 5) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um crachá para o veículo válido.");
         setAlertSeverity("error");
@@ -442,11 +442,11 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um militar válido.");
         setAlertSeverity("error");
-      } else if (formData.cracha == '') {
+      } else if (String(formData.cracha).length != 5) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um crachá para o militar válido.");
         setAlertSeverity("error");
-      } else if (formData.veiculo_cracha == '') {
+      } else if (String(formData.veiculo_cracha).length != 5) {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um crachá para o veículo válido.");
         setAlertSeverity("error");
