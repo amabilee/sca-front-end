@@ -9,13 +9,14 @@ import DependenteComponent from '../../components/pessoas/dependente.jsx'
 import VisitanteComponent from '../../components/pessoas/visitante.jsx'
 import MilitarSemANCrachaComponent from '../../components/pessoas/militar_sem_an_cracha.jsx'
 import MilitarSemCadastroComponent from '../../components/pessoas/militar_sem_cadastro.jsx'
+import CrachaComponent from '../../components/pessoas/cracha.jsx'
 
 
 import './style.css'
 
 function Pessoas() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
-    const [pessoasComponent, setPessoasComponent] = useState({ dependente: true, visitante: false, militar1: false, militar2: false })
+    const [pessoasComponent, setPessoasComponent] = useState({ dependente: true, visitante: false, militar1: false, militar2: false, cracha: false })
 
     // SnackBar config
     const [message, setMessage] = useState("");
@@ -80,29 +81,40 @@ function Pessoas() {
     };
 
     //NAV click handle
-    const [styleNav, setStyleNav] = useState({ button1: 'active-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'inactive-button' })
+    const [styleNav, setStyleNav] = useState(
+        {
+            button1: 'active-button',
+            button2: 'inactive-button',
+            button3: 'inactive-button',
+            button4: 'inactive-button',
+            button5: 'inactive-button'
+        })
 
     const navClick = (type) => {
         switch (type) {
             case 'dependente':
-                setStyleNav({ button1: 'active-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'inactive-button' })
-                setPessoasComponent({ dependente: true, visitante: false, militar1: false, militar2: false })
+                setStyleNav({ button1: 'active-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'inactive-button', button5: 'inactive-button' })
+                setPessoasComponent({ dependente: true, visitante: false, militar1: false, militar2: false, cracha: false })
                 break;
             case 'visitante':
-                setStyleNav({ button1: 'inactive-button', button2: 'active-button', button3: 'inactive-button', button4: 'inactive-button' })
-                setPessoasComponent({ dependente: false, visitante: true, militar1: false, militar2: false })
+                setStyleNav({ button1: 'inactive-button', button2: 'active-button', button3: 'inactive-button', button4: 'inactive-button', button5: 'inactive-button' })
+                setPessoasComponent({ dependente: false, visitante: true, militar1: false, militar2: false, cracha: false })
                 break;
             case 'militar1':
-                setStyleNav({ button1: 'inactive-button', button2: 'inactive-button', button3: 'active-button', button4: 'inactive-button' })
-                setPessoasComponent({ dependente: false, visitante: false, militar1: true, militar2: false })
+                setStyleNav({ button1: 'inactive-button', button2: 'inactive-button', button3: 'active-button', button4: 'inactive-button', button5: 'inactive-button' })
+                setPessoasComponent({ dependente: false, visitante: false, militar1: true, militar2: false, cracha: false })
                 break;
             case 'militar2':
-                setStyleNav({ button1: 'inactive-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'active-button' })
-                setPessoasComponent({ dependente: false, visitante: false, militar1: false, militar2: true })
+                setStyleNav({ button1: 'inactive-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'active-button', button5: 'inactive-button' })
+                setPessoasComponent({ dependente: false, visitante: false, militar1: false, militar2: true, cracha: false })
+                break;
+            case 'cracha':
+                setStyleNav({ button1: 'inactive-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'inactive-button', button5: 'active-button' })
+                setPessoasComponent({ dependente: false, visitante: false, militar1: false, militar2: false, cracha: true })
                 break;
             default:
-                setStyleNav({ button1: 'active-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'inactive-button' })
-                setPessoasComponent({ dependente: true, visitante: false, militar1: false, militar2: false })
+                setStyleNav({ button1: 'active-button', button2: 'inactive-button', button3: 'inactive-button', button4: 'inactive-button', button5: 'inactive-button' })
+                setPessoasComponent({ dependente: false, visitante: false, militar1: false, militar2: false, cracha: false })
                 break;
         }
     }
@@ -121,6 +133,7 @@ function Pessoas() {
                         <button className={styleNav.button2} onClick={() => navClick('visitante')}>Visitantes</button>
                         <button className={styleNav.button3} onClick={() => navClick('militar1')}>Militar sem AN/Crachá</button>
                         <button className={styleNav.button4} onClick={() => navClick('militar2')}>Militar sem cadastro</button>
+                        <button className={styleNav.button5} onClick={() => navClick('cracha')}>Crachás</button>
                     </div>
                     {pessoasComponent.dependente ? (
                         <DependenteComponent renderTable={operationSuccess} />
@@ -130,6 +143,8 @@ function Pessoas() {
                         <MilitarSemANCrachaComponent renderTable={operationSuccess} />
                     ) : pessoasComponent.militar2 ? (
                         <MilitarSemCadastroComponent renderTable={operationSuccess} />
+                    ) : pessoasComponent.cracha ? (
+                        <CrachaComponent renderTable={operationSuccess}></CrachaComponent>
                     ) : null}
                 </div>
             </div>

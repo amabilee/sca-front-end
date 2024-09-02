@@ -95,13 +95,18 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         formData.append('email', receivedData.email);
         formData.append('id_alerta', receivedData.id_alerta);
         if (String(receivedData.cnh).length >= 5) {
-            formData.append('cnh', receivedData.cnh);
+            formData.append('cnh', Number(receivedData.cnh));
+        } else {
+            console.log(receivedData.cnh)
+            formData.append('cnh', '');
         }
         if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {
 
             var [day, month, year] = receivedData.val_cnh.split('/');
             var formattedValCnh = `${year}-${month}-${day}`;
             formData.append('val_cnh', formattedValCnh);
+        } else{
+            formData.append('val_cnh', '');
         }
         formData.append('ativo_efetivo', receivedData.ativo_efetivo);
         formData.append('foto', receivedData.foto);

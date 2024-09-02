@@ -138,12 +138,12 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
         if (receivedData.cnh != null) {
             formData.append('cnh', Number(receivedData.cnh));
         } else {
-            formData.append('cnh', null);
+            formData.append('cnh', '');
         }
         if (receivedData.val_cnh.length == 10) {
             formData.append('val_cnh', receivedData.val_cnh);
         } else {
-            formData.append('val_cnh', null);
+            formData.append('val_cnh', '');
         }
         formData.append('ativo_efetivo', receivedData.ativo_efetivo);
         formData.append('foto', receivedData.foto);
