@@ -516,21 +516,12 @@ function VisitanteComponent() {
     } else if (formData.nome_completo.length === 0) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um nome completo válido.");
-    } else if (formData.telefone.length >= 1 && (formData.telefone).length !=  16) {
+    } else if (formData.telefone.length != 16) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um telefone válido.");
-    } else if (formData.bairro === '') {
+    } else if (formData.empresa.length == 0) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-      setMessage("Insira um bairro.");
-    } else if (formData.numero === '') {
-      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-      setMessage("Insira um número.");
-    } else if (formData.rua === '') {
-      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-      setMessage("Insira uma rua.");
-    } else if (formData.estado === 'Selecione') {
-      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-      setMessage("Insira um estado.");
+      setMessage("Insira uma empresa válido.");
     } else if (formData.entrada === 'Sim' && String(formData.cracha).length != 5) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um crachá para o visitante válido.");
