@@ -10,16 +10,18 @@ const RelatorioVeiculoTable = ({ data }) => {
 
   return (
     <div className='table-wrapper'>
-      <table className='table table-relatorio table-relatorio-veiculo'>
+      <table className='table table-relatorio-veiculo'>
         <thead>
           <tr>
             <th scope="col">Tipo de movimentação</th>
             <th scope="col">Data</th>
             <th scope="col">Hora</th>
+            <th scope="col">Posto de serviço</th>
             <th scope="col">Adesivo/Crachá</th>
             <th scope="col">Placa</th>
             <th scope="col">Sentinela</th>
             <th scope="col">Autorizador</th>
+            <th scope="col">Observação</th>
           </tr>
         </thead>
         <tbody>
@@ -34,12 +36,14 @@ const RelatorioVeiculoTable = ({ data }) => {
               <td>{registro.tipo}</td>
               <td>{formatDate(registro.data)}</td>
               <td>{registro.hora}</td>
+              <td>{registro.Posto.nome}</td>
               <td>{registro.cracha_veiculo ? registro.cracha_veiculo : registro.Veiculo.qrcode}</td>
               <td>
                 {registro.VeiculoSemAn ? registro.VeiculoSemAn.placa : registro.Veiculo ? registro.Veiculo.placa : 'N/A'}
               </td>
-              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: 'Dispositivo móvel'}</td>
-              <td>{registro.autorizador ? registro.autorizador: null}</td>
+              <td>{registro.SentinelaQrcode ? `${registro.SentinelaQrcode.Efetivo.Graduacao.sigla} ${registro.SentinelaQrcode.Efetivo.nome_guerra}`: null}</td>
+              <td>{registro.autorizador ? registro.autorizador: 'Dispositivo móvel'}</td>
+              <td>{registro.detalhe ? registro.detalhe : null}</td>
             </tr>
           ))}
         </tbody>

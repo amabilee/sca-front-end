@@ -69,11 +69,9 @@ RelatorioEfetivoTable.propTypes = {
     }),
     Dependente: PropTypes.shape({
       nome: PropTypes.string,
-      cpf: PropTypes.number
     }),
     Visitante: PropTypes.shape({
       nome: PropTypes.string,
-      cpf: PropTypes.string
     }),
     SentinelaQrcode: PropTypes.shape({
       Efetivo: PropTypes.shape({

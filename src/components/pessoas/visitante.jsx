@@ -516,6 +516,9 @@ function VisitanteComponent() {
     } else if (formData.nome_completo.length === 0) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um nome completo válido.");
+    } else if (formData.telefone.length >= 1 && (formData.telefone).length !=  16) {
+      setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
+      setMessage("Insira um telefone válido.");
     } else if (formData.bairro === '') {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
       setMessage("Insira um bairro.");
@@ -595,13 +598,13 @@ function VisitanteComponent() {
     const formDataVisitante = new FormData();
     formDataVisitante.append('cpf', Number(formattedCPF),);
     formDataVisitante.append('nome', formData.nome_completo,);
-    formDataVisitante.append('rua', formData.rua,);
-    formDataVisitante.append('numero', formData.numero,);
-    formDataVisitante.append('bairro', formData.bairro,);
-    formDataVisitante.append('estado', formData.estado,);
+    formDataVisitante.append('rua', formData.rua != '' ? formData.rua : null,);
+    formDataVisitante.append('numero', formData.numero != '' ? formData.numero : null,);
+    formDataVisitante.append('bairro', formData.bairro != '' ? formData.bairro : null,);
+    formDataVisitante.append('estado', formData.estado != '' ? formData.estado : null,);
     formDataVisitante.append('complemento', formData.complemento != '' ? formData.complemento : null,);
-    formDataVisitante.append('telefone', formData.telefone != '' ? formattedTelefone : null,);
-    formDataVisitante.append('empresa', formData.empresa != '' ? formData.empresa : null,);
+    formDataVisitante.append('telefone', formattedTelefone);
+    formDataVisitante.append('empresa', formData.empresa);
     formDataVisitante.append('foto', formData.foto != '' ? formData.foto : null);
 
     try {
@@ -870,7 +873,7 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Telefone</p>
+              <p>Telefone*</p>
               <IMaskInput
                 mask='(00) 0 0000-0000'
                 type='text'
@@ -881,7 +884,7 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Empresa</p>
+              <p>Empresa*</p>
               <input
                 type="text"
                 className='filtering-input'
@@ -893,7 +896,7 @@ function VisitanteComponent() {
           </div>
           <div className="session-input-line2">
             <div className="input-container">
-              <p>Bairro*</p>
+              <p>Bairro</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -903,7 +906,7 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Número*</p>
+              <p>Número</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -913,7 +916,7 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Rua*</p>
+              <p>Rua</p>
               <input
                 type='text'
                 className='filtering-input'
@@ -933,7 +936,7 @@ function VisitanteComponent() {
               />
             </div>
             <div className="input-container">
-              <p>Estado*</p>
+              <p>Estado</p>
               <select
                 type='text'
                 className='filtering-input'

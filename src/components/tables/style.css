@@ -46,7 +46,7 @@
     height: 40px;
 }
 
-.table tbody tr{
+.table tbody tr {
     height: 40px;
 }
 
@@ -58,7 +58,7 @@
     background-color: #F2F2F2;
 }
 
-.row-efetivo td{
+.row-efetivo td {
     font-weight: 800;
 }
 
@@ -115,44 +115,52 @@
 
 /* Table relatórios */
 
-.table-relatorio thead tr th{
-    width: 15%;
+.table-relatorio thead tr th:nth-of-type(1) {
+    width: 12%;
 }
 
 .table-relatorio thead tr th:nth-child(2),
 .table-relatorio thead tr th:nth-child(3),
-.table-relatorio thead tr th:nth-child(4){
-    width: 11%;
-}
-.table-relatorio thead tr th:nth-child(1),
-.table-relatorio thead tr th:nth-child(7){
-    width: 14%;
+.table-relatorio thead tr th:nth-child(4) {
+    width: 9%;
 }
 
 .table-relatorio thead tr th:nth-child(5),
-.table-relatorio thead tr th:nth-child(6){
-    width: 20%;
+.table-relatorio thead tr th:nth-child(6) {
+    width: 17%;
 }
 
-.table-relatorio-veiculo thead tr th:nth-child(1),
+.table-relatorio thead tr th:nth-child(7) {
+    width: 14%;
+}
+
+.table-relatorio-veiculo thead tr th:nth-child(1) {
+    width: 12%;
+}
+
 .table-relatorio-veiculo thead tr th:nth-child(2),
 .table-relatorio-veiculo thead tr th:nth-child(3),
 .table-relatorio-veiculo thead tr th:nth-child(4),
 .table-relatorio-veiculo thead tr th:nth-child(5),
-.table-relatorio-veiculo thead tr th:nth-child(6),
-.table-relatorio-veiculo thead tr th:nth-child(7){
-    width: 15%;
+.table-relatorio-veiculo thead tr th:nth-child(6){
+    width: 9%;
 }
 
-.table-relatorio-veiculo tbody tr td:nth-child(5){
+.table-relatorio-veiculo thead tr th:nth-child(7),
+.table-relatorio-veiculo thead tr th:nth-child(8){
+    width: 14%;
+}
+
+.table-relatorio-veiculo tbody tr td:nth-child(5) {
     text-transform: uppercase;
-} 
+}
 
 
 
 /* Table usuário */
 
-.table-usuarios thead tr th, .table-usuarios tbody tr td{
+.table-usuarios thead tr th,
+.table-usuarios tbody tr td {
     width: 33%;
 }
 
@@ -163,7 +171,7 @@
 
 /* Table veículos */
 
-.table-veiculos thead tr th:not(:last-child), .table-veiculos tbody tr td:not(:last-child) {
-    width: 11,5%;
+.table-veiculos thead tr th:not(:last-child),
+.table-veiculos tbody tr td:not(:last-child) {
+    width: 11, 5%;
 }
-
