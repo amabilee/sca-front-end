@@ -233,7 +233,7 @@ function Efetivos() {
                     <div className="page-title page-title-create-option">
                         <div className="page-title-text">
                             <h1>Efetivo</h1>
-                            <h2>Para consultar os efetivos, informe os dados desejados</h2>
+                            <h2>Para consultar os efetivo, informe os dados desejados</h2>
                         </div>
                         <button onClick={() => openModal("create")}>Cadastrar efetivo</button>
                     </div>

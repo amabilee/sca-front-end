@@ -1,9 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState} from 'react';
 import Header from '../../components/sidebar/sidebar';
-import { server } from '../../services/server';
-
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 
 import DependenteComponent from '../../components/pessoas/dependente.jsx'
 import VisitanteComponent from '../../components/pessoas/visitante.jsx'
@@ -15,70 +11,7 @@ import CrachaComponent from '../../components/pessoas/cracha.jsx'
 import './style.css'
 
 function Pessoas() {
-    const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 0, filtering: '' })
     const [pessoasComponent, setPessoasComponent] = useState({ dependente: true, visitante: false, militar1: false, militar2: false, cracha: false })
-
-    // SnackBar config
-    const [message, setMessage] = useState("");
-    const [statusAlert, setStatusAlert] = useState("");
-    const [state, setState] = useState({
-        open: false,
-        vertical: 'top',
-        horizontal: 'center',
-    });
-    const { vertical, horizontal, open } = state;
-
-    const handleClose = () => {
-        setState({ ...state, open: false });
-    };
-
-    const getPostos = useCallback(async (filter, page) => {
-        let userData = localStorage.getItem('user');
-        let userDataParsed = JSON.parse(userData);
-        let token = localStorage.getItem("user_token")
-        try {
-            const response = await server.get(`/posto?page=${page}${filter}`, {
-                headers: {
-                    'Authentication': token,
-                    'access-level': userDataParsed.nivel_acesso
-                }
-            });
-            setPaginationData(prevState => {
-                return { ...prevState, totalPages: response.data.pagination.totalPages }
-            });
-        } catch (e) {
-            setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-            setMessage("Erro ao buscar dados:");
-            setStatusAlert("error");
-        }
-    }, [state, setPaginationData, setState, setMessage, setStatusAlert]);
-
-    useEffect(() => {
-        getPostos('', 1);
-    }, [getPostos]);
-
-    const operationSuccess = (type) => {
-        switch (type) {
-            case 'create':
-                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Posto de Serviço criado com sucesso.");
-                setStatusAlert("success");
-                break;
-            case 'edit':
-                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Posto de Serviço alterado com sucesso.");
-                setStatusAlert("success");
-                break;
-            case 'delete':
-                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Posto de Serviço deletado com sucesso.");
-                setStatusAlert("success");
-                break;
-            default:
-                break;
-        }
-        getPostos(paginationData.filtering, paginationData.currentPage);
-    };
 
     //NAV click handle
     const [styleNav, setStyleNav] = useState(
@@ -136,30 +69,18 @@ function Pessoas() {
                         <button className={styleNav.button5} onClick={() => navClick('cracha')}>Crachás</button>
                     </div>
                     {pessoasComponent.dependente ? (
-                        <DependenteComponent renderTable={operationSuccess} />
+                        <DependenteComponent />
                     ) : pessoasComponent.visitante ? (
-                        <VisitanteComponent renderTable={operationSuccess} />
+                        <VisitanteComponent />
                     ) : pessoasComponent.militar1 ? (
-                        <MilitarSemANCrachaComponent renderTable={operationSuccess} />
+                        <MilitarSemANCrachaComponent />
                     ) : pessoasComponent.militar2 ? (
-                        <MilitarSemCadastroComponent renderTable={operationSuccess} />
+                        <MilitarSemCadastroComponent />
                     ) : pessoasComponent.cracha ? (
-                        <CrachaComponent renderTable={operationSuccess}></CrachaComponent>
+                        <CrachaComponent/>
                     ) : null}
                 </div>
             </div>
-            <Snackbar
-                ContentProps={{ sx: { borderRadius: '8px' } }}
-                anchorOrigin={{ vertical, horizontal }}
-                open={open}
-                autoHideDuration={2000}
-                onClose={handleClose}
-                key={vertical + horizontal}
-            >
-                <Alert variant="filled" severity={statusAlert}>
-                    {message}
-                </Alert>
-            </Snackbar>
         </div >
     );
 }

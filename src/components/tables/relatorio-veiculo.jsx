@@ -8,6 +8,8 @@ const RelatorioVeiculoTable = ({ data }) => {
     return `${day}/${month}/${year}`;
   };
 
+  console.log(data)
+
   return (
     <div className='table-wrapper'>
       <table className='table table-relatorio-veiculo'>
@@ -37,7 +39,7 @@ const RelatorioVeiculoTable = ({ data }) => {
               <td>{formatDate(registro.data)}</td>
               <td>{registro.hora}</td>
               <td>{registro.Posto.nome}</td>
-              <td>{registro.cracha_veiculo ? registro.cracha_veiculo : registro.Veiculo.qrcode}</td>
+              <td>{registro.cracha_veiculo ? registro.cracha_veiculo : registro.Veiculo ? registro.Veiculo.qrcode : registro.VeiculoSemAn ? registro.VeiculoSemAn.qrcode : 'N/A'}</td>
               <td>
                 {registro.VeiculoSemAn ? registro.VeiculoSemAn.placa : registro.Veiculo ? registro.Veiculo.placa : 'N/A'}
               </td>

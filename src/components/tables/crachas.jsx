@@ -41,7 +41,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            return 'Nome não informado';
+            return 'Não informado';
         } else if (type == 'placa') {
             if (currentRegistro.UltimoRegistroAcessoPessoa.length > 0) {
                 for (const registro of currentRegistro.UltimoRegistroAcessoPessoa) {
@@ -53,7 +53,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            if (currentRegistro.UltimoRegistroAcessoVeiculo.length > 0) {
+            if (currentRegistro.UltimoRegistroAcessoVeiculo && currentRegistro.UltimoRegistroAcessoVeiculo.length > 0) {
                 for (const registro of currentRegistro.UltimoRegistroAcessoVeiculo) {
                     if (!isObjectEmpty(registro.Veiculo)) {
                         return registro.Veiculo.placa;
@@ -63,7 +63,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            return 'Placa não informada';
+            return 'Não informado';
         } else if (type == 'telefone') {
             if (currentRegistro.UltimoRegistroAcessoPessoa.length > 0) {
                 for (const registro of currentRegistro.UltimoRegistroAcessoPessoa) {
@@ -81,7 +81,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            return 'Telefone não informado';
+            return 'Não informado';
         } else if (type == 'empresa') {
             if (currentRegistro.UltimoRegistroAcessoPessoa.length > 0) {
                 for (const registro of currentRegistro.UltimoRegistroAcessoPessoa) {
@@ -112,7 +112,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            return 'Empresa não informada';
+            return 'Não informado';
         } else if (type == 'autorizador'){
             if (currentRegistro.UltimoRegistroAcessoPessoa.length > 0) {
                 for (const registro of currentRegistro.UltimoRegistroAcessoPessoa) {
@@ -130,7 +130,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            return 'Autorizador não informado';
+            return 'Não informado';
         } else if (type == 'destino'){
             if (currentRegistro.UltimoRegistroAcessoPessoa.length > 0) {
                 for (const registro of currentRegistro.UltimoRegistroAcessoPessoa) {
@@ -148,7 +148,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            return 'Destino não informado';
+            return 'Não informado';
         } else if (type == 'tempo'){
             if (currentRegistro.UltimoRegistroAcessoPessoa.length > 0) {
                 for (const registro of currentRegistro.UltimoRegistroAcessoPessoa) {
@@ -170,7 +170,7 @@ const CrachasTable = ({ data, openModal }) => {
                 }
             }
 
-            return 'Tempo não informado';
+            return 'Não informado';
         }
     };
 
@@ -193,7 +193,13 @@ const CrachasTable = ({ data, openModal }) => {
                 </thead>
                 <tbody>
                     {data && Array.isArray(data) && data.map((registro, index) => (
-                        <tr key={index} scope="row" className={index % 2 === 0 ? 'row-white' : 'row-gray'}>
+                        <tr key={index} scope="row"
+                        className={
+                          index % 2 === 0 && registro.veiculo == 1 ? 'row-white row-efetivo' :
+                            index % 2 === 0 && registro.veiculo == 0 ? 'row-white' :
+                              index % 2 !== 0 && registro.veiculo == 1 ? 'row-gray row-efetivo' :
+                                'row-gray'
+                        }>
                             <td>{registro.numero_cracha}</td>
                             <td>{detectRegistroType('nome', registro)}</td>
                             <td>{detectRegistroType('placa', registro)}</td>
@@ -203,7 +209,7 @@ const CrachasTable = ({ data, openModal }) => {
                             <td>{detectRegistroType('destino', registro)}</td>
                             <td>{detectRegistroType('tempo', registro)}</td>
                             <td>
-                                <button onClick={() => openModal("delete", registro)}><img src={Returned} alt="Check crachá" /></button>
+                                <button onClick={() => openModal("delete", registro)}><img src={Returned} alt="Action crachá" /></button>
                             </td>
                         </tr>
                     ))}
