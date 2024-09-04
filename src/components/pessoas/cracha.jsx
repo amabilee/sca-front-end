@@ -89,24 +89,10 @@ function CrachaComponent() {
             case 'delete':
                 let formattedNewRegistro = formatRegistro(data)
                 sendRegistroSaida(data, formattedNewRegistro)
-                operationSuccess('delete')
                 break;
             default:
                 break;
         }
-    };
-
-    const operationSuccess = (type) => {
-        switch (type) {
-            case 'delete':
-                setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Status do crachá atualizado com sucesso.");
-                setAlertSeverity("success");
-                break;
-            default:
-                break;
-        }
-        getCrachas(paginationData.filtering, paginationData.currentPage);
     };
 
 
@@ -249,17 +235,17 @@ function CrachaComponent() {
                     getCrachas(paginationData.filtering, paginationData.currentPage);
                 } catch (e) {
                     setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                    setMessage("Erro ao buscar dados");
+                    setMessage("Erro ao atualizar crachá");
                     setAlertSeverity("error");
                 }
             } else {
                 setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-                setMessage("Erro ao buscar dados");
+                setMessage("Erro ao registrar saída");
                 setAlertSeverity("error");
             }
         } catch (e) {
             setState({ ...state, vertical: 'bottom', horizontal: 'center', open: true });
-            setMessage("Erro ao buscar dados");
+            setMessage("Erro ao registrar saída");
             setAlertSeverity("error");
         }
     }

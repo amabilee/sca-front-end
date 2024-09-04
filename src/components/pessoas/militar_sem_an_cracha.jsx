@@ -103,8 +103,8 @@ function MilitarSemANCrachaComponent() {
       id_graduacao: true,
       email: true,
 
-      cracha: true,
-      destino: true,
+      cracha: false,
+      destino: false,
       veiculo_cracha: true,
 
       veiculo_tipo: true,
@@ -605,7 +605,7 @@ function MilitarSemANCrachaComponent() {
       cleanInputs()
     } catch (e) {
       setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
-      setMessage('Erro ao inesperado ao criar registro.');
+      setMessage(e.response.data.message ? e.response.data.message : 'Erro ao inesperado ao criar registro.');
       setAlertSeverity("error");
     }
   }
