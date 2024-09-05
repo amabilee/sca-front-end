@@ -240,7 +240,7 @@ function Efetivos() {
                 ) : (
                     <div className="page-title">
                         <h1>Efetivo</h1>
-                        <h2>Para consultar os efetivos, informe os dados desejados</h2>
+                        <h2>Para consultar os efetivo, informe os dados desejados</h2>
                     </div>
                 )}
                 <div className="page-filters efetivo-filters">

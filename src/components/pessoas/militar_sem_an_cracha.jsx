@@ -438,7 +438,7 @@ function MilitarSemANCrachaComponent() {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um número de ordem válido.");
         setAlertSeverity("error");
-      } else if (formData.nome_completo == '' || formData.nome_guerra == '' || formData.unidade == '' || formData.email) {
+      } else if (formData.nome_completo == '' || formData.nome_guerra == '' || formData.unidade == '' || formData.email == '') {
         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
         setMessage("Insira um militar válido.");
         setAlertSeverity("error");

@@ -11,7 +11,7 @@ import CrachasTable from '../tables/crachas.jsx'
 
 function CrachaComponent() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 1, filtering: '' })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [crachas, setCrachas] = useState([])
 
     //Paginator conifg

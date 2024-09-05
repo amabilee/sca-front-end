@@ -18,7 +18,7 @@ import { server } from '../../services/server';
 
 function RelatorioEfetivo() {
     const [paginationData, setPaginationData] = useState({ currentPage: 1, totalPages: 1, filtering: '' })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [registros, setRegistros] = useState([])
     const [postosOptions, setPostosOptions] = useState([]);
 

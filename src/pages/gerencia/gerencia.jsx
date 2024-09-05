@@ -39,7 +39,7 @@ function Veiculos() {
     const [pessoaTitle, setPessoaTitle] = useState('')
 
     const [gerenciaDadosPessoas, setGerenciaDadosPessoas] = useState([
-        { id: 0, value: 0, label: 'Efetivos' },
+        { id: 0, value: 0, label: 'Efetivo' },
         { id: 1, value: 0, label: 'Visitantes' },
         { id: 2, value: 0, label: 'Dependetes' },
     ])
@@ -96,7 +96,7 @@ function Veiculos() {
             } = response.data.formattedEntities;
 
             setGerenciaDadosPessoas([
-                { id: 0, value: efetivo || 0, label: 'Efetivos' },
+                { id: 0, value: efetivo || 0, label: 'Efetivo' },
                 { id: 1, value: visitante || 0, label: 'Visitantes' },
                 { id: 2, value: dependente || 0, label: 'Dependetes' },
             ]);
@@ -114,7 +114,7 @@ function Veiculos() {
             const somaTotalVeiculos = motocicleta + carro + onibus + caminhoneta;
             setVeiculoTitle(somaTotalVeiculos)
 
-            setGerenciaDadosCards([{ titulo: 'Usuário', qnt: usuario }, { titulo: 'Crachás', qnt: cracha }, { titulo: 'Unidades', qnt: unidade }, { titulo: 'Qrcodes', qnt: qrcode }])
+            setGerenciaDadosCards([{ titulo: 'Usuários', qnt: usuario }, { titulo: 'Crachás', qnt: cracha }, { titulo: 'Unidades', qnt: unidade }, { titulo: 'Qrcodes', qnt: qrcode }])
             const somaEntradasMilitar = entradasPorDiaMilitar.reduce((acc, curr) => acc + curr, 0);
             const somaSaidasMilitar = saidasPorDiaMilitar.reduce((acc, curr) => acc + curr, 0);
             const somaTotalMovimentacaoMiltiar = somaEntradasMilitar + somaSaidasMilitar;
