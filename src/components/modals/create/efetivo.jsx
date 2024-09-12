@@ -141,7 +141,10 @@ export default function CreateEfetivoModal({ closeModal, renderTable }) {
             formData.append('cnh', '');
         }
         if (receivedData.val_cnh.length == 10) {
-            formData.append('val_cnh', receivedData.val_cnh);
+            var [day, month, year] = receivedData.val_cnh.split('/');
+            var formattedValCnh = `${year}-${month}-${day}`;
+            formData.append('val_cnh', formattedValCnh);
+
         } else {
             formData.append('val_cnh', '');
         }
