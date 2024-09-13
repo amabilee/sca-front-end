@@ -647,6 +647,7 @@ function Crachas() {
                                         value={`1,${formData.saram}`}
                                         viewBox={`0 0 50 50`}
                                         className='cracha-qrcode-qrcode'
+                                        preserveAspectRatio="none"
                                     />
                                     <p className='cracha-qrcode-saram'>
                                         {formData.saram.replace(/(\d{3})(\d{3})(\d)/, '$1.$2-$3')}

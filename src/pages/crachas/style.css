@@ -141,9 +141,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    padding: 352px 0px 0px 45px;
+    padding: 351px 0px 0px 44px;
     object-fit: cover;
-    width: 182px;
+    width: 185px;
     height: 540px;
 }
 
@@ -187,10 +187,10 @@
 }
 
 .cracha-normal-saram {
-    padding: 485px 0px 0px 200px;
-    font-size: 33px;
+    padding: 490px 0px 0px 183px;
+    font-size: 36px;
     font-weight: 700;
-    width: 350px;
+    width: 370px;
     color: white;
 }
 
@@ -205,16 +205,16 @@
     position: absolute;
     top: 0;
     left: 0;
-    padding: 20px 0px 0px 47px;
-    width: 130px;
-    height: 110px;
+    padding: 20px 0px 0px 45px;
+    width: 135px;
+    height: 120px;
 }
 
 .cracha-qrcode-dom-title {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 95px 0px 0px 140px;
+    padding: 95px 0px 0px 155px;
     object-fit: cover;
     width: 360px;
     height: 120px;
@@ -235,10 +235,10 @@
     position: absolute;
     top: 0;
     left: 0;
-    padding: 270px 0px 0px 32px;
+    padding: 266px 0px 0px 32px;
     object-fit: cover;
-    width: 185px;
-    height: 457px;
+    width: 187px;
+    height: 459px;
 }
 
 .cracha-qrcode-foto-empty {
@@ -274,10 +274,10 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 0px 0px 130px 0px;
-    width: 230px;
-    max-width: 230px;
-    height: 290px;
+    padding: 0px 30px 107px 0px;
+    width: 200px;
+    max-width: 210px;
+    height: 306px;
 }
 
 .cracha-body-img {
