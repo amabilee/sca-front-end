@@ -104,6 +104,7 @@ function Usuarios() {
                         <input
                             className='filtering-input'
                             value={filteringConditions.militar}
+                            placeholder='Graduação e Nome de Guerra'
                             onChange={(e) => setFilteringConditions({ ...filteringConditions, militar: e.target.value })}
                         />
                     </div>

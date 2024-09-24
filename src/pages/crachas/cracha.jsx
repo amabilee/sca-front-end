@@ -224,7 +224,7 @@ function Crachas() {
                     } else if (formData.nome_completo == '' || formData.militar == '' || formData.unidade == '' || formData.foto == '') {
                         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                         setMessage("Insira as informações do efetivo.");
-                    } else if (formData.cargo == '') {
+                    } else if (formData.cargo == 'Selecione') {
                         setState({ ...state, open: true, vertical: 'bottom', horizontal: 'center' });
                         setMessage("Insira um cargo/função válido.");
                     } else if (formData.setor == '') {

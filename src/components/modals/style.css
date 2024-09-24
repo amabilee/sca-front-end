@@ -31,7 +31,8 @@
 
 .efetivo-inputs-1 {
     display: flex;
-    width: max-content;
+    width: fit-content;
+    max-width: 100%;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
@@ -40,6 +41,10 @@
 .efetivo-inputs-1 .input-container:nth-child(1),
 .efetivo-inputs-1 .input-container:nth-child(3) {
     width: 250px;
+}
+
+.efetivo-inputs-1 .input-container:nth-child(1){
+    min-width: 235px;
 }
 
 .efetivo-inputs-1 .input-container:nth-child(2),

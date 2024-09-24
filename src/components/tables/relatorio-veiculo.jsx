@@ -8,8 +8,6 @@ const RelatorioVeiculoTable = ({ data }) => {
     return `${day}/${month}/${year}`;
   };
 
-  console.log(data)
-
   return (
     <div className='table-wrapper'>
       <table className='table table-relatorio-veiculo'>

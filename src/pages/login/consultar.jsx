@@ -181,8 +181,12 @@ function ConsultarEfetivo() {
                                     )}
                                 </div>
                                 <div className="input-container input-qrcode">
-                                    <p>Qr Codes</p>
-                                    <button className='findQrcode-button' onClick={() => viewQrCodes(true)}>Visualizar Qr Codes</button>
+                                    {efetivoData.qrcode_efetivo && (
+                                        <>
+                                            <p>Qr Codes</p>
+                                            <button className='findQrcode-button' onClick={() => viewQrCodes(true)}>Visualizar Qr Codes</button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                             <h3>Veículos cadastrados</h3>

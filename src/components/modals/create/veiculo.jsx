@@ -164,7 +164,7 @@ export default function CreateVeiculoModal({ closeModal, renderTable }) {
 
     const convertDateToDDMMYYYY = (dateString) => {
         const [year, month, day] = dateString.split('-');
-        var data = new Date(year, month, day);
+        var data = new Date(year, month - 1, day);
         return data;
     };
 

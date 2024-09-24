@@ -97,7 +97,6 @@ export default function EditEfetivoModal({ currentData, closeModal, renderTable 
         if (String(receivedData.cnh).length >= 5) {
             formData.append('cnh', Number(receivedData.cnh));
         } else {
-            console.log(receivedData.cnh)
             formData.append('cnh', '');
         }
         if (String(receivedData.val_cnh).length != 0 && receivedData.val_cnh != null) {

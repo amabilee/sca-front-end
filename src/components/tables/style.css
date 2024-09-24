@@ -159,14 +159,59 @@
 
 /* Table usuário */
 
-.table-usuarios thead tr th,
-.table-usuarios tbody tr td {
+
+.table-usuarios thead tr th:nth-of-type(1),
+.table-usuarios thead tr th:nth-child(2),
+.table-usuarios thead tr th:nth-child(3){
     width: 33%;
 }
 
+.table-usuarios tbody tr {
+    height: 40px;
+    max-height: 40px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease
+}
+
+.table-usuarios tbody tr.expanded {
+    max-height: auto;
+}
+
 .table-usuarios tbody tr td:nth-child(2) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.table-usuarios tbody tr td:nth-child(2) .modulos {
+    opacity: 0;
+    height: 0px;
+    padding: 0;
+    visibility: hidden;
+    transition: opacity 0.9s ease, visibility 0.9s ease, height 0.9s ease, padding 0.9s ease;
+}
+
+.table-usuarios tbody tr.expanded td:nth-child(2) .modulos {
+    opacity: 1;
+    visibility: visible;
+    padding: 10px 0;
+    height: auto;
+    transition: opacity 0.9s ease, visibility 0.9s ease, height 0.9s ease, padding 0.9s ease;
+}
+
+.table-usuarios tbody tr td:nth-child(2) .resumo {
     padding: 10px 0;
 }
+
+.table-usuarios tbody tr.expanded td:nth-child(2) .resumo {
+    height: 0px;
+    opacity: 0;
+    padding: 0;
+    visibility: hidden;
+}
+
 
 
 /* Table veículos */

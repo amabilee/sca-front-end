@@ -1,7 +1,8 @@
 /* Relatório Efetivo */
 
 .filters-relatorio-efetivo {
-    width: 1550px;
+    width: 1300px;
+    max-width: 100%;
 }
 
 .filters-relatorio-efetivo .input-container:nth-child(1) {
@@ -22,6 +23,7 @@
 
 .filters-relatorio-veiculo {
     width: 1300px;
+    max-width: 100%;
 }
 
 .filters-relatorio-veiculo .input-container:nth-child(1),

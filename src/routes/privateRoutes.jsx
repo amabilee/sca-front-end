@@ -26,7 +26,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const userDataParsed = JSON.parse(userData);
   const token = localStorage.getItem('user_token');
 
-  const isAuthenticated = userDataParsed && token ? true : false;
+  const isAuthenticated = userDataParsed && token ? true : false
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -64,7 +64,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     };
 
     fetchModules();
-  }, [isAuthenticated, currentPath, token, userDataParsed.id, userDataParsed.nivel_acesso]);
+  }, [isAuthenticated, currentPath, token]);
 
   useEffect(() => {
     if (redirect) {

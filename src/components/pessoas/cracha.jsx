@@ -201,12 +201,7 @@ function CrachaComponent() {
         let userDataParsed = JSON.parse(userData);
         let token = localStorage.getItem("user_token")
 
-        console.log(registro, 'inicial')
-        console.log(formattedRegistro, 'final')
-
         try {
-
-            console.log(token, userDataParsed.nivel_acesso)
 
             const response = await server.post(`/registro_acesso`, formattedRegistro, {
                 headers: {
